@@ -1,0 +1,10 @@
+[tasks.dev]
+workspace = false
+command = "cargo"
+args = [
+    "run",
+    "--bin",
+    "dd2vtt-parser",
+    "../"
+]
+watch = true
