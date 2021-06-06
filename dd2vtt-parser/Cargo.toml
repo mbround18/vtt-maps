@@ -1,0 +1,13 @@
+[package]
+name = "dd2vtt-parser"
+version = "0.1.0"
+authors = ["mbround18 <12646562+mbround18@users.noreply.github.com>"]
+edition = "2018"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+glob = "0.3.0"
+clap = "3.0.0-beta.2"
+serde = "1.0.126"
+serde_json = "1.0.64"
