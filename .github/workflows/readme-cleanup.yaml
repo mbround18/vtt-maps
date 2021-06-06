@@ -12,5 +12,6 @@ jobs:
     - name: Build
       run: cargo build --verbose
     - name: Run Install
-      run: cargo install --path ./dd2vtt-parser
-    
+      run: cargo install --path ./dd2vtt-parserh
+    - name: Run Parser
+      run: dd2vtt-parser ./
