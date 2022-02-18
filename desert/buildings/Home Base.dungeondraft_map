@@ -40,8 +40,8 @@
 		],
 		"editor_state": {
 			"current_level": 0,
-			"camera_position": "Vector2( 6144, 3456 )",
-			"camera_zoom": 4,
+			"camera_position": "Vector2( 6566.07, 4565.52 )",
+			"camera_zoom": 8,
 			"guide_position": "null",
 			"trace_image": null,
 			"color_palettes": {
@@ -155,11 +155,11 @@
 			},
 			"object_library_memory": {
 				"mode": "all",
-				"scroll": 0,
+				"scroll": 667.5,
 				"selected": [
-					"res://textures/objects/structures/well_01.png"
+					"res://textures/objects/activities/cooking/stove_03_russian.png"
 				],
-				"search_strictness": 0.5
+				"search_strictness": 0.7
 			},
 			"scatter_library_memory": {
 				"mode": "all",
@@ -177,7 +177,7 @@
 		"format": 3,
 		"width": 48,
 		"height": 27,
-		"next_node_id": "7",
+		"next_node_id": "34",
 		"next_prefab_id": "0",
 		"msi": {
 			"offset_map_size": 512,
@@ -1557,6 +1557,59 @@
 				],
 				"walls": [
 					{
+						"points": "PoolVector2Array( 2048, 2304, 2048, 256 )",
+						"texture": "res://textures/walls/battlements.png",
+						"color": "ff726e65",
+						"loop": false,
+						"type": 1,
+						"joint": 1,
+						"normalize_uv": true,
+						"shadow": true,
+						"node_id": "b",
+						"portals": [
+							{
+								"position": "Vector2( 2048, 1152 )",
+								"rotation": -1.570796,
+								"scale": "Vector2( 1, 1 )",
+								"direction": "Vector2( 0, -1 )",
+								"texture": "res://textures/portals/door_06.png",
+								"radius": 128,
+								"wall_id": "b",
+								"wall_distance": 0.5625,
+								"closed": true,
+								"node_id": "c"
+							}
+						]
+					},
+					{
+						"points": "PoolVector2Array( 2048, 2304, 3328, 2304 )",
+						"texture": "res://textures/walls/battlements.png",
+						"color": "ff726e65",
+						"loop": false,
+						"type": 1,
+						"joint": 1,
+						"normalize_uv": true,
+						"shadow": true,
+						"node_id": "a",
+						"portals": [
+
+						]
+					},
+					{
+						"points": "PoolVector2Array( 2048, 3584, 2048, 2304 )",
+						"texture": "res://textures/walls/battlements.png",
+						"color": "ff726e65",
+						"loop": false,
+						"type": 1,
+						"joint": 1,
+						"normalize_uv": true,
+						"shadow": true,
+						"node_id": "9",
+						"portals": [
+
+						]
+					},
+					{
 						"points": "PoolVector2Array( 7168, 2560, 7168, 256 )",
 						"texture": "res://textures/walls/battlements.png",
 						"color": "ff726e65",
@@ -1567,7 +1620,18 @@
 						"shadow": true,
 						"node_id": "5",
 						"portals": [
-
+							{
+								"position": "Vector2( 7168, 1152 )",
+								"rotation": -1.570796,
+								"scale": "Vector2( 1, 1 )",
+								"direction": "Vector2( 0, -1 )",
+								"texture": "res://textures/portals/door_06.png",
+								"radius": 128,
+								"wall_id": "5",
+								"wall_distance": 0.611111,
+								"closed": true,
+								"node_id": "d"
+							}
 						]
 					},
 					{
@@ -1581,7 +1645,18 @@
 						"shadow": true,
 						"node_id": "4",
 						"portals": [
-
+							{
+								"position": "Vector2( 6528, 2560 )",
+								"rotation": 0,
+								"scale": "Vector2( 1, 1 )",
+								"direction": "Vector2( 1, 0 )",
+								"texture": "res://textures/portals/door_06.png",
+								"radius": 128,
+								"wall_id": "4",
+								"wall_distance": 0.25,
+								"closed": true,
+								"node_id": "e"
+							}
 						]
 					},
 					{
@@ -1609,7 +1684,102 @@
 						"shadow": true,
 						"node_id": "2",
 						"portals": [
-
+							{
+								"position": "Vector2( 5888, 3968 )",
+								"rotation": -1.570796,
+								"scale": "Vector2( 1, 1 )",
+								"direction": "Vector2( 0, -1 )",
+								"texture": "res://textures/portals/window_05.png",
+								"radius": 100.5,
+								"wall_id": "2",
+								"wall_distance": 0.7,
+								"closed": true,
+								"node_id": "2f"
+							},
+							{
+								"position": "Vector2( 3456, 3584 )",
+								"rotation": 3.141593,
+								"scale": "Vector2( 1, 1 )",
+								"direction": "Vector2( -1, 0 )",
+								"texture": "res://textures/portals/window_05.png",
+								"radius": 100.5,
+								"wall_id": "2",
+								"wall_distance": 1.452381,
+								"closed": true,
+								"node_id": "31"
+							},
+							{
+								"position": "Vector2( 2944, 3584 )",
+								"rotation": 3.141593,
+								"scale": "Vector2( 1, 1 )",
+								"direction": "Vector2( -1, 0 )",
+								"texture": "res://textures/portals/door_06.png",
+								"radius": 128,
+								"wall_id": "2",
+								"wall_distance": 1.547619,
+								"closed": true,
+								"node_id": "8"
+							},
+							{
+								"position": "Vector2( 2688, 3584 )",
+								"rotation": 3.141593,
+								"scale": "Vector2( 1, 1 )",
+								"direction": "Vector2( -1, 0 )",
+								"texture": "res://textures/portals/door_05.png",
+								"radius": 128,
+								"wall_id": "2",
+								"wall_distance": 1.595238,
+								"closed": true,
+								"node_id": "7"
+							},
+							{
+								"position": "Vector2( 1280, 3584 )",
+								"rotation": 3.141593,
+								"scale": "Vector2( 1, 1 )",
+								"direction": "Vector2( -1, 0 )",
+								"texture": "res://textures/portals/window_05.png",
+								"radius": 100.5,
+								"wall_id": "2",
+								"wall_distance": 1.857143,
+								"closed": true,
+								"node_id": "32"
+							},
+							{
+								"position": "Vector2( 1280, 256 )",
+								"rotation": 0,
+								"scale": "Vector2( 1, 1 )",
+								"direction": "Vector2( 1, 0 )",
+								"texture": "res://textures/portals/window_05.png",
+								"radius": 100.5,
+								"wall_id": "2",
+								"wall_distance": 3.096774,
+								"closed": true,
+								"node_id": "2e"
+							},
+							{
+								"position": "Vector2( 2432, 256 )",
+								"rotation": 0,
+								"scale": "Vector2( 1, 1 )",
+								"direction": "Vector2( 1, 0 )",
+								"texture": "res://textures/portals/window_05.png",
+								"radius": 100.5,
+								"wall_id": "2",
+								"wall_distance": 3.241935,
+								"closed": true,
+								"node_id": "2d"
+							},
+							{
+								"position": "Vector2( 8448, 3968 )",
+								"rotation": 1.570796,
+								"scale": "Vector2( 1, 1 )",
+								"direction": "Vector2( 0, 1 )",
+								"texture": "res://textures/portals/window_05.png",
+								"radius": 100.5,
+								"wall_id": "2",
+								"wall_distance": 4.805555,
+								"closed": true,
+								"node_id": "30"
+							}
 						]
 					}
 				],
@@ -1637,9 +1807,7 @@
 					"disable_border": false
 				},
 				"materials": {
-					"-400": [
 
-					]
 				},
 				"paths": [
 
@@ -1655,6 +1823,331 @@
 						"shadow": true,
 						"block_light": false,
 						"node_id": "6"
+					},
+					{
+						"position": "Vector2( 1280, 384 )",
+						"rotation": 0,
+						"scale": "Vector2( 1, 1 )",
+						"mirror": false,
+						"texture": "res://textures/objects/activities/smithing/design_table_02.png",
+						"layer": 100,
+						"shadow": true,
+						"block_light": false,
+						"node_id": "f"
+					},
+					{
+						"position": "Vector2( 6400, 1408 )",
+						"rotation": 1.570796,
+						"scale": "Vector2( 1, 1 )",
+						"mirror": false,
+						"texture": "res://textures/objects/furniture/tables/bar_table.png",
+						"layer": 100,
+						"shadow": true,
+						"block_light": false,
+						"node_id": "10"
+					},
+					{
+						"position": "Vector2( 6016, 896 )",
+						"rotation": 1.832596,
+						"scale": "Vector2( 1, 1 )",
+						"mirror": false,
+						"texture": "res://packs/FK6JxVwZ/textures/objects/Stool_Wood_Light_B_1x1.webp",
+						"layer": 100,
+						"shadow": true,
+						"block_light": false,
+						"node_id": "11"
+					},
+					{
+						"position": "Vector2( 6016, 1152 )",
+						"rotation": 1.832596,
+						"scale": "Vector2( 1, 1 )",
+						"mirror": false,
+						"texture": "res://packs/FK6JxVwZ/textures/objects/Stool_Wood_Light_B_1x1.webp",
+						"layer": 100,
+						"shadow": true,
+						"block_light": false,
+						"node_id": "12"
+					},
+					{
+						"position": "Vector2( 6016, 1408 )",
+						"rotation": 1.832596,
+						"scale": "Vector2( 1, 1 )",
+						"mirror": false,
+						"texture": "res://packs/FK6JxVwZ/textures/objects/Stool_Wood_Light_B_1x1.webp",
+						"layer": 100,
+						"shadow": true,
+						"block_light": false,
+						"node_id": "13"
+					},
+					{
+						"position": "Vector2( 6016, 1664 )",
+						"rotation": 1.832596,
+						"scale": "Vector2( 1, 1 )",
+						"mirror": false,
+						"texture": "res://packs/FK6JxVwZ/textures/objects/Stool_Wood_Light_B_1x1.webp",
+						"layer": 100,
+						"shadow": true,
+						"block_light": false,
+						"node_id": "14"
+					},
+					{
+						"position": "Vector2( 6016, 1920 )",
+						"rotation": 1.832596,
+						"scale": "Vector2( 1, 1 )",
+						"mirror": false,
+						"texture": "res://packs/FK6JxVwZ/textures/objects/Stool_Wood_Light_B_1x1.webp",
+						"layer": 100,
+						"shadow": true,
+						"block_light": false,
+						"node_id": "15"
+					},
+					{
+						"position": "Vector2( 8192, 640 )",
+						"rotation": -3.141593,
+						"scale": "Vector2( 1.6, 1.6 )",
+						"mirror": false,
+						"texture": "res://packs/FK6JxVwZ/textures/objects/Keg_Wood_Light_H_1x1.webp",
+						"layer": 100,
+						"shadow": true,
+						"block_light": false,
+						"node_id": "16"
+					},
+					{
+						"position": "Vector2( 8192, 1152 )",
+						"rotation": -3.141593,
+						"scale": "Vector2( 1.6, 1.6 )",
+						"mirror": false,
+						"texture": "res://packs/FK6JxVwZ/textures/objects/Keg_Wood_Light_H_1x1.webp",
+						"layer": 100,
+						"shadow": true,
+						"block_light": false,
+						"node_id": "17"
+					},
+					{
+						"position": "Vector2( 8192, 1664 )",
+						"rotation": -3.141593,
+						"scale": "Vector2( 1.6, 1.6 )",
+						"mirror": false,
+						"texture": "res://packs/FK6JxVwZ/textures/objects/Keg_Wood_Light_H_1x1.webp",
+						"layer": 100,
+						"shadow": true,
+						"block_light": false,
+						"node_id": "18"
+					},
+					{
+						"position": "Vector2( 8192, 2176 )",
+						"rotation": -3.141593,
+						"scale": "Vector2( 1.6, 1.6 )",
+						"mirror": false,
+						"texture": "res://packs/FK6JxVwZ/textures/objects/Keg_Wood_Light_H_1x1.webp",
+						"layer": 100,
+						"shadow": true,
+						"block_light": false,
+						"node_id": "19"
+					},
+					{
+						"position": "Vector2( 2176, 384 )",
+						"rotation": -0.785398,
+						"scale": "Vector2( 1.6, 1.6 )",
+						"mirror": false,
+						"texture": "res://textures/objects/activities/cooking/stove_04_detail.png",
+						"layer": 100,
+						"shadow": true,
+						"block_light": false,
+						"node_id": "1a"
+					},
+					{
+						"position": "Vector2( 4480, 1408 )",
+						"rotation": -0.785398,
+						"scale": "Vector2( 1.6, 1.6 )",
+						"mirror": false,
+						"texture": "res://textures/objects/stable/hay_floor_02.png",
+						"layer": 100,
+						"shadow": true,
+						"block_light": false,
+						"node_id": "1b"
+					},
+					{
+						"position": "Vector2( 4864, 1024 )",
+						"rotation": -0.785398,
+						"scale": "Vector2( 1.6, 1.6 )",
+						"mirror": false,
+						"texture": "res://textures/objects/furniture/broken/table_broken_03.png",
+						"layer": 100,
+						"shadow": true,
+						"block_light": false,
+						"node_id": "1c"
+					},
+					{
+						"position": "Vector2( 5504, 3200 )",
+						"rotation": -0.785398,
+						"scale": "Vector2( 1.6, 1.6 )",
+						"mirror": false,
+						"texture": "res://textures/objects/furniture/broken/table_broken_02.png",
+						"layer": 100,
+						"shadow": true,
+						"block_light": false,
+						"node_id": "1d"
+					},
+					{
+						"position": "Vector2( 3200, 896 )",
+						"rotation": -0.785398,
+						"scale": "Vector2( 1.6, 1.6 )",
+						"mirror": false,
+						"texture": "res://textures/objects/furniture/broken/table_broken_01.png",
+						"layer": 100,
+						"shadow": true,
+						"block_light": false,
+						"node_id": "1e"
+					},
+					{
+						"position": "Vector2( 1664, 3200 )",
+						"rotation": 2.094395,
+						"scale": "Vector2( 1.6, 1.6 )",
+						"mirror": false,
+						"texture": "res://textures/objects/furniture/broken/table_broken_02.png",
+						"layer": 100,
+						"shadow": true,
+						"block_light": false,
+						"node_id": "21"
+					},
+					{
+						"position": "Vector2( 768, 2688 )",
+						"rotation": -1.047198,
+						"scale": "Vector2( 1.6, 1.6 )",
+						"mirror": false,
+						"texture": "res://textures/objects/furniture/broken/table_broken_02.png",
+						"layer": 100,
+						"shadow": true,
+						"block_light": false,
+						"node_id": "22"
+					},
+					{
+						"position": "Vector2( 3328, 768 )",
+						"rotation": -2.356194,
+						"scale": "Vector2( 1.6, 1.6 )",
+						"mirror": false,
+						"texture": "res://textures/objects/clutter/floor/broken_pottery_10.png",
+						"layer": 100,
+						"shadow": true,
+						"block_light": false,
+						"node_id": "23"
+					},
+					{
+						"position": "Vector2( 6400, 896 )",
+						"rotation": -2.356194,
+						"scale": "Vector2( 1.6, 1.6 )",
+						"mirror": false,
+						"texture": "res://textures/objects/clutter/floor/broken_pottery_07.png",
+						"layer": 100,
+						"shadow": true,
+						"block_light": false,
+						"node_id": "24"
+					},
+					{
+						"position": "Vector2( 5248, 384 )",
+						"rotation": 0,
+						"scale": "Vector2( 1.6, 1.6 )",
+						"mirror": false,
+						"texture": "res://textures/objects/furniture/broken/armchair_broken_02.png",
+						"layer": 100,
+						"shadow": true,
+						"block_light": false,
+						"custom_color": "ff6b3834",
+						"node_id": "25"
+					},
+					{
+						"position": "Vector2( 7296, 4480 )",
+						"rotation": -3.141593,
+						"scale": "Vector2( 1.6, 1.6 )",
+						"mirror": false,
+						"texture": "res://textures/objects/furniture/broken/bed_broken_02.png",
+						"layer": 100,
+						"shadow": true,
+						"block_light": false,
+						"custom_color": "ff6b3834",
+						"node_id": "26"
+					},
+					{
+						"position": "Vector2( 5248, 4096 )",
+						"rotation": 2.879793,
+						"scale": "Vector2( 1.6, 1.6 )",
+						"mirror": false,
+						"texture": "res://textures/objects/furniture/broken/pillar_broken_05.png",
+						"layer": 100,
+						"shadow": true,
+						"block_light": false,
+						"custom_color": "ff6b3834",
+						"node_id": "27"
+					},
+					{
+						"position": "Vector2( 384, 4224 )",
+						"rotation": -2.879793,
+						"scale": "Vector2( 1.6, 1.6 )",
+						"mirror": false,
+						"texture": "res://textures/objects/furniture/broken/pillar_broken_02.png",
+						"layer": 100,
+						"shadow": true,
+						"block_light": false,
+						"node_id": "28"
+					},
+					{
+						"position": "Vector2( 8192, 3072 )",
+						"rotation": 1.570796,
+						"scale": "Vector2( 1.6, 1.6 )",
+						"mirror": false,
+						"texture": "res://textures/objects/furniture/broken/table_broken_01.png",
+						"layer": 100,
+						"shadow": true,
+						"block_light": false,
+						"node_id": "29"
+					},
+					{
+						"position": "Vector2( 5248, 6144 )",
+						"rotation": 1.308997,
+						"scale": "Vector2( 1.6, 1.6 )",
+						"mirror": false,
+						"texture": "res://textures/objects/spiritual/totems/totem_broken_02.png",
+						"layer": 100,
+						"shadow": true,
+						"block_light": false,
+						"custom_color": "ff6b3834",
+						"node_id": "2a"
+					},
+					{
+						"position": "Vector2( 2176, 2432 )",
+						"rotation": -0.523599,
+						"scale": "Vector2( 1.6, 1.6 )",
+						"mirror": false,
+						"texture": "res://textures/objects/spiritual/totems/totem_broken_04.png",
+						"layer": 100,
+						"shadow": true,
+						"block_light": false,
+						"custom_color": "ff6b3834",
+						"node_id": "2b"
+					},
+					{
+						"position": "Vector2( 2432, 1920 )",
+						"rotation": -1.308997,
+						"scale": "Vector2( 1.6, 1.6 )",
+						"mirror": false,
+						"texture": "res://textures/objects/structures/bridges/bridge_broken_04.png",
+						"layer": 100,
+						"shadow": true,
+						"block_light": false,
+						"custom_color": "ff6b3834",
+						"node_id": "2c"
+					},
+					{
+						"position": "Vector2( 7424, 2048 )",
+						"rotation": -1.570796,
+						"scale": "Vector2( 1.6, 1.6 )",
+						"mirror": false,
+						"texture": "res://textures/objects/activities/cooking/stove_03_russian.png",
+						"layer": 100,
+						"shadow": true,
+						"block_light": false,
+						"node_id": "33"
 					}
 				],
 				"lights": [

@@ -1,2 +1,2 @@
 [workspace]
-members=["dd2vtt-parser"]
+members=["thumbnail-generator"]
