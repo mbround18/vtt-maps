@@ -27,7 +27,7 @@ jobs:
       - name: Setup | Rust | Nightly
         uses: ATiltedTree/setup-rust@v1
         with:
-          rust-version: nightly
+          rust-version: stable
           components: clippy rustfmt trunk
           targets: wasm32-unknown-unknown
       - name: Run Install
