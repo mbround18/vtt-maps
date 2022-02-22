@@ -1,3 +1,0 @@
-# Catalogue of Maps
-
-{}

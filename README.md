@@ -1,4 +1,4 @@
-# vtt-maps
+# VTT-Maps
 
 
 ## Disclaimer

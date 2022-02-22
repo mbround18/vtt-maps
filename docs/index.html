@@ -1,3 +1,72 @@
+<!DOCTYPE html><html><head>
+    <meta charset="utf-8">
+    <title>D&amp;D VTT Maps</title>
+    <style>
+        :root {
+            --darkreader-neutral-background: #131516;
+            --darkreader-neutral-text: #d8d4cf;
+            --darkreader-selection-background: #004daa;
+            --darkreader-selection-text: #e8e6e3;
+        }
+        html, body, input, textarea, select, button {
+            border-color: #736b5e;
+            color: #e8e6e3;
+        }
+        html, body, input, textarea, select, button {
+            background-color: #181a1b;
+        }
+        html {
+            color-scheme: dark !important;
+        }
+        html {
+            background-color: #181a1b !important;
+        }
+        * {
+            scrollbar-color: #454a4d #202324;
+        }
+    </style>
+    <style rel="scss" data-inline="">
+        .image-mosaic {
+            display: flex;
+            flex-direction: row;
+            flex-wrap: wrap;
+
+            gap: 1rem;
+        }
+
+        .card:last-child {
+            position: relative;
+        }
+    </style>
+    
+
+<link rel="preload" href="/index-2a24570e3c5fed8b_bg.wasm" as="fetch" type="application/wasm" crossorigin="">
+<link rel="modulepreload" href="/index-2a24570e3c5fed8b.js"></head>
 <body>
-  <h1>Test</h1>
-</body>
+<script type="module">import init from '/index-2a24570e3c5fed8b.js';init('/index-2a24570e3c5fed8b_bg.wasm');</script><script>(function () {
+    var url = 'ws://' + window.location.host + '/_trunk/ws';
+    var poll_interval = 5000;
+    var reload_upon_connect = () => {
+        window.setTimeout(
+            () => {
+                // when we successfully reconnect, we'll force a
+                // reload (since we presumably lost connection to
+                // trunk due to it being killed, so it will have
+                // rebuilt on restart)
+                var ws = new WebSocket(url);
+                ws.onopen = () => window.location.reload();
+                ws.onclose = reload_upon_connect;
+            },
+            poll_interval);
+    };
+
+    var ws = new WebSocket(url);
+    ws.onmessage = (ev) => {
+        const msg = JSON.parse(ev.data);
+        if (msg.reload) {
+            window.location.reload();
+        }
+    };
+    ws.onclose = reload_upon_connect;
+})()
+</script></body></html>

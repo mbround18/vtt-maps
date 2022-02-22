@@ -1,15 +1,40 @@
-name: File Mod
+name: Rust
 
-on: [push]
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+env:
+  NAME: "Rust Test"
+  CARGO_TERM_COLOR: always
 
 jobs:
-  build:
+  cancel-previous:
+    name: Cancel Previous
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v1
-    - name: Build
-      run: cargo build --verbose
-    - name: Run Install
-      run: cargo install --path ./thumbnail-generator
-    - name: Run Parser
-      run: thumbnail-generator ./
+      - uses: styfle/cancel-workflow-action@0.9.1
+        with:
+          access_token: ${{ github.token }}
+
+  build-nd-test:
+    name: Build & Test
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Setup | Rust | Nightly
+        uses: ATiltedTree/setup-rust@v1
+        with:
+          rust-version: nightly
+          components: clippy rustfmt trunk
+          targets: wasm32-unknown-unknown
+      - name: Run Install
+        run: cargo install --path ./packages/thumbnail-generator
+      - name: Run Parser
+        run: thumbnail-generator ./
+      - name: Build Pages
+        run: trunk build --release -d ./docs ./packages/gh-pagify/index.html
+      - name: Commit
+        run: git add --all && git commit -am "[skip ci] Auto Generated" && git push
