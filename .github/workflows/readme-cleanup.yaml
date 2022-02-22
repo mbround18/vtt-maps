@@ -35,10 +35,12 @@ jobs:
         uses: ATiltedTree/setup-rust@v1
         with:
           rust-version: stable
-          components: clippy rustfmt trunk
+          components: clippy rustfmt
           targets: wasm32-unknown-unknown
       - name: Run Install
-        run: cargo install --path ./packages/thumbnail-generator
+        run: > 
+          cargo install --path ./packages/thumbnail-generator
+          cargo install trunk
       - name: Run Parser
         run: thumbnail-generator ./
       - name: Build Pages
