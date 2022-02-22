@@ -1,5 +1,6 @@
 # VTT-Maps
 
+[**Want to learn more about this project? Click here!**](https://github.com/dnd-apps/vtt-maps/discussions/4)
 
 ## Disclaimer
 
