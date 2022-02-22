@@ -3,9 +3,16 @@ name: Rust
 on:
   push:
     branches: [ main ]
+    paths-ignore:
+      - "**/docs/**/*"
+      - "**/*.info"
+      - "**/*.preview.png"
   pull_request:
     branches: [ main ]
-
+    paths-ignore:
+      - "**/docs/**/*"
+      - "**/*.info"
+      - "**/*.preview.png"
 env:
   NAME: "Rust Test"
   CARGO_TERM_COLOR: always
@@ -37,4 +44,4 @@ jobs:
       - name: Build Pages
         run: trunk build --release -d ./docs ./packages/gh-pagify/index.html
       - name: Commit
-        run: git add --all && git commit -am "[skip ci] Auto Generated" && git push
+        run: git add --all && git commit -am "Auto Generated" && git push
