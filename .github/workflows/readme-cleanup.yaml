@@ -2,13 +2,13 @@ name: Rust
 
 on:
   push:
-    branches: [ main ]
+    branches: [main]
     paths-ignore:
       - "**/docs/**/*"
       - "**/*.info"
       - "**/*.preview.png"
   pull_request:
-    branches: [ main ]
+    branches: [main]
     paths-ignore:
       - "**/docs/**/*"
       - "**/*.info"
@@ -30,13 +30,15 @@ jobs:
     name: Build & Test
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
+
       - name: Setup | Rust | Nightly
         uses: ATiltedTree/setup-rust@v1
         with:
           rust-version: stable
           components: clippy rustfmt
           targets: wasm32-unknown-unknown
+
       - uses: actions/cache@v2
         name: Cache Cargo Files
         with:
@@ -44,20 +46,31 @@ jobs:
             target/release
             target/debug
           key: ${{ runner.os }}-${{ hashFiles('**/Cargo.lock') }}
+
       - name: Run Install
         run: |
           cargo install --path ./packages/thumbnail-generator
           cargo install trunk
+
       - name: Run Parser
         run: thumbnail-generator ./
+
       - name: Build Pages
         run: trunk build --release -d ./docs ./packages/gh-pagify/index.html
-      - name: Commit
-        run: |
-          git config --global user.email "12646562+mbround18@users.noreply.github.com"
-          git config --global user.name "mbround18"
-          
-          git pull
-          git add --all 
-          git commit -am "Auto Generated"
-          git push
+
+      - name: Deploy 🚀
+        uses: JamesIves/github-pages-deploy-action@v4.2.5
+        if: github.event_name != 'pull_request'
+        with:
+          branch: gh-pages
+          folder: docs
+
+      # - name: Commit
+      #   run: |
+      #     git config --global user.email "12646562+mbround18@users.noreply.github.com"
+      #     git config --global user.name "mbround18"
+
+      #     git pull
+      #     git add --all
+      #     git commit -am "Auto Generated"
+      #     git push
