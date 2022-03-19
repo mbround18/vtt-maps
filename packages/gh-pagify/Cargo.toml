@@ -8,6 +8,7 @@ edition = "2021"
 [dependencies]
 # you can check the latest version here: https://crates.io/crates/yew
 yew = "0.19"
+yew-router = "0.16"
 reqwasm = "0.4.1"
 serde = {version = "1", features = ["derive"]}
 serde_json = "1"

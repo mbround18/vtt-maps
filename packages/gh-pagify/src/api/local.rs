@@ -1,11 +1,11 @@
 use reqwasm::http::Request;
 
-pub async fn get_readme() -> String {
-     Request::get("/README.md")
+pub async fn get_markdown(url: &str) -> String {
+    Request::get(url)
         .send()
         .await
         .unwrap()
         .text()
-         .await
+        .await
         .unwrap()
 }

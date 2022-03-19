@@ -1,90 +1,48 @@
 mod api;
+mod components;
 mod entities;
+mod pages;
 
-use crate::api::get_file_tree;
-use crate::entities::MapAssets;
+use pages::{Catalogue, Home};
+use components::navigation::Navigation;
 use yew::prelude::*;
-use crate::api::local::get_readme;
+use yew_router::prelude::*;
 
-enum Msg {
-    SetReadme(String),
-    SetAssets(MapAssets),
+#[derive(Clone, Routable, PartialEq)]
+enum MainRoute {
+    #[at("/")]
+    Home,
+    #[at("/catalogue")]
+    Catalogue,
+    #[not_found]
+    #[at("/settings/404")]
+    NotFound,
 }
 
-struct Model {
-    readme: String,
-    map_assets: MapAssets,
+fn switch_main(route: &MainRoute) -> Html {
+    match route {
+        MainRoute::Home => html! {
+            <Home />
+        },
+        MainRoute::Catalogue => html! {
+            <Catalogue />
+        },
+        MainRoute::NotFound => html! {<h1>{"Not Found"}</h1>},
+    }
 }
 
-impl Component for Model {
-    type Message = Msg;
-    type Properties = ();
-
-    fn create(ctx: &Context<Self>) -> Self {
-        ctx.link().send_future(async move {
-            let body = get_file_tree().await;
-            Msg::SetAssets(MapAssets::from(body))
-        });
-        ctx.link().send_future(async move {
-            let body = get_readme().await;
-            Msg::SetReadme(body)
-        });
-        Self {
-            readme: String::from("# VTT-Maps"),
-            map_assets: MapAssets { assets: vec![] },
-        }
-    }
-
-    fn update(&mut self, _ctx: &Context<Self>, msg: Self::Message) -> bool {
-        match msg {
-            Msg::SetAssets(assets) => {
-                self.map_assets = assets;
-                // the value has changed so we need to
-                // re-render for it to appear on the page
-                true
-            },
-            Msg::SetReadme(readme) => {
-                self.readme = markdown::to_html(&readme);
-                true
-            }
-        }
-    }
-
-    fn view(&self, _ctx: &Context<Self>) -> Html {
-        let assets = &self.map_assets.assets;
-        let items = assets
-            .into_iter()
-            .map(|e| {
-                let href = format!("{}", e.download_url);
-                let src = format!("{}", e.preview_url);
-
-                html! {
-                    <div class="card" key={src.clone()}>
-                        <img alt={src.clone()} src={src.clone()}  />
-                        <div class="overlay">
-                            <a {href} target="_blank">{"^ Download Above ^"}</a>
-                        </div>
-                    </div>
-                }
-            })
-            .collect::<Vec<_>>();
-
-        let div = gloo_utils::document().create_element("div").unwrap();
-        div.set_inner_html(&self.readme);
-
-        html! {
-            <>
-            { Html::VRef(div.into()) }
-            <h2>{"Catalogue"}</h2>
-            <hr />
-            <div class="image-mosaic">{
-                for items
-            }</div>
-            </>
-        }
+#[function_component(App)]
+pub fn app() -> Html {
+    html! {
+        <>
+            <BrowserRouter>
+                <Navigation />
+                <Switch<MainRoute> render={Switch::render(switch_main)} />
+            </BrowserRouter>
+        </>
     }
 }
 
 fn main() {
-    yew::start_app::<Model>();
+    yew::start_app::<App>();
 }

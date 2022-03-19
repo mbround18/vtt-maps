@@ -1,10 +1,10 @@
 [tasks.dev]
 workspace = false
-command = "cargo"
+command = "trunk"
 args = [
-    "run",
-    "--bin",
-    "dd2vtt-parser",
-    "../"
+    "serve",
+    "-d",
+    "./docs",
+    "./packages/gh-pagify/index.html"
 ]
-watch = true
+#watch = true
