@@ -8,7 +8,7 @@ runs:
       uses: ATiltedTree/setup-rust@v1
       with:
         rust-version: stable
-        components: clippy rustfmt trunk
+        components: clippy rustfmt
         targets: wasm32-unknown-unknown
 
     - name: Setup | Rust | Nightly
