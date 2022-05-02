@@ -1,0 +1,22 @@
+{
+  "plugins": [
+    "git-tag",
+    [
+      "gh-pages",
+      {
+        "buildCommand": "trunk build --release -d ./docs ./packages/gh-pagify/index.html",
+        "dir": "./docs"
+      }
+    ]
+  ],
+  "owner": "dnd-apps",
+  "repo": "vtt-maps",
+  "name": "mbround18",
+  "email": "12646562+mbround18@users.noreply.github.com",
+  "noDefaultLabels": true,
+  "labels": [
+    { "releaseType": "major", "name": "Version: Major" },
+    { "releaseType": "minor", "name": "Version: Minor" },
+    { "releaseType": "patch", "name": "Version: Patch" }
+  ]
+}

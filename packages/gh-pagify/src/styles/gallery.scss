@@ -1,0 +1,16 @@
+@use "base";
+
+#gallery {
+  @include base.theme;
+
+  .image-mosaic {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 1rem;
+  }
+
+  .card:last-child {
+    position: relative;
+  }
+}

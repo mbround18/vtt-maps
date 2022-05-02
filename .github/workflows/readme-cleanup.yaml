@@ -30,47 +30,26 @@ jobs:
     name: Build & Test
     runs-on: ubuntu-latest
     steps:
+      # Checkout
       - uses: actions/checkout@v3
-
-      - name: Setup | Rust | Nightly
-        uses: ATiltedTree/setup-rust@v1
-        with:
-          rust-version: stable
-          components: clippy rustfmt
-          targets: wasm32-unknown-unknown
-
-      - uses: actions/cache@v2
-        name: Cache Cargo Files
-        with:
-          path: |
-            target/release
-            target/debug
-          key: ${{ runner.os }}-${{ hashFiles('**/Cargo.lock') }}
-
-      - name: Run Install
-        run: |
-          cargo install --path ./packages/thumbnail-generator
-          cargo install trunk
-
-      - name: Run Parser
-        run: thumbnail-generator ./
-
-      - name: Build Pages
-        run: trunk build --release -d ./docs ./packages/gh-pagify/index.html
-
-      - name: Deploy 🚀
-        uses: JamesIves/github-pages-deploy-action@v4.2.5
         if: github.event_name != 'pull_request'
         with:
-          branch: gh-pages
-          folder: docs
+          fetch-depth: 0 # <- Suggested to get all tags
+          token: ${{ secrets.GH_TOKEN }} # <- This is required
 
-      # - name: Commit
-      #   run: |
-      #     git config --global user.email "12646562+mbround18@users.noreply.github.com"
-      #     git config --global user.name "mbround18"
+      - uses: actions/checkout@v3
+        if: github.event_name == 'pull_request'
 
-      #     git pull
-      #     git add --all
-      #     git commit -am "Auto Generated"
-      #     git push
+      # Setup
+      - uses: ./.github/actions/setup
+
+      # Parser
+      - name: Run Parser
+        uses: ./.github/actions/parser
+
+      # Deploy
+      - name: Deploy 🚀
+        if: github.event_name != 'pull_request'
+        uses: mbround18/auto@v1
+        with:
+          token: ${{ secrets.GH_TOKEN }} # <- This is for auto

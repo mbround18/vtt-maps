@@ -1,0 +1,40 @@
+// Branding
+@use "base";
+
+// Required
+:root {
+  --darkreader-neutral-background: #131516;
+  --darkreader-neutral-text: #d8d4cf;
+  --darkreader-selection-background: #004daa;
+  --darkreader-selection-text: #e8e6e3;
+}
+html,
+body,
+input,
+textarea,
+select,
+button {
+  border-color: #736b5e;
+  color: #e8e6e3;
+}
+html,
+body,
+input,
+textarea,
+select,
+button {
+  background-color: #181a1b;
+}
+html {
+  color-scheme: dark !important;
+  background-color: base.$background-color !important;
+}
+
+* {
+  scrollbar-color: #454a4d #202324;
+}
+
+// imports
+@import "general";
+@import "readme";
+@import "gallery";

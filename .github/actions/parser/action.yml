@@ -1,0 +1,13 @@
+name: Thumbnail Parser
+author: mbround18
+description: Run parser
+runs:
+  using: "composite"
+  steps:
+    - name: Run Install
+      shell: bash
+      run: cargo install --path ./packages/thumbnail-generator
+
+    - name: Run Parser
+      shell: bash
+      run: thumbnail-generator ./

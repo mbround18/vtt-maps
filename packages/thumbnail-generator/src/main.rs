@@ -57,7 +57,7 @@ fn handle_file(file_path: &str) {
     }
 
     // Generate thumbnail if it doesnt exist.
-    if !path_to_thumbnail_path(&file_path).exists() {
+    if !path_to_thumbnail_path(file_path).exists() {
         generate_thumbnail(file_path);
         return;
     }
@@ -69,7 +69,7 @@ fn handle_file(file_path: &str) {
         generate_thumbnail(file_path);
         write_reference(&info_path, reference);
     } else {
-        println!("No thumbnail gnerated for {}", file_path);
+        println!("No thumbnail generated for {}", file_path);
     }
 }
 

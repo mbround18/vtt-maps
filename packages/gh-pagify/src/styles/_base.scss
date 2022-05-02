@@ -1,0 +1,16 @@
+$background-color: #181a1b;
+$foreground-color: #2d2f33;
+$accent-color: #6f2b9b;
+$error-color: #9b2b40;
+$warn-color: #9b8c2b;
+$info-color: #668ec4;
+
+@mixin theme($theme: $foreground-color) {
+  background-color: $theme;
+}
+
+@mixin card($theme: $foreground-color) {
+  box-shadow: 0 4px 8px 0 rgba($theme, 0.25);
+  border-radius: 5px;
+  transition: 0.3s;
+}

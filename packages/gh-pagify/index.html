@@ -5,13 +5,13 @@
     <title>D&D VTT Maps</title>
     <!--   Usability   -->
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    
+
     <!--  Robots    -->
     <meta name="description" content="Virtual tabletop maps for FoundryVTT and other similar VTT software!">
-    <meta name=”robots” content=”index, follow”> 
-    
+    <meta name=”robots” content=”index, follow”>
+
     <!--  SEO   -->
-    <meta name="keywords" content="OpenGraph, meta tags, findability, Twitter, Facebook, SEO">
+    <meta name="keywords" content="OpenGraph, meta tags, find-ability, Twitter, Facebook, SEO">
     <meta name="description" content="This website hold a catalogue of all maps utilized in the Boop Ninja Universe and associated campaigns.">
 
     <meta property="og:title" content="VTT Maps by Boop NInja Universe">
@@ -25,45 +25,28 @@
     <meta name="twitter:image" content="https://avatars.githubusercontent.com/u/51458697?s=200&v=4">
     <meta property="twitter:description" content="This website hold a catalogue of all maps utilized in the Boop Ninja Universe and associated campaigns.">
 
-    <!--   Code   -->
-    <style>
-        :root {
-            --darkreader-neutral-background: #131516;
-            --darkreader-neutral-text: #d8d4cf;
-            --darkreader-selection-background: #004daa;
-            --darkreader-selection-text: #e8e6e3;
-        }
-        html, body, input, textarea, select, button {
-            border-color: #736b5e;
-            color: #e8e6e3;
-        }
-        html, body, input, textarea, select, button {
-            background-color: #181a1b;
-        }
-        html {
-            color-scheme: dark !important;
-        }
-        html {
-            background-color: #181a1b !important;
-        }
-        * {
-            scrollbar-color: #454a4d #202324;
-        }
-    </style>
-    <style rel="scss" data-inline>
-        .image-mosaic {
-            display: flex;
-            flex-direction: row;
-            flex-wrap: wrap;
+    <!--  Styles  -->
+    <link data-trunk rel="scss" href="src/styles/index.scss" />
 
-            gap: 1rem;
-        }
-
-        .card:last-child {
-            position: relative;
-        }
-    </style>
+    <!--  Files to Copy  -->
     <link data-trunk rel="copy-file" href="../../README.md" />
     <link data-trunk rel="copy-file" href="../../config/CNAME" />
+    <link data-trunk rel="copy-dir" href="../../assets" />
+
+    <!--  Plugins  -->
+    <script
+            src='https://storage.ko-fi.com/cdn/scripts/overlay-widget.js'
+            defer async
+    ></script>
+    <script defer async>
+        setTimeout(async ()=> {
+            window.kofiWidgetOverlay.draw('mbround18', {
+                'type': 'floating-chat',
+                'floating-chat.donateButton.text': 'Support Us',
+                'floating-chat.donateButton.background-color': '#794bc4',
+                'floating-chat.donateButton.text-color': '#fff'
+            });
+        }, 200)
+    </script>
 </head>
 </html>

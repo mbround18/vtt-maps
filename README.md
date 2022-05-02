@@ -1,18 +1,24 @@
-# VTT-Maps
+![](/assets/vtt-maps-logo.png)
 
-[**Want to learn more about this project? Click here!**](https://github.com/dnd-apps/vtt-maps/discussions/4)
+## About
 
-## Disclaimer
+### ❤️Info/Support Links ❤️
+
+- **[Learn more about this project!](https://github.com/dnd-apps/vtt-maps/discussions/4)**
+- *[Support the creator, @mbround18](https://ko-fi.com/mbround18)*
+
+### ❗ Disclaimer ❗
 
 Many map files in this repo are DungeonDraft files, and you will need a license to DungeonDraft to modify or re-render them.
 Any map that is dubbed complete will be generated into an optimal-half output in the dd2vtt standard format. Once it's been outputted to that format,
-it will have a preview image generated to accompany it. I am working on getting auto documentation and cataloging of each map available
-in the README but for now you might have to go digging. 
+it will have a preview image generated to accompany it. 
 
 ## Asset Packs Used
 
-### Free Packs
+### 🌟 Free Packs 🌟
 
- - [Dungeondraft Integration 3.0](https://www.forgotten-adventures.net/product/map-making/assets/dungeondraft-integration/)
- - [Pirates & Ports](https://essendi.gumroad.com/l/PiratesAndPorts)
- - [Crosshead Ghibli Pack](https://crossheadstudios.com/dungeondraft/)
+- [Dungeondraft Integration 3.0](https://www.forgotten-adventures.net/product/map-making/assets/dungeondraft-integration/)
+- [Pirates & Ports](https://essendi.gumroad.com/l/PiratesAndPorts)
+- [Crosshead Ghibli Pack](https://crossheadstudios.com/dungeondraft/)
+
+
