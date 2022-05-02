@@ -8,7 +8,7 @@ runs:
       uses: ATiltedTree/setup-rust@v1
       with:
         rust-version: stable
-        components: clippy rustfmt
+        components: clippy rustfmt trunk
         targets: wasm32-unknown-unknown
 
     - uses: actions/cache@v2
@@ -18,7 +18,3 @@ runs:
           target/release
           target/debug
         key: ${{ runner.os }}-${{ hashFiles('**/Cargo.lock') }}
-
-    - name: Run Install
-      shell: bash
-      run: cargo install trunk
