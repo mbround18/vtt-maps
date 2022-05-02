@@ -19,6 +19,18 @@ args = [
     "./packages/gh-pagify/index.html"
 ]
 
+[tasks.build]
+dependencies = [ "rustfmt" ]
+install_crate = { crate_name = "trunk" }
+workspace = false
+command = "trunk"
+args = [
+    "build",
+    "--release",
+    "-d=./dist",
+    "./packages/gh-pagify/index.html"
+]
+
 [tasks.rustfmt]
 workspace = false
 command = "cargo"

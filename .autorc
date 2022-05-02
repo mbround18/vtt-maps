@@ -4,8 +4,8 @@
     [
       "gh-pages",
       {
-        "buildCommand": "trunk build --release -d ./docs ./packages/gh-pagify/index.html",
-        "dir": "./docs"
+        "buildCommand": "trunk build --release -d ./dist ./packages/gh-pagify/index.html",
+        "dir": "./dist"
       }
     ]
   ],

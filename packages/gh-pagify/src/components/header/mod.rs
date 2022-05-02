@@ -22,12 +22,10 @@ impl Component for Header {
 
     // On Render
     fn view(&self, _ctx: &Context<Self>) -> Html {
-        let readme = Route::ReadMe;
-        let catalog = Route::Catalog;
         html! {
             <div class="header">
-                <Link<Route> to={readme}>{ "About" }</Link<Route>>
-                <Link<Route> to={catalog}>{ "Catalog" }</Link<Route>>
+                <a href="/">{"About"}</a>
+                <a href="/catalog">{"Catalog"}</a>
             </div>
         }
     }

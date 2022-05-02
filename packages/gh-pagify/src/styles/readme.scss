@@ -3,12 +3,14 @@
 #readme {
   padding: 2em;
   margin: 2em;
+  border-radius: 1em;
 
   &:hover {
     box-shadow: 0 8px 16px 0 rgba(0, 0, 0, 0.2);
   }
+
   img {
-    width: 30%;
+    width: 15vw;
     filter: brightness(1.50);
   }
 }

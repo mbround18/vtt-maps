@@ -14,3 +14,10 @@ $info-color: #668ec4;
   border-radius: 5px;
   transition: 0.3s;
 }
+
+@mixin center() {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  width: 50%;
+}

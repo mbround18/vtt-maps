@@ -37,3 +37,16 @@ blockquote {
   background-color: #27282c;
   padding: .25em .5em .25em .5em;
 }
+
+#map-asset-view {
+  @include base.theme;
+  #content {
+    @include base.center;
+  }
+  img {
+    width: 25vw;
+  }
+  padding: 4em;
+  margin: 4em;
+  border-radius: 1em;
+}

@@ -1,4 +1,5 @@
 use crate::api::get_file_tree;
+use crate::components::MapAssetCard;
 use crate::entities::MapAssets;
 use yew::prelude::*;
 
@@ -47,8 +48,23 @@ impl Component for Catalog {
 
     // On Render
     fn view(&self, _ctx: &Context<Self>) -> Html {
+        let assets = &self.map_assets.assets;
+        let items = assets
+            .iter()
+            .map(|e| {
+                let asset = e.clone();
+                html! {
+                    <MapAssetCard {asset} />
+                }
+            })
+            .collect::<Vec<_>>();
+
         html! {
-            <div>{"hello"}</div>
+            <div id={"catalog"}>
+                <div class="image-mosaic">{
+                    for items
+                }</div>
+            </div>
         }
     }
 }

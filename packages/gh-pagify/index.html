@@ -29,24 +29,16 @@
     <link data-trunk rel="scss" href="src/styles/index.scss" />
 
     <!--  Files to Copy  -->
+    <link data-trunk
+          rel="icon"
+          type="image/x-icon"
+          href="../../assets/vtt-maps-logo.png"
+    />
     <link data-trunk rel="copy-file" href="../../README.md" />
     <link data-trunk rel="copy-file" href="../../config/CNAME" />
     <link data-trunk rel="copy-dir" href="../../assets" />
 
+
     <!--  Plugins  -->
-    <script
-            src='https://storage.ko-fi.com/cdn/scripts/overlay-widget.js'
-            defer async
-    ></script>
-    <script defer async>
-        setTimeout(async ()=> {
-            window.kofiWidgetOverlay.draw('mbround18', {
-                'type': 'floating-chat',
-                'floating-chat.donateButton.text': 'Support Us',
-                'floating-chat.donateButton.background-color': '#794bc4',
-                'floating-chat.donateButton.text-color': '#fff'
-            });
-        }, 200)
-    </script>
 </head>
 </html>

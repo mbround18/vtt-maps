@@ -19,5 +19,5 @@ runs:
           target/debug
         key: ${{ runner.os }}-${{ hashFiles('**/Cargo.lock') }}
 
-    - run: cargo install trunk
+    - run: cargo install trunk cargo-make
       shell: sh

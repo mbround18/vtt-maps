@@ -1,9 +1,24 @@
 use reqwasm::http::Request;
 use serde::{Deserialize, Serialize};
 
-#[derive(Serialize, Deserialize)]
+
+#[derive(PartialEq, Serialize, Deserialize)]
 pub struct GitTree {
     pub path: String,
+}
+
+impl From<String> for GitTree {
+    fn from(path: String) -> Self {
+        GitTree { path }
+    }
+}
+
+impl Clone for GitTree {
+    fn clone(&self) -> Self {
+        Self {
+            path: (&self.path).to_string(),
+        }
+    }
 }
 
 #[derive(Serialize, Deserialize)]
@@ -20,3 +35,14 @@ pub async fn get_file_tree() -> GHRepoTree {
         .await
         .unwrap()
 }
+
+// pub async fn get_body_as_string(url: String) -> DD2VTT {
+//     Request::get(&url)
+//         .send()
+//         .await
+//         .unwrap()
+//         .json()
+//         .await
+//         .unwrap()
+// }
+

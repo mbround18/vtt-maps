@@ -1,0 +1,29 @@
+@use "base";
+
+#catalog {
+  //@include base.theme;
+
+  padding: 2em;
+  margin: 2em;
+  border-radius: 1em;
+  .image-mosaic {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+
+
+    .card {
+      padding: 0;
+      margin: 1vh;
+
+      .preview-image {
+        @include base.center;
+        padding: 2vh 2vw 2vh 2vw;
+      }
+    }
+  }
+
+  .card:last-child {
+    position: relative;
+  }
+}
