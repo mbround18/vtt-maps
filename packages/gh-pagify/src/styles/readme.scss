@@ -1,10 +1,14 @@
 @use "base";
 
 #readme {
-  padding: 4em;
-  margin: 4em;
+  padding: 2em;
+  margin: 2em;
 
   &:hover {
     box-shadow: 0 8px 16px 0 rgba(0, 0, 0, 0.2);
+  }
+  img {
+    width: 30%;
+    filter: brightness(1.50);
   }
 }
