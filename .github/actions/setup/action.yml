@@ -4,11 +4,18 @@ description: Setup for this repo
 runs:
   using: "composite"
   steps:
-    - name: Setup | Rust | Nightly
+    - name: Setup | Rust | Stable
       uses: ATiltedTree/setup-rust@v1
       with:
         rust-version: stable
         components: clippy rustfmt trunk
+        targets: wasm32-unknown-unknown
+
+    - name: Setup | Rust | Nightly
+      uses: ATiltedTree/setup-rust@v1
+      with:
+        rust-version: nightly
+        components: trunk
         targets: wasm32-unknown-unknown
 
     - uses: actions/cache@v2
