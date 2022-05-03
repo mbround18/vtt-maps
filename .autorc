@@ -7,6 +7,14 @@
         "buildCommand": "trunk build --release -d ./dist ./packages/gh-pagify/index.html",
         "dir": "./dist"
       }
+    ],
+    [
+      "s3",
+      {
+        "bucket": "mbruno-static-files",
+        "region": "us-west-2",
+        "files": [["dist", "dnd-apps/vtt-maps"]]
+      }
     ]
   ],
   "owner": "dnd-apps",
