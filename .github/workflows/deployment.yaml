@@ -34,12 +34,13 @@ jobs:
         if: github.event_name == 'pull_request'
 
       # Setup
-      - uses: ./.github/actions/setup
+      - name: Setup
+        uses: ./.github/actions/setup
 
       # Parser
-      - name: Run Parser
+      - name: Thumbnail Parser
         uses: ./.github/actions/parser
-          
+
   deploy:
     name: Deploy
     runs-on: ubuntu-latest
@@ -52,13 +53,13 @@ jobs:
         with:
           fetch-depth: 0 # <- Suggested to get all tags
           token: ${{ secrets.GH_TOKEN }} # <- This is required
-          
+
       - uses: chrislennon/action-aws-cli@v1.1
 
       # Deploy
       - name: Deploy 🚀
         if: github.event_name != 'pull_request'
-        env: 
+        env:
           AWS_ACCESS_KEY: ${{ secrets.AWS_ACCESS_KEY }}
           AWS_SECRET_KEY: ${{ secrets.AWS_SECRET_KEY }}
         uses: mbround18/auto@v1.1.0
