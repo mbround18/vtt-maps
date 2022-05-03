@@ -1,0 +1,52 @@
+@use "base";
+
+// general purpose
+
+#not-found {
+  padding: 4em;
+  margin: 4em;
+}
+
+.card {
+  @include base.theme;
+  @include base.card;
+}
+
+.header {
+  top: 0;
+  margin: .3em;
+  padding: .75em;
+
+  a {
+    @include base.card;
+    background-color: base.$accent-color;
+    color: white;
+    padding: .5em .75em .5em .75em;
+    margin-left: .5em;
+    margin-right: .5em;
+    //&:visited {
+    //  color: gray;
+    //}
+    //&:hover {
+    //  color: white;
+    //}
+  }
+}
+
+blockquote {
+  background-color: #27282c;
+  padding: .25em .5em .25em .5em;
+}
+
+#map-asset-view {
+  @include base.theme;
+  #content {
+    @include base.center;
+  }
+  img {
+    width: 25vw;
+  }
+  padding: 4em;
+  margin: 4em;
+  border-radius: 1em;
+}

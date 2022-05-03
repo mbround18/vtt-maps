@@ -1,0 +1,23 @@
+name: Setup
+author: mbround18
+description: Setup for this repo
+runs:
+  using: "composite"
+  steps:
+    - name: Setup | Rust | Stable
+      uses: ATiltedTree/setup-rust@v1
+      with:
+        rust-version: stable
+        components: clippy rustfmt
+        targets: wasm32-unknown-unknown
+
+    - uses: actions/cache@v2
+      name: Cache Cargo Files
+      with:
+        path: |
+          target/release
+          target/debug
+        key: ${{ runner.os }}-${{ hashFiles('**/Cargo.lock') }}
+
+    - run: cargo install trunk cargo-make
+      shell: sh
