@@ -30,13 +30,6 @@ jobs:
     name: Build & Test
     runs-on: ubuntu-latest
     steps:
-      # Checkout
-      - uses: actions/checkout@v3
-        if: github.event_name != 'pull_request'
-        with:
-          fetch-depth: 0 # <- Suggested to get all tags
-          token: ${{ secrets.GH_TOKEN }} # <- This is required
-
       - uses: actions/checkout@v3
         if: github.event_name == 'pull_request'
 
@@ -46,7 +39,20 @@ jobs:
       # Parser
       - name: Run Parser
         uses: ./.github/actions/parser
-        
+          
+  deploy:
+    name: Deploy
+    runs-on: ubuntu-latest
+    needs: [build-nd-test]
+    environment: aws-s3
+    if: github.event_name != 'pull_request'
+    steps:
+      # Checkout
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0 # <- Suggested to get all tags
+          token: ${{ secrets.GH_TOKEN }} # <- This is required
+          
       - uses: chrislennon/action-aws-cli@v1.1
 
       # Deploy
