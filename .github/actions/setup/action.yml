@@ -11,13 +11,18 @@ runs:
         components: clippy rustfmt
         targets: wasm32-unknown-unknown
 
-    - uses: actions/cache@v2
-      name: Cache Cargo Files
+    - uses: actions/cache@v3
       with:
         path: |
-          target/release
-          target/debug
-        key: ${{ runner.os }}-${{ hashFiles('**/Cargo.lock') }}
+          ~/.cargo/bin/
+          ~/.cargo/registry/index/
+          ~/.cargo/registry/cache/
+          ~/.cargo/git/db/
+          target/
+        key: ${{ runner.os }}-cargo-setup-${{ hashFiles('**/Cargo.lock') }}
 
     - run: cargo install trunk cargo-make
+      shell: sh
+
+    - run: cargo build
       shell: sh
