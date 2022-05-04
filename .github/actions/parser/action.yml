@@ -16,7 +16,7 @@ runs:
 
     - name: Run Install
       shell: bash
-      run: cargo install --path ./packages/thumbnail-generator
+      run: cargo install --path ./packages/thumbnail-generator --force
 
     - name: Run Parser
       shell: bash
