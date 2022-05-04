@@ -1,3 +1,15 @@
+# v1.0.8 (Wed May 04 2022)
+
+#### ⚠️ Pushed to `main`
+
+- Update FUNDING.yml ([@mbround18](https://github.com/mbround18))
+
+#### Authors: 1
+
+- Michael ([@mbround18](https://github.com/mbround18))
+
+---
+
 # v1.0.7 (Wed May 04 2022)
 
 #### ⚠️ Pushed to `main`
