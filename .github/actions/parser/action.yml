@@ -4,6 +4,16 @@ description: Run parser
 runs:
   using: "composite"
   steps:
+    - uses: actions/cache@v3
+      with:
+        path: |
+          ~/.cargo/bin/
+          ~/.cargo/registry/index/
+          ~/.cargo/registry/cache/
+          ~/.cargo/git/db/
+          target/
+        key: ${{ runner.os }}-cargo-parser-${{ hashFiles('**/Cargo.lock') }}
+
     - name: Run Install
       shell: bash
       run: cargo install --path ./packages/thumbnail-generator
