@@ -57,7 +57,7 @@ jobs:
           token: ${{ secrets.GH_TOKEN }} # <- This is required
 
       # Deps
-      - uses: chrislennon/action-aws-cli@v1.1
+      - uses: unfor19/install-aws-cli-action@master
       - uses: mbround18/trunk-rs@v0.0.1
       
       # Deploy
