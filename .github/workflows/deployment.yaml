@@ -59,17 +59,27 @@ jobs:
       # Deps
       - name: Setup
         uses: ./.github/actions/setup
-      
+
       - name: AWS CLI Install
         uses: unfor19/install-aws-cli-action@master
 
-      
-      # Deploy
-      - name: Deploy 🚀
-        if: github.event_name != 'pull_request'
-        env:
-          AWS_ACCESS_KEY: ${{ secrets.AWS_ACCESS_KEY }}
-          AWS_SECRET_KEY: ${{ secrets.AWS_SECRET_KEY }}
+      # Release
+      - name: Release 🚀
         uses: mbround18/auto@v1.1.0
         with:
           token: ${{ secrets.GH_TOKEN }} # <- This is for auto
+
+      - name: Upload Assets
+        env:
+          AWS_ACCESS_KEY: ${{ secrets.AWS_ACCESS_KEY }}
+          AWS_SECRET_KEY: ${{ secrets.AWS_SECRET_KEY }}
+        run: |
+          # Build Release
+          trunk build --release -d ./dist ./packages/gh-pagify/index.html
+
+          # Upload Release
+          aws                       \
+            --region us-west-2      \
+            s3 sync                 \
+            ./dist                  \
+            s3://mbruno-static-files/dnd-apps/vtt-apps

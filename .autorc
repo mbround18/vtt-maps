@@ -1,14 +1,6 @@
 {
   "plugins": [
-    "git-tag",
-    [
-      "s3",
-      {
-        "bucket": "mbruno-static-files",
-        "region": "us-west-2",
-        "files": [["./dist/*", "dnd-apps/vtt-maps/"]]
-      }
-    ]
+    "git-tag"
   ],
   "owner": "dnd-apps",
   "repo": "vtt-maps",
@@ -16,8 +8,17 @@
   "email": "12646562+mbround18@users.noreply.github.com",
   "noDefaultLabels": true,
   "labels": [
-    { "releaseType": "major", "name": "Version: Major" },
-    { "releaseType": "minor", "name": "Version: Minor" },
-    { "releaseType": "patch", "name": "Version: Patch" }
+    {
+      "releaseType": "major",
+      "name": "Version: Major"
+    },
+    {
+      "releaseType": "minor",
+      "name": "Version: Minor"
+    },
+    {
+      "releaseType": "patch",
+      "name": "Version: Patch"
+    }
   ]
 }
