@@ -1,3 +1,15 @@
+# v1.0.6 (Wed May 04 2022)
+
+#### ⚠️ Pushed to `main`
+
+- Update CODEOWNERS ([@mbround18](https://github.com/mbround18))
+
+#### Authors: 1
+
+- Michael ([@mbround18](https://github.com/mbround18))
+
+---
+
 # v1.0.5 (Wed May 04 2022)
 
 #### ⚠️ Pushed to `main`
