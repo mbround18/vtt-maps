@@ -57,8 +57,12 @@ jobs:
           token: ${{ secrets.GH_TOKEN }} # <- This is required
 
       # Deps
-      - uses: unfor19/install-aws-cli-action@master
-      - uses: mbround18/trunk-rs@v0.0.1
+      - name: Setup
+        uses: ./.github/actions/setup
+      
+      - name: AWS CLI Install
+        uses: unfor19/install-aws-cli-action@master
+
       
       # Deploy
       - name: Deploy 🚀
