@@ -56,8 +56,10 @@ jobs:
           fetch-depth: 0 # <- Suggested to get all tags
           token: ${{ secrets.GH_TOKEN }} # <- This is required
 
-      - uses: unfor19/install-aws-cli-action@master
-
+      # Deps
+      - uses: chrislennon/action-aws-cli@v1.1
+      - uses: mbround18/trunk-rs@v0.0.1
+      
       # Deploy
       - name: Deploy 🚀
         if: github.event_name != 'pull_request'
