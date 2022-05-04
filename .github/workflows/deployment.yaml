@@ -82,5 +82,5 @@ jobs:
           aws                       \
             s3 sync                 \
             ./dist/                 \
-            s3://mbruno-static-files/dnd-apps/vtt-apps/ \
+            s3://mbruno-static-files/dnd-apps/vtt-maps \
             --request-payer requester
