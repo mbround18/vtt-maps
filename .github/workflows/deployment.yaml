@@ -81,5 +81,6 @@ jobs:
           # Upload Release
           aws                       \
             s3 sync                 \
-            ./dist                  \
-            s3://mbruno-static-files/dnd-apps/vtt-apps
+            ./dist/                 \
+            s3://mbruno-static-files/dnd-apps/vtt-apps/ \
+            --request-payer requester
