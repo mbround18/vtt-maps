@@ -21,8 +21,8 @@ runs:
           target/
         key: ${{ runner.os }}-cargo-setup-${{ hashFiles('**/Cargo.lock') }}
 
-    - run: cargo install trunk cargo-make
-      shell: sh
+    - name: Install Trunk
+      uses: mbround18/trunk-rs@v0.0.1
 
     - run: cargo build
       shell: sh
