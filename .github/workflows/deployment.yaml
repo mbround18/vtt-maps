@@ -56,7 +56,7 @@ jobs:
           fetch-depth: 0 # <- Suggested to get all tags
           token: ${{ secrets.GH_TOKEN }} # <- This is required
 
-      - uses: chrislennon/action-aws-cli@v1.1
+      - uses: unfor19/install-aws-cli-action@master
 
       # Deploy
       - name: Deploy 🚀
