@@ -15,7 +15,7 @@ impl From<String> for GitTree {
 impl Clone for GitTree {
     fn clone(&self) -> Self {
         Self {
-            path: (&self.path).to_string(),
+            path: self.path.to_string(),
         }
     }
 }

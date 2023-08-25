@@ -26,9 +26,9 @@ impl Component for MapAssetCard {
 
     // On Render
     fn view(&self, _ctx: &Context<Self>) -> Html {
-        let src = (&self.asset.preview_url).to_string();
-        let name = (&self.asset.name).to_string();
-        let download_url = (&self.asset.download_url).to_string();
+        let src = self.asset.preview_url.to_string();
+        let name = self.asset.name.to_string();
+        let download_url = self.asset.download_url.to_string();
 
         // let identifier =
         //     urlencoding::encode({ &base64::encode(&self.asset.tree.path) }).to_string();
@@ -37,7 +37,7 @@ impl Component for MapAssetCard {
 
         html! {
             <div class={"card"}>
-                <h3>{format!("{}", name)}</h3>
+                <h3>{name.to_string()}</h3>
                 <img {src} class={"preview-image"} />
                 <a target={"_blank"} href={download_url}>{
                     "Download DD2VTT File"

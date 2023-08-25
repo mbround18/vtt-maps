@@ -16,7 +16,7 @@ fn switch(routes: &Route) -> Html {
         Route::Catalog => html! { <Catalog /> },
         Route::MapAssetView { id } => {
             let identifier = id.to_string();
-            return html! { <MapAssetView id={identifier} /> };
+            html! { <MapAssetView id={identifier} /> }
         }
         Route::NotFound => html! { <NotFound /> },
     }

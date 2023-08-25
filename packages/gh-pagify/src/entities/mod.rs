@@ -51,10 +51,10 @@ impl From<&GitTree> for MapAsset {
 impl Clone for MapAsset {
     fn clone(&self) -> Self {
         Self {
-            tree: (&self.tree).clone(),
-            name: (&self.name).to_string(),
-            download_url: (&self.download_url).to_string(),
-            preview_url: (&self.preview_url).to_string(),
+            tree: self.tree.clone(),
+            name: self.name.to_string(),
+            download_url: self.download_url.to_string(),
+            preview_url: self.preview_url.to_string(),
         }
     }
 }

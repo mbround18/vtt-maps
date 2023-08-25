@@ -69,9 +69,9 @@ impl Component for MapAssetView {
 
     // On Render
     fn view(&self, _ctx: &Context<Self>) -> Html {
-        let name = (&self.asset.name).to_string();
-        let src = (&self.image).to_string();
-        let download_url = (&self.asset.download_url).to_string();
+        let name = self.asset.name.to_string();
+        let src = self.image.to_string();
+        let download_url = self.asset.download_url.to_string();
         html! {
             <div id={"map-asset-view"} class="card">
                 <h1>{name}</h1>
