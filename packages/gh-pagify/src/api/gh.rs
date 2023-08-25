@@ -1,7 +1,6 @@
 use reqwasm::http::Request;
 use serde::{Deserialize, Serialize};
 
-
 #[derive(PartialEq, Serialize, Deserialize)]
 pub struct GitTree {
     pub path: String,
@@ -45,4 +44,3 @@ pub async fn get_file_tree() -> GHRepoTree {
 //         .await
 //         .unwrap()
 // }
-

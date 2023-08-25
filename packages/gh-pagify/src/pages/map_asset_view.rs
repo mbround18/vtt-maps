@@ -7,19 +7,19 @@ pub struct MapAssetView {
     asset: MapAsset,
     loaded: bool,
     image: String,
-    dd2vtt: String
+    dd2vtt: String,
 }
 
 impl MapAssetView {
     fn parse_path(id: &str) -> String {
         String::from_utf8({
-            base64::decode({ urlencoding::decode(id).expect("UTF-8").to_string() }).unwrap()
+            base64::decode(urlencoding::decode(id).expect("UTF-8").to_string()).unwrap()
         })
         .unwrap()
     }
     fn load_dd2vtt(ctx: &Context<MapAssetView>) {
         let path: String = MapAssetView::parse_path(&ctx.props().id);
-        let dd2vtt_url = path.clone().replace(".preview.png", "dd2vtt");
+        let _dd2vtt_url = path.clone().replace(".preview.png", "dd2vtt");
 
         // ctx.link().callback_future_once(async move {
         //
@@ -53,7 +53,7 @@ impl Component for MapAssetView {
             asset,
             loaded: false,
             image,
-            dd2vtt: "".to_string()
+            dd2vtt: "".to_string(),
         }
     }
 

@@ -30,7 +30,6 @@ impl Component for MapAssetCard {
         let name = (&self.asset.name).to_string();
         let download_url = (&self.asset.download_url).to_string();
 
-
         // let identifier =
         //     urlencoding::encode({ &base64::encode(&self.asset.tree.path) }).to_string();
 
