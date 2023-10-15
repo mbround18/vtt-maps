@@ -34,3 +34,9 @@ wsl.clean-all:
 
 wsl.clippy: wsl.sync
 	cd $(BUILD_DIR) && cargo clippy
+
+wsl.thumbs: wsl.sync
+	cd $(BUILD_DIR) && cargo run --bin thumbnail-generator "./"
+	rsync -av $(BUILD_DIR)/ $(SOURCE_DIR)/ \
+		--exclude .git \
+		--exclude target

@@ -48,9 +48,6 @@ jobs:
     steps:
       # Checkout
       - uses: actions/checkout@v4
-        with:
-          fetch-depth: 0 # <- Suggested to get all tags
-          token: ${{ secrets.GH_TOKEN }} # <- This is required
 
       # Deps
       - name: Setup
@@ -58,12 +55,6 @@ jobs:
 
       - name: AWS CLI Install
         uses: unfor19/install-aws-cli-action@master
-
-      # Release
-      - name: Release 🚀
-        uses: mbround18/auto@v1.5.0
-        with:
-          token: ${{ secrets.GH_TOKEN }} # <- This is for auto
 
       - name: Upload Assets
         env:
