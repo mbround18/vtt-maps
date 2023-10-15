@@ -15,8 +15,8 @@ struct DD2VTTFile {
 }
 
 fn get_files(base_directory: &Path) -> Result<Paths, PatternError> {
-    let src_path = std::fs::canonicalize(&base_directory).unwrap();
-    let glob_pattern = std::path::Path::new(&src_path).join("**").join("*.dd2vtt");
+    let src_path = fs::canonicalize(base_directory).unwrap();
+    let glob_pattern = Path::new(&src_path).join("**").join("*.dd2vtt");
     glob_with(glob_pattern.to_str().unwrap(), Default::default())
 }
 
@@ -28,9 +28,9 @@ fn path_to_thumbnail_path(file_path: &str) -> PathBuf {
 
 fn generate_thumbnail(file_path: &str) {
     println!("Generating thumbnail for {}", file_path);
-    let data = std::fs::read_to_string(file_path).expect("Unable to read file");
+    let data = fs::read_to_string(file_path).expect("Unable to read file");
     let res: DD2VTTFile = serde_json::from_str(&data).expect("Unable to parse");
-    let bytes = base64::decode(res.image).unwrap();
+    let bytes = shared::decode(res.image);
     let img2 = ImageReader::new(Cursor::new(bytes))
         .with_guessed_format()
         .unwrap()
@@ -41,7 +41,7 @@ fn generate_thumbnail(file_path: &str) {
 }
 
 fn write_reference(file_path: &Path, reference: String) {
-    if let Err(e) = fs::write(&file_path, &reference) {
+    if let Err(e) = fs::write(file_path, reference) {
         println!("Failed to write to {}", file_path.to_str().unwrap());
         panic!("{}", e)
     };
@@ -88,8 +88,11 @@ fn main() {
 
     // Calling .unwrap() is safe here because "INPUT" is required (if "INPUT" wasn't
     // required we could have used an 'if let' to conditionally get the value)
-    println!("Using input file: {}", matches.value_of("INPUT").unwrap());
-    let src_dir = std::path::PathBuf::from(matches.value_of("INPUT").unwrap());
+    let input: &String = matches.get_one("INPUT").unwrap();
+    println!("Using input file: {}", input);
+
+    // .value_of("INPUT").unwrap());
+    let src_dir = std::path::PathBuf::from(input);
     let files = get_files(&src_dir).unwrap();
     for file in files {
         handle_file(file.unwrap().to_str().unwrap())

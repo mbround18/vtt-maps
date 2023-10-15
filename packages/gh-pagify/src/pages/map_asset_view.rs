@@ -12,9 +12,9 @@ pub struct MapAssetView {
 
 impl MapAssetView {
     fn parse_path(id: &str) -> String {
-        String::from_utf8({
-            base64::decode(urlencoding::decode(id).expect("UTF-8").to_string()).unwrap()
-        })
+        String::from_utf8(shared::decode(
+            urlencoding::decode(id).expect("UTF-8").to_string(),
+        ))
         .unwrap()
     }
     fn load_dd2vtt(ctx: &Context<MapAssetView>) {

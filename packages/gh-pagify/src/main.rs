@@ -10,7 +10,7 @@ use yew_router::prelude::*;
 use components::Header;
 use pages::{Catalog, MapAssetView, NotFound, ReadMe, Route};
 
-fn switch(routes: &Route) -> Html {
+fn switch(routes: Route) -> Html {
     match routes {
         Route::ReadMe => html! { <ReadMe /> },
         Route::Catalog => html! { <Catalog /> },
@@ -22,18 +22,35 @@ fn switch(routes: &Route) -> Html {
     }
 }
 
-#[function_component(Main)]
-fn app() -> Html {
+// #[function_component(Main)]
+// fn app() -> Html {
+//     html! {
+//         <>
+//             <Header />
+//             <BrowserRouter>
+//                 <Switch<Route> render={switch} />
+//             </BrowserRouter>
+//         </>
+//     }
+// }
+//
+// fn main() {
+//     Renderer::<App>::new().render();
+// }
+//
+
+#[function_component]
+fn App() -> Html {
     html! {
         <>
             <Header />
             <BrowserRouter>
-                <Switch<Route> render={Switch::render(switch)} />
+                <Switch<Route> render={switch} />
             </BrowserRouter>
         </>
     }
 }
 
 fn main() {
-    yew::start_app::<Main>();
+    yew::Renderer::<App>::new().render();
 }

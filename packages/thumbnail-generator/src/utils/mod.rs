@@ -1,12 +1,13 @@
+use blake2::digest::FixedOutput;
 use blake2::{Blake2s256, Digest};
 use std::path::Path;
 use std::{fs, io};
 
 pub fn parse_file_info(path: &str) -> String {
-    let mut file = fs::File::open(&path).unwrap();
+    let mut file = fs::File::open(path).unwrap();
     let mut hasher = Blake2s256::new();
     let n = io::copy(&mut file, &mut hasher).unwrap();
-    let hash = hasher.finalize();
+    let hash = hasher.finalize_fixed();
     format!(
         "Name: {}\nBytes: {}\nHash: {:x}",
         Path::new(path).file_name().unwrap().to_string_lossy(),
