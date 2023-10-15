@@ -14,16 +14,16 @@
 
 .header {
   top: 0;
-  margin: .3em;
-  padding: .75em;
+  margin: 0.3em;
+  padding: 0.75em;
 
   a {
     @include base.card;
     background-color: base.$accent-color;
     color: white;
-    padding: .5em .75em .5em .75em;
-    margin-left: .5em;
-    margin-right: .5em;
+    padding: 0.5em 0.75em 0.5em 0.75em;
+    margin-left: 0.5em;
+    margin-right: 0.5em;
     //&:visited {
     //  color: gray;
     //}
@@ -35,7 +35,7 @@
 
 blockquote {
   background-color: #27282c;
-  padding: .25em .5em .25em .5em;
+  padding: 0.25em 0.5em 0.25em 0.5em;
 }
 
 #map-asset-view {
