@@ -1,0 +1,13 @@
+{
+  "name": "campsite_by_road",
+  "path": "maps/forest/campsites/campsite_by_road.dd2vtt",
+  "hash": "af5dfa3793c947d3255c7f22bf9a372dcd5d19fb9185963f0e308a0ba1cde7f5",
+  "bytes": 1688280,
+  "resolution": {
+    "map_size": {
+      "x": 10,
+      "y": 10
+    },
+    "pixels_per_grid": 256
+  }
+}

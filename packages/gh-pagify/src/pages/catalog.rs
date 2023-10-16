@@ -1,70 +1,46 @@
-use crate::api::get_file_tree;
-use crate::components::MapAssetCard;
-use crate::entities::MapAssets;
 use yew::prelude::*;
+use crate::api::local::get_catalog;
 
-// Definition
+
 pub struct Catalog {
-    map_assets: MapAssets,
+    content: Html,
 }
 
-// Props
-#[derive(PartialEq, Properties)]
-pub struct CatalogProps;
-
-// State
-pub enum CatalogMsg {
-    SetAssets(MapAssets),
+pub enum CatalogMessage {
+    SetContent(Html),
 }
 
-// Implementation
 impl Component for Catalog {
-    type Message = CatalogMsg;
-    type Properties = CatalogProps;
+    type Message = CatalogMessage;
+    type Properties = ();
 
-    // On Initialize
     fn create(ctx: &Context<Self>) -> Self {
         ctx.link().send_future(async move {
-            let body = get_file_tree().await;
-            CatalogMsg::SetAssets(MapAssets::from(body))
+            let body = get_catalog().await;
+            let content: Html = Html::from_html_unchecked(body.into());
+            CatalogMessage::SetContent(content)
         });
-
         Self {
-            map_assets: MapAssets { assets: vec![] },
+            content: html! { "loading..."},
         }
     }
 
-    // When state change
     fn update(&mut self, _ctx: &Context<Self>, msg: Self::Message) -> bool {
         match msg {
-            CatalogMsg::SetAssets(assets) => {
-                self.map_assets = assets;
-                // the value has changed so we need to
-                // re-render for it to appear on the page
+            CatalogMessage::SetContent(content) => {
+                self.content = content;
                 true
             }
         }
     }
 
-    // On Render
     fn view(&self, _ctx: &Context<Self>) -> Html {
-        let assets = &self.map_assets.assets;
-        let items = assets
-            .iter()
-            .map(|e| {
-                let asset = e.clone();
-                html! {
-                    <MapAssetCard {asset} />
-                }
-            })
-            .collect::<Vec<_>>();
+       html! {
+           <>
+            <div id="catalog">{self.content.clone()}</div>
+           </>
+           }
 
-        html! {
-            <div id={"catalog"}>
-                <div class="image-mosaic">{
-                    for items
-                }</div>
-            </div>
-        }
     }
 }
+

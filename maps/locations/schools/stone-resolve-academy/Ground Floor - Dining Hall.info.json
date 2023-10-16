@@ -1,0 +1,13 @@
+{
+  "name": "Ground Floor - Dining Hall",
+  "path": "maps/locations/schools/stone-resolve-academy/Ground Floor - Dining Hall.dd2vtt",
+  "hash": "b3778debab23a3b43918411e2904c9ea3598227e472d07b6818f1bbe8ac0c231",
+  "bytes": 6283792,
+  "resolution": {
+    "map_size": {
+      "x": 60,
+      "y": 17
+    },
+    "pixels_per_grid": 128
+  }
+}

@@ -1,73 +1,36 @@
+mod files;
 mod utils;
 
-use crate::utils::{create_reference_content, parse_file_info};
+use crate::files::dd2vtt::DD2VTTFile;
+use crate::utils::{get_files, path_to_thumbnail_path};
 use clap::{Arg, Command};
-use glob::{glob_with, Paths, PatternError};
-use image::io::Reader as ImageReader;
-use serde::{Deserialize, Serialize};
-use std::fs;
-use std::io::Cursor;
-use std::path::{Path, PathBuf};
-
-#[derive(Debug, Deserialize, Serialize)]
-struct DD2VTTFile {
-    image: String,
-}
-
-fn get_files(base_directory: &Path) -> Result<Paths, PatternError> {
-    let src_path = fs::canonicalize(base_directory).unwrap();
-    let glob_pattern = Path::new(&src_path).join("**").join("*.dd2vtt");
-    glob_with(glob_pattern.to_str().unwrap(), Default::default())
-}
-
-fn path_to_thumbnail_path(file_path: &str) -> PathBuf {
-    Path::new(file_path)
-        .with_extension("")
-        .with_extension("preview.png")
-}
-
-fn generate_thumbnail(file_path: &str) {
-    println!("Generating thumbnail for {}", file_path);
-    let data = fs::read_to_string(file_path).expect("Unable to read file");
-    let res: DD2VTTFile = serde_json::from_str(&data).expect("Unable to parse");
-    let bytes = shared::decode(res.image);
-    let img2 = ImageReader::new(Cursor::new(bytes))
-        .with_guessed_format()
-        .unwrap()
-        .decode()
-        .unwrap();
-    let thumbnail = img2.thumbnail(img2.width() / 16, img2.height() / 16);
-    thumbnail.save(path_to_thumbnail_path(file_path)).unwrap();
-}
-
-fn write_reference(file_path: &Path, reference: String) {
-    if let Err(e) = fs::write(file_path, reference) {
-        println!("Failed to write to {}", file_path.to_str().unwrap());
-        panic!("{}", e)
-    };
-}
+use shared::types::map_reference::MapReference;
+use std::path::Path;
 
 fn handle_file(file_path: &str) {
     println!("Parsing {}", file_path);
-    let reference = create_reference_content(parse_file_info(file_path));
-    let info_path = Path::new(&file_path).with_extension("info");
+    let dd2vtt = DD2VTTFile::from(String::from(file_path));
+    let reference: MapReference = dd2vtt.clone().into();
+    let info_path = Path::new(&file_path).with_extension("info.json");
+
     // Write info if not found.
     if !info_path.exists() {
-        write_reference(&info_path, reference.clone());
+        reference.to_file(&info_path);
     }
 
     // Generate thumbnail if it doesnt exist.
-    if !path_to_thumbnail_path(file_path).exists() {
-        generate_thumbnail(file_path);
+    let thumbnail_path = path_to_thumbnail_path(file_path);
+    if !thumbnail_path.exists() {
+        dd2vtt.to_thumbnail_file(thumbnail_path);
         return;
     }
 
-    let info = String::from_utf8(fs::read(&info_path).unwrap()).unwrap();
+    let info = MapReference::from(&info_path);
 
     // If old info doesnt match new info, generate new thumbnail & info.
-    if info.ne(&reference) {
-        generate_thumbnail(file_path);
-        write_reference(&info_path, reference);
+    if info.bytes.ne(&reference.bytes) {
+        DD2VTTFile::from(String::from(file_path)).to_thumbnail_file(thumbnail_path);
+        reference.to_file(&info_path);
     } else {
         println!("No thumbnail generated for {}", file_path);
     }

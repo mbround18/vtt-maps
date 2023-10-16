@@ -1,0 +1,13 @@
+{
+  "name": "Green Tower - Base",
+  "path": "maps/locations/schools/stone-resolve-academy/Green Tower - Base.dd2vtt",
+  "hash": "f312c87205d4446d59fbb19d4f8689f43303b986b8848b7824ce83309c2cf4b1",
+  "bytes": 1119868,
+  "resolution": {
+    "map_size": {
+      "x": 10,
+      "y": 12
+    },
+    "pixels_per_grid": 128
+  }
+}

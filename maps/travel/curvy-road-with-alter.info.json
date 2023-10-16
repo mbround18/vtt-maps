@@ -1,0 +1,13 @@
+{
+  "name": "curvy-road-with-alter",
+  "path": "maps/travel/curvy-road-with-alter.dd2vtt",
+  "hash": "0e7cbfee9db37e8196982d3c9744d6521aadad62e562040b7f55bdfe39253da8",
+  "bytes": 18488776,
+  "resolution": {
+    "map_size": {
+      "x": 55,
+      "y": 20
+    },
+    "pixels_per_grid": 256
+  }
+}

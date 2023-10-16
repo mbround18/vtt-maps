@@ -1,0 +1,13 @@
+{
+  "name": "slums-office",
+  "path": "maps/cyberpunk/city scape/slums-office.dd2vtt",
+  "hash": "65f8ce986292b523625f7576368f148ff2fcee770eaebbb5c62948a15e1687dd",
+  "bytes": 48439669,
+  "resolution": {
+    "map_size": {
+      "x": 48,
+      "y": 27
+    },
+    "pixels_per_grid": 256
+  }
+}

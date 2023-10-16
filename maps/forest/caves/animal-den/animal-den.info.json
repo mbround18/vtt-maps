@@ -1,0 +1,13 @@
+{
+  "name": "animal-den",
+  "path": "maps/forest/caves/animal-den/animal-den.dd2vtt",
+  "hash": "55069b6b9f286c0032897223582763e729230df4efaafd727847927758170a50",
+  "bytes": 28993775,
+  "resolution": {
+    "map_size": {
+      "x": 50,
+      "y": 50
+    },
+    "pixels_per_grid": 128
+  }
+}

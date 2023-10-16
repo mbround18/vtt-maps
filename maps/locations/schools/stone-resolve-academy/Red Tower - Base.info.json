@@ -1,0 +1,13 @@
+{
+  "name": "Red Tower - Base",
+  "path": "maps/locations/schools/stone-resolve-academy/Red Tower - Base.dd2vtt",
+  "hash": "3ed9d577a7def0d216a13e7cc4ac2c4604d4c2b8402e2808682b0629a67efdf0",
+  "bytes": 998796,
+  "resolution": {
+    "map_size": {
+      "x": 10,
+      "y": 12
+    },
+    "pixels_per_grid": 128
+  }
+}

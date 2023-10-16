@@ -1,0 +1,13 @@
+{
+  "name": "sexy-sewers",
+  "path": "maps/locations/sewers/sexy-sewers/sexy-sewers.dd2vtt",
+  "hash": "dc3c6e1b5090f53fa7aba92880908d3dc9f6a22694993ae6355bd96e349228b8",
+  "bytes": 36433752,
+  "resolution": {
+    "map_size": {
+      "x": 99,
+      "y": 46
+    },
+    "pixels_per_grid": 128
+  }
+}

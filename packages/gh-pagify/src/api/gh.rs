@@ -34,13 +34,3 @@ pub async fn get_file_tree() -> GHRepoTree {
         .await
         .unwrap()
 }
-
-// pub async fn get_body_as_string(url: String) -> DD2VTT {
-//     Request::get(&url)
-//         .send()
-//         .await
-//         .unwrap()
-//         .json()
-//         .await
-//         .unwrap()
-// }

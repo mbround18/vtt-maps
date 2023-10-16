@@ -1,0 +1,13 @@
+{
+  "name": "fallen-angels-academy",
+  "path": "maps/locations/schools/fallen-angels-academy/fallen-angels-academy.dd2vtt",
+  "hash": "b8a2718aad25185498d6379f8fb899f6cb0e1b051b7080d93c489689b812a79c",
+  "bytes": 35886693,
+  "resolution": {
+    "map_size": {
+      "x": 48,
+      "y": 48
+    },
+    "pixels_per_grid": 128
+  }
+}

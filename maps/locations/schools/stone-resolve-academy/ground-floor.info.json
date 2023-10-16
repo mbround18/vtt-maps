@@ -1,0 +1,13 @@
+{
+  "name": "ground-floor",
+  "path": "maps/locations/schools/stone-resolve-academy/ground-floor.dd2vtt",
+  "hash": "9dbfb928d58a1436d1566ec55dec42c23924bdc39f13d7d57d11df41e8ab6603",
+  "bytes": 25631171,
+  "resolution": {
+    "map_size": {
+      "x": 64,
+      "y": 64
+    },
+    "pixels_per_grid": 128
+  }
+}

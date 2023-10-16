@@ -1,0 +1,13 @@
+{
+  "name": "felder-town",
+  "path": "maps/locations/towns/felder-town.dd2vtt",
+  "hash": "9fb6fecb1ee92c910f9c4e414777a592203e265f222804daaff2dfb9faf06352",
+  "bytes": 46857502,
+  "resolution": {
+    "map_size": {
+      "x": 45,
+      "y": 35
+    },
+    "pixels_per_grid": 256
+  }
+}

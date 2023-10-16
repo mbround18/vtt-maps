@@ -1,0 +1,13 @@
+{
+  "name": "festival-of-fools",
+  "path": "maps/locations/festivals/festival-of-fools/festival-of-fools.dd2vtt",
+  "hash": "e24accd03a546ace12f64aed90fff4f97d426f613f9f49dbf96c623503d7f34c",
+  "bytes": 37126699,
+  "resolution": {
+    "map_size": {
+      "x": 48,
+      "y": 48
+    },
+    "pixels_per_grid": 128
+  }
+}

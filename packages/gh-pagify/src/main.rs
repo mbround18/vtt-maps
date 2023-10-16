@@ -21,24 +21,6 @@ fn switch(routes: Route) -> Html {
         Route::NotFound => html! { <NotFound /> },
     }
 }
-
-// #[function_component(Main)]
-// fn app() -> Html {
-//     html! {
-//         <>
-//             <Header />
-//             <BrowserRouter>
-//                 <Switch<Route> render={switch} />
-//             </BrowserRouter>
-//         </>
-//     }
-// }
-//
-// fn main() {
-//     Renderer::<App>::new().render();
-// }
-//
-
 #[function_component]
 fn App() -> Html {
     html! {
