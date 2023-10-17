@@ -110,25 +110,52 @@
         request.send();
       }
 
-      // wait for the element #catalog to appear
-      let interval = setInterval(() => {
-        if (document.getElementById("catalog")) {
-          clearInterval(interval);
+      function waitForElementById(id) {
+        return new Promise((resolve, reject) => {
+          let interval = setInterval(() => {
+            if (document.getElementById(id)) {
+              clearInterval(interval);
+              resolve();
+            }
+          }, 100);
+        });
+      }
+
+      async function loader() {
+        await waitForElementById("catalog");
+        await waitForElementById("map-asset-vcc");
+        setTimeout(() => {
+          document
+                  .querySelectorAll("button[data-href]")
+                  .forEach((element) => {
+                    element.setAttribute("data-processed", "true");
+                    element.onclick = () =>
+                            handleDownload(element.getAttribute("data-href"));
+                  });
+        }, 250);
+      }
+
+        loader().then(() => {
           document
             .getElementById("catalog")
             .setAttribute("data-processed", "true");
           document.getElementById("catalog").setAttribute("data-trunk", "true");
-          setTimeout(() => {
-            document
-              .querySelectorAll("button[data-href]")
-              .forEach((element) => {
-                element.setAttribute("data-processed", "true");
-                element.onclick = () =>
-                  handleDownload(element.getAttribute("data-href"));
-              });
-          }, 250);
-        }
-      }, 100);
+          document.getElementById("map-asset-vcc").setAttribute("data-trunk", "true");
+        });
+
+      // // wait for the element #catalog to appear
+      // let interval = setInterval(() => {
+      //   if (document.getElementById("catalog")) {
+      //     clearInterval(interval);
+      //     document
+      //       .getElementById("catalog")
+      //       .setAttribute("data-processed", "true");
+      //     document.getElementById("catalog").setAttribute("data-trunk", "true");
+      //     map-asset-vcc
+      //
+      //
+      //   }
+      // }, 100);
     </script>
   </head>
 </html>
