@@ -35,7 +35,7 @@ jobs:
         uses: ./.github/actions/setup
 
       - name: Build
-        run: trunk build --release ./packages/gh-pagify/index.html
+        run: make compile
 
       # Parser
       - name: Thumbnail Parser
