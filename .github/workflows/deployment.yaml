@@ -69,6 +69,6 @@ jobs:
         run: |
           aws                       \
             s3 sync                 \
-            ./dist/                 \
+            ./packages/gh-pagify/dist                 \
             s3://mbruno-static-files/dnd-apps/vtt-maps \
             --request-payer requester
