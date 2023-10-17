@@ -55,18 +55,3 @@
     position: relative;
   }
 }
-
-.btn {
-  position: absolute;
-  top: 55%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  height: 95px;
-  width: 360px;
-  background: #1818f2;
-  border-radius: 55px;
-  cursor: pointer;
-  box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
-  transition: all 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
-  overflow: hidden;
-}
