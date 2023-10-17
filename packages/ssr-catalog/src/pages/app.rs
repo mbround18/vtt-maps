@@ -39,8 +39,8 @@ pub fn App(props: &AppProps) -> Html {
                             <p><strong>{"Pixels Per Tile: "}</strong>{&reference.resolution.pixels_per_grid}</p>
                             <p><strong>{"Tile Length: "}</strong>{&reference.resolution.map_size.x}</p>
                             <p><strong>{"Tile Width: "}</strong>{&reference.resolution.map_size.y}</p>
-                            <button class="download" data-href={download_url}>{"Download DD2VTT File"}</button>
-                            <br/>
+                            <button class="download" data-href={download_url}>{"⬇️ Download DD2VTT File"}</button>
+                            <br style="padding: 5px;"/>
                             <a href="https://github.com/sponsors/mbround18" target={"_blank"}>{"❤️ Support the Artist"}</a>
                         </div>
 
