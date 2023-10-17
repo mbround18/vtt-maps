@@ -1,6 +1,5 @@
 use reqwasm::http::Request;
 
-
 async fn get_txt(path: &str) -> String {
     Request::get(path)
         .send()

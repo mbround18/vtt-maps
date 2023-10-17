@@ -2,7 +2,7 @@
 members=[
     "packages/thumbnail-generator",
     "packages/gh-pagify",
-    "packages/pagify",
+    "packages/ssr-catalog",
     "packages/shared"
 ]
 resolver = "2"

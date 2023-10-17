@@ -1,6 +1,5 @@
-use yew::prelude::*;
 use crate::api::local::get_catalog;
-
+use yew::prelude::*;
 
 pub struct Catalog {
     content: Html,
@@ -35,12 +34,10 @@ impl Component for Catalog {
     }
 
     fn view(&self, _ctx: &Context<Self>) -> Html {
-       html! {
-           <>
-            <div id="catalog">{self.content.clone()}</div>
-           </>
-           }
-
+        html! {
+        <>
+         <div id="catalog">{self.content.clone()}</div>
+        </>
+        }
     }
 }
-

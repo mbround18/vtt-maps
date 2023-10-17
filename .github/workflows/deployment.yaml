@@ -58,16 +58,15 @@ jobs:
       - name: AWS CLI Install
         uses: unfor19/install-aws-cli-action@master
 
+      - name: Build Release
+        run: make compile
+
       - name: Upload Assets
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_KEY }}
           AWS_DEFAULT_REGION: "us-west-2"
         run: |
-          # Build Release
-          trunk build --release -d ./dist ./packages/gh-pagify/index.html
-
-          # Upload Release
           aws                       \
             s3 sync                 \
             ./dist/                 \

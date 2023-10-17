@@ -14,22 +14,26 @@ build:
 	cargo build
 
 compile:
-	cargo run --release --bin pagify
-	cargo build --release
+	trunk build packages/gh-pagify/index.html \
+    			--dist packages/gh-pagify/dist \
+    && cargo run --release --bin ssr-catalog
+
+release:
+	cargo run --release --bin ssr-catalog
+
 
 serve: compile
 	npx http-server packages/gh-pagify/dist
 
 wsl.compile: wsl.sync
 	cd $(BUILD_DIR) \
-		&& trunk build packages/gh-pagify/index.html \
-			--dist packages/gh-pagify/dist \
-		&& cargo run --release --bin pagify
+		&& make compile
 
 wsl.serve: wsl.compile
-	rsync -avh $(BUILD_DIR)/packages/gh-pagify/ $(SOURCE_DIR)/packages/gh-pagify/
-	rsync -avh $(SOURCE_DIR)/packages/gh-pagify/dist/dist $(SOURCE_DIR)/packages/gh-pagify/dist/
-	npx http-server packages/gh-pagify/dist
+	rsync -avh $(BUILD_DIR)/packages/gh-pagify/ $(SOURCE_DIR)/packages/gh-pagify/ \
+		--exclude src \
+		--exclude Cargo.toml
+	npx http-server packages/gh-pagify/dist --proxy http://127.0.0.1:8080? --push-state --cors
 
 
 wsl.build: wsl.sync
@@ -82,6 +86,6 @@ wsl.thumbs: wsl.build
 
 wsl.dev: wsl.sync
 	cd $(BUILD_DIR) \
-		&& cargo run --bin pagify
+		&& cargo run --bin ssr-catalog
 
 

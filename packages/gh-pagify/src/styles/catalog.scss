@@ -6,6 +6,34 @@
   padding: 2em;
   margin: 2em;
   border-radius: 1em;
+
+  & > #map-asset-vcc {
+    display: flex;
+    overflow: auto;
+    flex-flow: wrap;
+  }
+
+  .card {
+    display: flex;
+    flex-direction: column;
+    min-height: min-content;
+    padding: 1em;
+    margin: 1em;
+
+    button {
+      background: none !important;
+      border: none;
+      padding: 0 !important;
+      /*optional*/
+      font-family: arial, sans-serif;
+      /*input has OS specific font-family*/
+      color: #0683c1;
+      text-decoration: underline;
+      cursor: pointer;
+      font-weight: bold;
+    }
+  }
+
   .image-mosaic {
     display: flex;
     flex-direction: row;
@@ -15,9 +43,10 @@
       padding: 0;
       margin: 1vh;
 
-      .preview-image {
-        @include base.center;
-        padding: 2vh 2vw 2vh 2vw;
+      .responsive {
+        width: 100%;
+        max-width: 400px;
+        height: auto;
       }
     }
   }
@@ -25,4 +54,19 @@
   .card:last-child {
     position: relative;
   }
+}
+
+.btn {
+  position: absolute;
+  top: 55%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  height: 95px;
+  width: 360px;
+  background: #1818f2;
+  border-radius: 55px;
+  cursor: pointer;
+  box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
+  transition: all 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+  overflow: hidden;
 }

@@ -1019,6 +1019,12 @@ dependencies = [
 ]
 
 [[package]]
+name = "joinery"
+version = "2.1.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "72167d68f5fce3b8655487b8038691a3c9984ee769590f93f2a631f4ad64e4f5"
+
+[[package]]
 name = "jpeg-decoder"
 version = "0.3.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -1181,20 +1187,6 @@ name = "once_cell"
 version = "1.18.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "dd8b5dd2ae5ed71462c540258bedcb51965123ad7e7ccf4b9a8cafaa4a63576d"
-
-[[package]]
-name = "pagify"
-version = "0.1.0"
-dependencies = [
- "base64",
- "glob",
- "serde",
- "serde_json",
- "shared",
- "tokio",
- "urlencoding",
- "yew",
-]
 
 [[package]]
 name = "parking_lot"
@@ -1621,6 +1613,22 @@ dependencies = [
 ]
 
 [[package]]
+name = "ssr-catalog"
+version = "0.1.0"
+dependencies = [
+ "base64",
+ "glob",
+ "serde",
+ "serde_json",
+ "shared",
+ "titlecase",
+ "tokio",
+ "urlencoding",
+ "wasm-bindgen",
+ "yew",
+]
+
+[[package]]
 name = "strsim"
 version = "0.10.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -1698,6 +1706,17 @@ dependencies = [
  "flate2",
  "jpeg-decoder",
  "weezl",
+]
+
+[[package]]
+name = "titlecase"
+version = "2.2.1"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "38397a8cdb017cfeb48bf6c154d6de975ac69ffeed35980fde199d2ee0842042"
+dependencies = [
+ "joinery",
+ "lazy_static",
+ "regex",
 ]
 
 [[package]]

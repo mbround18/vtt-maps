@@ -59,6 +59,76 @@
     <link data-trunk rel="copy-file" href="../../README.md" />
     <link data-trunk rel="copy-file" href="../../config/CNAME" />
     <link data-trunk rel="copy-dir" href="../../assets" />
+    <script defer>
+      sessionStorage.setItem("catalog-downloading", JSON.stringify([]));
 
+      function addToQueue(path) {
+        let queue = JSON.parse(sessionStorage.getItem("catalog-downloading"));
+        queue.push(path);
+        sessionStorage.setItem("catalog-downloading", JSON.stringify(queue));
+      }
+
+      function isInQueue(path) {
+        let queue = JSON.parse(sessionStorage.getItem("catalog-downloading"));
+        return queue.includes(path);
+      }
+
+      function removeFromQueue(path) {
+        let queue = JSON.parse(sessionStorage.getItem("catalog-downloading"));
+        queue = queue.filter((item) => item !== path);
+        sessionStorage.setItem("catalog-downloading", JSON.stringify(queue));
+      }
+
+      function handleDownload(path) {
+        if (isInQueue(path)) {
+          return;
+        }
+
+        addToQueue(path);
+        let blob;
+        let request = new XMLHttpRequest();
+        request.open("GET", path, true);
+        request.responseType = "blob";
+        request.onprogress = (event) => {
+          console.log(event);
+        };
+        request.onload = function (e) {
+          blob = new Blob([this.response]);
+        };
+        request.onloadend = function (e) {
+          let fileName = path.split("/").pop();
+          let tempEl = document.createElement("a");
+          document.body.appendChild(tempEl);
+          tempEl.style = { display: "none" };
+          path = window.URL.createObjectURL(blob);
+          tempEl.href = path;
+          tempEl.download = fileName;
+          tempEl.click();
+          window.URL.revokeObjectURL(path);
+          removeFromQueue(path);
+        };
+        request.send();
+      }
+
+      // wait for the element #catalog to appear
+      let interval = setInterval(() => {
+        if (document.getElementById("catalog")) {
+          clearInterval(interval);
+          document
+            .getElementById("catalog")
+            .setAttribute("data-processed", "true");
+          document.getElementById("catalog").setAttribute("data-trunk", "true");
+          setTimeout(() => {
+            document
+              .querySelectorAll("button[data-href]")
+              .forEach((element) => {
+                element.setAttribute("data-processed", "true");
+                element.onclick = () =>
+                  handleDownload(element.getAttribute("data-href"));
+              });
+          }, 250);
+        }
+      }, 100);
+    </script>
   </head>
 </html>
