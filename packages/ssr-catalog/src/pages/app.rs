@@ -40,7 +40,7 @@ pub fn App(props: &AppProps) -> Html {
                             <p><strong>{"Tile Length: "}</strong>{&reference.resolution.map_size.x}</p>
                             <p><strong>{"Tile Width: "}</strong>{&reference.resolution.map_size.y}</p>
                             <button class="download" data-href={download_url}>{"Download DD2VTT File"}</button>
-                            <a href="">{"❤️ Support the Artist"}</a>
+                            <a href="https://github.com/sponsors/mbround18" target={"_blank"}>{"❤️ Support the Artist"}</a>
                         </div>
 
                     </div>
