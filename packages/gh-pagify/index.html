@@ -125,23 +125,23 @@
         await waitForElementById("catalog");
         await waitForElementById("map-asset-vcc");
         setTimeout(() => {
-          document
-                  .querySelectorAll("button[data-href]")
-                  .forEach((element) => {
-                    element.setAttribute("data-processed", "true");
-                    element.onclick = () =>
-                            handleDownload(element.getAttribute("data-href"));
-                  });
+          document.querySelectorAll("button[data-href]").forEach((element) => {
+            element.setAttribute("data-processed", "true");
+            element.onclick = () =>
+              handleDownload(element.getAttribute("data-href"));
+          });
         }, 250);
       }
 
-        loader().then(() => {
-          document
-            .getElementById("catalog")
-            .setAttribute("data-processed", "true");
-          document.getElementById("catalog").setAttribute("data-trunk", "true");
-          document.getElementById("map-asset-vcc").setAttribute("data-trunk", "true");
-        });
+      loader().then(() => {
+        document
+          .getElementById("catalog")
+          .setAttribute("data-processed", "true");
+        document.getElementById("catalog").setAttribute("data-trunk", "true");
+        document
+          .getElementById("map-asset-vcc")
+          .setAttribute("data-trunk", "true");
+      });
 
       // // wait for the element #catalog to appear
       // let interval = setInterval(() => {

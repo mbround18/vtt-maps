@@ -80,8 +80,7 @@ wsl.clippy: wsl.sync
 		&& cargo clippy
 
 wsl.thumbs: wsl.build
-	cd $(BUILD_DIR) \
-		&& cargo run --bin thumbnail-generator "./"
+	cd $(BUILD_DIR) && cargo run --bin thumbnail-generator "./"
 	make wsl.reverse-sync
 
 wsl.dev: wsl.sync
