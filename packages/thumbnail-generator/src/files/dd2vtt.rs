@@ -23,9 +23,9 @@ impl From<String> for DD2VTTFile {
     }
 }
 
-impl Into<MapReference> for DD2VTTFile {
-    fn into(self) -> MapReference {
-        let file_path = self.path.expect("Path not found");
+impl From<DD2VTTFile> for MapReference {
+    fn from(val: DD2VTTFile) -> Self {
+        let file_path = val.path.expect("Path not found");
         let file_name = Path::new(&file_path).file_name().unwrap().to_str().unwrap();
         let bytes = fs::read(&file_path).unwrap();
         let hash = sha256::digest(&bytes);
@@ -34,7 +34,7 @@ impl Into<MapReference> for DD2VTTFile {
             path: String::from(&file_path[{ file_path.find("maps").unwrap() + 5 }..]),
             hash,
             bytes: bytes.len() as u64,
-            resolution: self.resolution,
+            resolution: val.resolution,
         }
     }
 }
