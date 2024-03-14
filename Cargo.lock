@@ -2287,6 +2287,7 @@ dependencies = [
 ]
 
 [[package]]
+name = "wasm-bindgen-backend"
 version = "0.2.92"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "614d787b966d3989fa7bb98a654e369c762374fd3213d212cfc0251257e747da"
