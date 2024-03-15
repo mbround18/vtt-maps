@@ -1,0 +1,13 @@
+{
+  "name": "grassy",
+  "path": "maps/encounters/grassy.dd2vtt",
+  "hash": "969bbc0745a5dd07fbd2069cb123da4f70708be9ef3b3d72a75bfa8cda50266a",
+  "bytes": 2266368,
+  "resolution": {
+    "map_size": {
+      "x": 48,
+      "y": 27
+    },
+    "pixels_per_grid": 128
+  }
+}

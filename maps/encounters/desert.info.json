@@ -1,0 +1,13 @@
+{
+  "name": "desert",
+  "path": "maps/encounters/desert.dd2vtt",
+  "hash": "6d80097d0b9767bc6f3bf5f0e1cdf7d9f1ad39a42076fe6e245a89666bb0fec3",
+  "bytes": 2635228,
+  "resolution": {
+    "map_size": {
+      "x": 48,
+      "y": 27
+    },
+    "pixels_per_grid": 128
+  }
+}
