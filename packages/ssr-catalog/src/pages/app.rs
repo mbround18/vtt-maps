@@ -17,17 +17,16 @@ pub struct AppProps {
 
 #[function_component]
 pub fn App(props: &AppProps) -> Html {
-    let mut references = props.references.clone();
-    references.sort_by(|a, b| a.name.cmp(&b.name));
+    let mut list_of_maps = props.references.clone();
+    list_of_maps.sort_by(|a, b| a.name.cmp(&b.name));
 
-    let html_references = references.iter()
-        .map(|reference| {
-            let name = titlecase(&reference.name.replace("_", " ").replace("-", " "));
-            let download_url = format!("https://raw.githubusercontent.com/dnd-apps/vtt-maps/main/{}", &reference.path);
-
+    let html_references = list_of_maps.iter()
+        .map(|item| {
+            let name = titlecase(&item.name.replace(['_', '-'], " "));
+            let download_url = format!("https://raw.githubusercontent.com/dnd-apps/vtt-maps/main/{}", &item.path);
             let src = format!(
                 "data:image/png;base64,{}",
-                image_to_base64(&Path::new(&root_dir().unwrap()).join(&reference.path.replace(".dd2vtt", ".preview.png")))
+                image_to_base64(&Path::new(&root_dir().unwrap()).join(item.path.replace(".dd2vtt", ".preview.png")))
             );
 
             html! {
@@ -36,9 +35,9 @@ pub fn App(props: &AppProps) -> Html {
                         <h1>{name}</h1>
                         <img {src}  class="responsive" />
                         <div>
-                            <p><strong>{"Pixels Per Tile: "}</strong>{&reference.resolution.pixels_per_grid}</p>
-                            <p><strong>{"Tile Length: "}</strong>{&reference.resolution.map_size.x}</p>
-                            <p><strong>{"Tile Width: "}</strong>{&reference.resolution.map_size.y}</p>
+                            <p><strong>{"Pixels Per Tile: "}</strong>{&item.resolution.pixels_per_grid}</p>
+                            <p><strong>{"Tile Length: "}</strong>{&item.resolution.map_size.x}</p>
+                            <p><strong>{"Tile Width: "}</strong>{&item.resolution.map_size.y}</p>
                             <button class="download" data-href={download_url}>{"⬇️ Download DD2VTT File"}</button>
                             <br style="padding: 5px;"/>
                             <a href="https://github.com/sponsors/mbround18" target={"_blank"}>{"❤️ Support the Artist"}</a>

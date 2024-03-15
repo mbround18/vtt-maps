@@ -1,0 +1,13 @@
+{
+  "name": "hot-springs",
+  "path": "maps/locations/destinations/hot-springs.dd2vtt",
+  "hash": "254cbb124260c7253549f0782edee275867519c51be7cf2f4db3346f947992b9",
+  "bytes": 12138157,
+  "resolution": {
+    "map_size": {
+      "x": 40,
+      "y": 40
+    },
+    "pixels_per_grid": 128
+  }
+}

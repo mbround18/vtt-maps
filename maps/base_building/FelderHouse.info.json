@@ -1,0 +1,13 @@
+{
+  "name": "FelderHouse",
+  "path": "maps/base_building/FelderHouse.dd2vtt",
+  "hash": "652c7db0537e7b969089fd4db8419fb41a0f2136fc0c28bf8449e2317172ed80",
+  "bytes": 22056583,
+  "resolution": {
+    "map_size": {
+      "x": 65,
+      "y": 45
+    },
+    "pixels_per_grid": 128
+  }
+}

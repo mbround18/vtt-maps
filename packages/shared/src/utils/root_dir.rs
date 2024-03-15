@@ -12,5 +12,7 @@ pub fn root_dir() -> io::Result<PathBuf> {
         dir.pop();
     }
 
+    dir.push(PathBuf::from("maps"));
+
     Ok(dir)
 }

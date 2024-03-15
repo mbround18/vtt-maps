@@ -20,7 +20,8 @@ async fn main() {
     println!("{}", &glob_path);
     let references = glob(&glob_path)
         .unwrap()
-        .map(|path| MapReference::from(&path.unwrap()))
+        .map(|result| result.unwrap())
+        .map(|result| MapReference::from(&result))
         .collect::<Vec<MapReference>>();
 
     let renderer = yew::ServerRenderer::<App>::with_props(|| AppProps { references });

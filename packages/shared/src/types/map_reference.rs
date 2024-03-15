@@ -1,4 +1,5 @@
 use crate::types::map_resolution::MapResolution;
+use crate::utils::root_dir::root_dir;
 use serde::{Deserialize, Serialize};
 use std::path::PathBuf;
 
@@ -14,7 +15,15 @@ pub struct MapReference {
 impl From<&PathBuf> for MapReference {
     fn from(value: &PathBuf) -> Self {
         let data = std::fs::read_to_string(value).expect("Unable to read file");
-        serde_json::from_str(&data).expect("Unable to parse")
+        let mut content: Self = serde_json::from_str(&data).expect("Unable to parse");
+        if content.path.starts_with("maps") {
+            let relative_path = content.path.strip_prefix("maps/").unwrap_or("");
+            content.path = root_dir().map_or(relative_path.to_string(), |mut root| {
+                root.push(relative_path);
+                root.to_str().unwrap_or("").to_string()
+            });
+        }
+        content
     }
 }
 

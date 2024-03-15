@@ -11,7 +11,7 @@ runs:
         components: clippy rustfmt
         targets: wasm32-unknown-unknown
 
-    - uses: actions/cache@v3
+    - uses: actions/cache@v4
       with:
         path: |
           ~/.cargo/bin/
@@ -22,7 +22,7 @@ runs:
         key: ${{ runner.os }}-cargo-setup-${{ hashFiles('**/Cargo.lock') }}
 
     - name: Install Trunk
-      uses: mbround18/trunk-rs@v0.0.1
+      uses: mbround18/trunk-rs@v1
 
     - run: cargo build
       shell: sh
