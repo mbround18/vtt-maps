@@ -11,7 +11,7 @@ shared = { path = "../shared" }
 yew = { version = "0.21" , features = ["ssr"]}
 serde = {version = "1", features = ["derive"]}
 serde_json = "1"
-base64 = "0.22"
+base64 = "0.22.1"
 urlencoding = "2"
 glob = "0"
 tokio = { version = "1", features = ["full"] }
