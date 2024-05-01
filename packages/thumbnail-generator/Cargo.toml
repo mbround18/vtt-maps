@@ -9,7 +9,7 @@ edition = "2021"
 [dependencies]
 shared = { path = "../shared" }
 glob = "0.3"
-clap = "4"
+clap = "4.5.4"
 serde = {version= "1", features = ["derive"]}
 serde_json = "1"
 webp = "0"
