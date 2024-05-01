@@ -586,7 +586,7 @@ dependencies = [
  "base64",
  "gloo-console 0.3.0",
  "gloo-file 0.3.0",
- "gloo-utils 0.2.0",
+ "gloo-utils 0.1.7",
  "markdown",
  "reqwasm",
  "serde",
