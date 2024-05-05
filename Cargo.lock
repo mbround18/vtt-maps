@@ -1046,18 +1046,6 @@ dependencies = [
 
 [[package]]
 name = "image"
-version = "0.24.9"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "5690139d2f55868e080017335e4b94cb7414274c74f1669c84fb5feba2c9f69d"
-dependencies = [
- "bytemuck",
- "byteorder",
- "color_quant",
- "num-traits",
-]
-
-[[package]]
-name = "image"
 version = "0.25.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "a9b4f005360d32e9325029b38ba47ebd7a56f3316df09249368939562d518645"
@@ -1909,7 +1897,7 @@ name = "shared"
 version = "0.1.0"
 dependencies = [
  "base64",
- "image 0.25.0",
+ "image",
  "serde",
  "serde_json",
 ]
@@ -2068,7 +2056,7 @@ dependencies = [
  "blake2",
  "clap",
  "glob",
- "image 0.25.0",
+ "image",
  "serde",
  "serde_json",
  "sha256",
@@ -2354,11 +2342,11 @@ dependencies = [
 
 [[package]]
 name = "webp"
-version = "0.2.6"
+version = "0.3.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "4bb5d8e7814e92297b0e1c773ce43d290bef6c17452dafd9fc49e5edb5beba71"
+checksum = "8f53152f51fb5af0c08484c33d16cca96175881d1f3dec068c23b31a158c2d99"
 dependencies = [
- "image 0.24.9",
+ "image",
  "libwebp-sys",
 ]
 
