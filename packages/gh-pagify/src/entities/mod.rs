@@ -2,7 +2,6 @@ mod dd2vtt;
 
 use crate::api::gh::{GHRepoTree, GitTree};
 use crate::utils::capitalize;
-pub use dd2vtt::DD2VTT;
 
 #[derive(PartialEq)]
 pub struct MapAsset {
