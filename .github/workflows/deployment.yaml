@@ -89,14 +89,20 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-cargo-index-
 
-      - name: Compile Project
-        run: cargo build --release
+      - name: Install Trunk and wasm-bindgen
+        run: cargo install trunk wasm-bindgen-cli
+
+      - name: Compile with Trunk for SSR
+        run: |
+          trunk build packages/gh-pagify/index.html \
+            --dist packages/gh-pagify/dist \
+            && cargo run --release --bin ssr-catalog
 
       - name: Upload Build Artifacts
         uses: actions/upload-artifact@v4
         with:
           name: build
-          path: target/release/
+          path: packages/gh-pagify/dist/
 
   deploy:
     name: Deploy
@@ -116,7 +122,7 @@ jobs:
           name: build
 
       - name: Configure AWS credentials
-        uses: aws-actions/configure-aws-credentials@v4
+        uses: aws-actions/configure-aws-credentials@v2
         with:
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_KEY }}
@@ -126,6 +132,6 @@ jobs:
         run: |
           aws                         \
             s3 sync                   \
-            ./packages/gh-pagify/dist \
+            packages/gh-pagify/dist   \
             s3://mbruno-static-files/dnd-apps/vtt-maps \
             --request-payer requester
