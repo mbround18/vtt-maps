@@ -124,8 +124,8 @@ jobs:
 
       - name: Upload to S3
         run: |
-          aws                       \
-            s3 sync                 \
-            ./target/release/                 \
+          aws                         \
+            s3 sync                   \
+            ./packages/gh-pagify/dist \
             s3://mbruno-static-files/dnd-apps/vtt-maps \
             --request-payer requester
