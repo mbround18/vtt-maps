@@ -19,3 +19,4 @@
 *.frm		         text eol=lf
 *.jpg		        -text
 *.png		        -textgh
+*.dungeondraft_map filter=lfs diff=lfs merge=lfs -text

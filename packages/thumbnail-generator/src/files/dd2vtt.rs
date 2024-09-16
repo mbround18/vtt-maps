@@ -1,4 +1,4 @@
-use image::io::Reader as ImageReader;
+use image::ImageReader;
 use serde::{Deserialize, Serialize};
 use shared::types::map_reference::MapReference;
 use shared::types::map_resolution::MapResolution;

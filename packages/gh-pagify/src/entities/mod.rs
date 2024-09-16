@@ -2,7 +2,7 @@ mod dd2vtt;
 
 use crate::api::gh::{GHRepoTree, GitTree};
 use crate::utils::capitalize;
-pub use dd2vtt::DD2VTT;
+use gloo_console::debug;
 
 #[derive(PartialEq)]
 pub struct MapAsset {
@@ -60,17 +60,20 @@ impl Clone for MapAsset {
 }
 
 pub struct MapAssets {
-    pub(crate) assets: Vec<MapAsset>,
+    // pub(crate) assets: Vec<MapAsset>,
 }
 
 impl From<GHRepoTree> for MapAssets {
     fn from(repo: GHRepoTree) -> Self {
-        let assets = repo
-            .tree
-            .iter()
-            .filter(|e| e.path.contains(".preview.png"))
-            .map(MapAsset::from)
-            .collect();
-        MapAssets { assets }
+        for x in repo.tree {
+            debug!("{}", x.path);
+        }
+        // let assets = repo
+        //     .tree
+        //     .iter()
+        //     .filter(|e| e.path.contains(".preview.png"))
+        //     .map(MapAsset::from)
+        //     .collect();
+        MapAssets {}
     }
 }
