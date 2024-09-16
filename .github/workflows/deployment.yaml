@@ -89,8 +89,22 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-cargo-index-
 
+      - name: Cache Cargo Binaries (trunk and wasm-bindgen-cli)
+        uses: actions/cache@v3
+        with:
+          path: ~/.cargo/bin
+          key: ${{ runner.os }}-cargo-bin-${{ hashFiles('Cargo.toml') }}
+          restore-keys: |
+            ${{ runner.os }}-cargo-bin-
+
       - name: Install Trunk and wasm-bindgen
-        run: cargo install trunk wasm-bindgen-cli
+        run: |
+          if ! command -v trunk &> /dev/null; then
+            cargo install trunk
+          fi
+          if ! command -v wasm-bindgen-cli &> /dev/null; then
+            cargo install wasm-bindgen-cli
+          fi
 
       - name: Compile with Trunk for SSR
         run: |
