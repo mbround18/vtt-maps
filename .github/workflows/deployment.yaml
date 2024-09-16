@@ -38,6 +38,7 @@ jobs:
         uses: actions-rust-lang/setup-rust-toolchain@v1
         with:
           toolchain: stable
+          target: wasm32-unknown-unknown
           components: clippy
 
       - name: Cache Cargo Registry
