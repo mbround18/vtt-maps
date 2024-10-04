@@ -23,4 +23,3 @@ urlencoding = "2"
 pulldown-cmark = "0"
 wasm-bindgen = "0"
 wasm-bindgen-futures = "0"
-

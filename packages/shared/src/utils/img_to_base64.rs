@@ -29,7 +29,6 @@ impl From<ImageError> for ImageConversionError {
 }
 
 pub fn image_to_base64(file: &PathBuf) -> Result<String, ImageConversionError> {
-    println!("Loading file {file:?}");
     let mut image_data = fs::read(file)?;
     let image = image::load_from_memory(&image_data)?;
 

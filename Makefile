@@ -17,15 +17,15 @@ lint:
 	@cargo fmt
 	@echo "Linting completed successfully."
 
-build:
+build: ssr_catalog
 	@cargo build --target-dir $(BUILD_DIR)
 	@echo "Build completed successfully."
 
-ssr_catalog:
+ssr_catalog: thumbnails
 	@cargo run --bin ssr_catalog --release
 	@echo "SSR catalog generation completed."
 
-compile: build thumbnails ssr_catalog
+compile: build
 	@trunk build $(INDEX_FILE) --dist packages/gh-pagify/dist
 	@echo "Compilation and SSR completed successfully."
 
