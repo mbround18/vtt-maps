@@ -6,9 +6,9 @@
   max-width: 100%;
   border-radius: 1em;
   background: linear-gradient(
-                  135deg,
-                  base.$background-color 0%,
-                  darken(base.$background-color, 10%) 100%
+    135deg,
+    base.$background-color 0%,
+    darken(base.$background-color, 10%) 100%
   );
   box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
 
@@ -29,9 +29,9 @@
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
     border-radius: 15px;
     transition:
-            transform 0.3s,
-            box-shadow 0.3s,
-            background-color 0.3s;
+      transform 0.3s,
+      box-shadow 0.3s,
+      background-color 0.3s;
     animation: card-entry 0.8s ease-out;
     background-color: lighten(base.$background-color, 3%);
     width: 100%;
@@ -81,8 +81,8 @@
       font-weight: bold;
       border-radius: 5px;
       transition:
-              background-color 0.3s,
-              color 0.3s;
+        background-color 0.3s,
+        color 0.3s;
       margin-top: 1em;
       position: relative;
 
