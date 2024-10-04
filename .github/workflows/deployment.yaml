@@ -65,7 +65,7 @@ jobs:
         uses: docker/build-push-action@v6
         with:
           file: ./Dockerfile
-          push: ${{ github.event_name != 'pull_request' }}
+          push: ${{ github.event_name != 'pull_request'  || (github.event_name == 'pull_request' && contains(github.event.pull_request.labels.*.name, 'canary')) }}
           tags: mbround18/vtt-maps:static-site
 
   deploy:
