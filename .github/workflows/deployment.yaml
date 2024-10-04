@@ -35,7 +35,7 @@ jobs:
           lfs: true
 
       - name: Setup
-        run: ./.github/actions/setup
+        uses: ./.github/actions/setup
 
       - name: Run Tests
         run: cargo test --all-features
@@ -50,7 +50,7 @@ jobs:
           lfs: true
 
       - name: Setup
-        run: ./.github/actions/setup
+        uses: ./.github/actions/setup
 
       - name: Compile Project
         run: make compile
