@@ -4,25 +4,29 @@ description: Setup for this repo
 runs:
   using: "composite"
   steps:
-    - name: Setup | Rust | Stable
-      uses: ATiltedTree/setup-rust@v1
+    - uses: actions-rust-lang/setup-rust-toolchain@v1
+      name: Setup Rust Toolchain
       with:
-        rust-version: stable
-        components: clippy rustfmt
-        targets: wasm32-unknown-unknown
+        components: rustfmt, clippy
+        target: wasm32-unknown-unknown
+        cache-workspaces: true
 
-    - uses: actions/cache@v4
+    - name: Cache Cargo Registry
+      uses: actions/cache@v3
       with:
-        path: |
-          ~/.cargo/bin/
-          ~/.cargo/registry/index/
-          ~/.cargo/registry/cache/
-          ~/.cargo/git/db/
-          target/
-        key: ${{ runner.os }}-cargo-setup-${{ hashFiles('**/Cargo.lock') }}
+        path: ~/.cargo/registry
+        key: ${{ runner.os }}-cargo-registry-${{ hashFiles('**/Cargo.lock') }}
+        restore-keys: |
+          ${{ runner.os }}-cargo-registry-
 
-    - name: Install Trunk
-      uses: mbround18/trunk-rs@v1
+    - name: Cache Cargo Index
+      uses: actions/cache@v3
+      with:
+        path: ~/.cargo/git
+        key: ${{ runner.os }}-cargo-index-${{ hashFiles('**/Cargo.lock') }}
+        restore-keys: |
+          ${{ runner.os }}-cargo-index-
 
-    - run: cargo build
+    - name: install make
       shell: sh
+      run: sudo apt update && sudo apt install make -y

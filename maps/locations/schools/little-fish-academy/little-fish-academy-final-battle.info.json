@@ -1,0 +1,13 @@
+{
+  "name": "little-fish-academy-final-battle",
+  "path": "maps/locations/schools/little-fish-academy/little-fish-academy-final-battle.dd2vtt",
+  "hash": "1d4acef07dbfeeb34a412c17a1a1f95282ca8ae3b2ac7bea253c490ef6cafbec",
+  "bytes": 7193696,
+  "resolution": {
+    "map_size": {
+      "x": 63,
+      "y": 57
+    },
+    "pixels_per_grid": 128
+  }
+}

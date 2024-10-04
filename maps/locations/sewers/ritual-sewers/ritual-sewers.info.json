@@ -1,0 +1,13 @@
+{
+  "name": "ritual-sewers",
+  "path": "maps/locations/sewers/ritual-sewers/ritual-sewers.dd2vtt",
+  "hash": "30494bea4bae1b71c0739d1697c1788696f49a0920a0191d28e5156fab248660",
+  "bytes": 10055847,
+  "resolution": {
+    "map_size": {
+      "x": 99,
+      "y": 46
+    },
+    "pixels_per_grid": 128
+  }
+}
