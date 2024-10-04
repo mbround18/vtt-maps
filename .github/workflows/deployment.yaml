@@ -68,11 +68,6 @@ jobs:
     if: github.event_name != 'pull_request'
     environment: aws-s3
     steps:
-      - name: Checkout code and LFS
-        uses: actions/checkout@v4
-        with:
-          lfs: false
-
       - name: Download Build Artifacts
         uses: actions/download-artifact@v4
         with:
@@ -89,6 +84,6 @@ jobs:
         run: |
           aws                         \
             s3 sync                   \
-            ./packages/gh-pagify/dist \
+            ./                        \
             s3://mbruno-static-files/dnd-apps/vtt-maps \
             --request-payer requester
