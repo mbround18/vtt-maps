@@ -32,29 +32,10 @@ jobs:
       - name: Checkout code and LFS
         uses: actions/checkout@v4
         with:
-          lfs: true
+          lfs: false
 
-      - name: Setup Rust Toolchain
-        uses: actions-rust-lang/setup-rust-toolchain@v1
-        with:
-          toolchain: stable
-          components: clippy
-
-      - name: Cache Cargo Registry
-        uses: actions/cache@v3
-        with:
-          path: ~/.cargo/registry
-          key: ${{ runner.os }}-cargo-registry-${{ hashFiles('**/Cargo.lock') }}
-          restore-keys: |
-            ${{ runner.os }}-cargo-registry-
-
-      - name: Cache Cargo Index
-        uses: actions/cache@v3
-        with:
-          path: ~/.cargo/git
-          key: ${{ runner.os }}-cargo-index-${{ hashFiles('**/Cargo.lock') }}
-          restore-keys: |
-            ${{ runner.os }}-cargo-index-
+      - name: Setup
+        uses: ./.github/actions/setup
 
       - name: Run Tests
         run: cargo test --all-features
@@ -66,37 +47,19 @@ jobs:
       - name: Checkout code and LFS
         uses: actions/checkout@v4
         with:
-          lfs: true
+          lfs: false
 
-      - name: Setup Rust Toolchain
-        uses: actions-rust-lang/setup-rust-toolchain@v1
-        with:
-          toolchain: stable
-
-      - name: Cache Cargo Registry
-        uses: actions/cache@v3
-        with:
-          path: ~/.cargo/registry
-          key: ${{ runner.os }}-cargo-registry-${{ hashFiles('**/Cargo.lock') }}
-          restore-keys: |
-            ${{ runner.os }}-cargo-registry-
-
-      - name: Cache Cargo Index
-        uses: actions/cache@v3
-        with:
-          path: ~/.cargo/git
-          key: ${{ runner.os }}-cargo-index-${{ hashFiles('**/Cargo.lock') }}
-          restore-keys: |
-            ${{ runner.os }}-cargo-index-
+      - name: Setup
+        uses: ./.github/actions/setup
 
       - name: Compile Project
-        run: cargo build --release
+        run: make compile
 
       - name: Upload Build Artifacts
         uses: actions/upload-artifact@v4
         with:
           name: build
-          path: target/release/
+          path: packages/gh-pagify/dist
 
   deploy:
     name: Deploy
@@ -108,7 +71,7 @@ jobs:
       - name: Checkout code and LFS
         uses: actions/checkout@v4
         with:
-          lfs: true
+          lfs: false
 
       - name: Download Build Artifacts
         uses: actions/download-artifact@v4

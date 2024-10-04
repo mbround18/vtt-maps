@@ -1,161 +1,161 @@
 <!doctype html>
-<html>
-  <head>
-    <meta charset="utf-8" />
-    <title>D&D VTT Maps</title>
-    <!--   Usability   -->
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>
+    D&D VTT Maps - Free Virtual Tabletop Battle Maps for FoundryVTT & More
+  </title>
+  <!--   Usability   -->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-    <!--  Robots    -->
-    <meta
-      name="description"
-      content="Virtual tabletop maps for FoundryVTT and other similar VTT software!"
-    />
-    <meta name="robots" content="index, follow" />
+  <!--  Robots    -->
+  <meta name="robots" content="index, follow" />
 
-    <!--  SEO   -->
-    <meta
-      name="keywords"
-      content="OpenGraph, meta tags, find-ability, Twitter, Facebook, SEO"
-    />
-    <meta
-      name="description"
-      content="This website hold a catalogue of all maps utilized in the Boop Ninja Universe and associated campaigns."
-    />
+  <!--  SEO   -->
+  <meta
+          name="description"
+          content="Discover a vast collection of free virtual tabletop maps for Dungeons & Dragons, FoundryVTT, and other VTT software. Elevate your campaigns with stunning, functional battle maps for RPG sessions."
+  />
+  <meta
+          name="keywords"
+          content="Dungeons & Dragons, D&D, VTT Maps, FoundryVTT, Battle Maps, Virtual Tabletop, RPG, Free Maps, D&D Maps, Roleplaying Maps, Fantasy Maps"
+  />
 
-    <meta property="og:title" content="VTT Maps by Boop Ninja Universe" />
-    <meta property="og:url" content="https://vtt-maps.dnd-apps.dev/" />
-    <meta
-      property="og:image"
-      content="https://avatars.githubusercontent.com/u/51458697?s=200&v=4"
-    />
-    <meta
-      property="og:description"
-      content="This website hold a catalogue of all maps utilized in the Boop Ninja Universe and associated campaigns."
-    />
-    <meta property="og:type" content="website" />
+  <!--  Open Graph Tags for Social Media Sharing  -->
+  <meta
+          property="og:title"
+          content="D&D VTT Maps - Free Virtual Tabletop Battle Maps for FoundryVTT & More!"
+  />
+  <meta property="og:url" content="https://vtt-maps.dnd-apps.dev/" />
+  <meta
+          property="og:image"
+          content="https://avatars.githubusercontent.com/u/51458697?s=200&v=4"
+  />
+  <meta
+          property="og:description"
+          content="Explore our extensive collection of free virtual tabletop maps perfect for Dungeons & Dragons and FoundryVTT. Make your campaign memorable with beautifully crafted RPG maps."
+  />
+  <meta property="og:type" content="website" />
 
-    <meta name="twitter:card" content="summary" />
-    <meta property="twitter:title" content="VTT Maps by Boop NInja Universe" />
-    <meta
-      name="twitter:image"
-      content="https://avatars.githubusercontent.com/u/51458697?s=200&v=4"
-    />
-    <meta
-      property="twitter:description"
-      content="This website hold a catalogue of all maps utilized in the Boop Ninja Universe and associated campaigns."
-    />
+  <!--  Twitter Card Tags for Social Sharing  -->
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta
+          name="twitter:title"
+          content="D&D VTT Maps - Free Virtual Tabletop Battle Maps for FoundryVTT & More!"
+  />
+  <meta
+          name="twitter:image"
+          content="https://avatars.githubusercontent.com/u/51458697?s=200&v=4"
+  />
+  <meta
+          name="twitter:description"
+          content="Explore our extensive collection of free virtual tabletop maps perfect for Dungeons & Dragons and FoundryVTT. Make your campaign memorable with beautifully crafted RPG maps."
+  />
 
-    <!--  Styles  -->
-    <link data-trunk rel="scss" href="src/styles/index.scss" />
+  <!-- Canonical URL to Prevent Duplicate Content Issues -->
+  <link rel="canonical" href="https://vtt-maps.dnd-apps.dev/" />
 
-    <!--  Files to Copy  -->
-    <link
-      data-trunk
-      rel="icon"
-      type="image/x-icon"
-      href="../../assets/vtt-maps-logo.png"
-    />
-    <link data-trunk rel="copy-file" href="../../README.md" />
-    <link data-trunk rel="copy-file" href="../../config/CNAME" />
-    <link data-trunk rel="copy-dir" href="../../assets" />
-    <script defer>
-      sessionStorage.setItem("catalog-downloading", JSON.stringify([]));
+  <!--  Styles  -->
+  <link data-trunk rel="scss" href="./src/styles/index.scss" />
 
-      function addToQueue(path) {
-        let queue = JSON.parse(sessionStorage.getItem("catalog-downloading"));
+  <!--  Files to Copy  -->
+  <link
+          data-trunk
+          rel="copy-file"
+          type="image/x-icon"
+          href="../../assets/vtt-maps-logo.png"
+  />
+  <link data-trunk rel="copy-file" href="../../README.md" />
+  <link data-trunk rel="copy-file" href="../../config/CNAME" />
+  <link data-trunk rel="copy-dir" href="../../assets" />
+
+  <script defer>
+    sessionStorage.setItem("catalog-downloading", JSON.stringify([]));
+
+    function updateQueue(path, action) {
+      let queue = JSON.parse(sessionStorage.getItem("catalog-downloading"));
+      if (action === "add") {
         queue.push(path);
-        sessionStorage.setItem("catalog-downloading", JSON.stringify(queue));
-      }
-
-      function isInQueue(path) {
-        let queue = JSON.parse(sessionStorage.getItem("catalog-downloading"));
-        return queue.includes(path);
-      }
-
-      function removeFromQueue(path) {
-        let queue = JSON.parse(sessionStorage.getItem("catalog-downloading"));
+      } else if (action === "remove") {
         queue = queue.filter((item) => item !== path);
-        sessionStorage.setItem("catalog-downloading", JSON.stringify(queue));
       }
+      sessionStorage.setItem("catalog-downloading", JSON.stringify(queue));
+    }
 
-      function handleDownload(path) {
-        if (isInQueue(path)) {
-          return;
-        }
-
-        addToQueue(path);
-        let blob;
-        let request = new XMLHttpRequest();
-        request.open("GET", path, true);
-        request.responseType = "blob";
-        request.onprogress = (event) => {
-          console.log(event);
-        };
-        request.onload = function (e) {
-          blob = new Blob([this.response]);
-        };
-        request.onloadend = function (e) {
-          let fileName = path.split("/").pop();
-          let tempEl = document.createElement("a");
-          document.body.appendChild(tempEl);
-          tempEl.style = { display: "none" };
-          path = window.URL.createObjectURL(blob);
-          tempEl.href = path;
-          tempEl.download = fileName;
-          tempEl.click();
-          window.URL.revokeObjectURL(path);
-          removeFromQueue(path);
-        };
-        request.send();
+    function handleDownload(path, button) {
+      if (
+              JSON.parse(sessionStorage.getItem("catalog-downloading")).includes(
+                      path,
+              )
+      ) {
+        return;
       }
+      const originalText = button.innerHTML;
+      button.innerHTML = '<img class="loading" src="assets/loading.gif"  alt=""/>';
+      button.disabled = true; // Disable the button on click
+      updateQueue(path, "add");
+      fetch(path)
+              .then((response) => response.blob())
+              .then((blob) => {
+                const fileName = path.split("/").pop();
+                const tempEl = document.createElement("a");
+                document.body.appendChild(tempEl);
+                tempEl.style.display = "none";
+                const blobUrl = window.URL.createObjectURL(blob);
+                tempEl.href = blobUrl;
+                tempEl.download = fileName;
+                tempEl.click();
+                window.URL.revokeObjectURL(blobUrl);
+                document.body.removeChild(tempEl);
+                updateQueue(path, "remove");
+                button.innerHTML = originalText; // Restore original text
+                button.disabled = false; // Re-enable the button after download completes
+              })
+              .catch(() => {
+                updateQueue(path, "remove");
+                button.innerHTML = originalText; // Restore original text if an error occurs
+                button.disabled = false; // Re-enable the button if an error occurs
+              });
+    }
 
-      function waitForElementById(id) {
-        return new Promise((resolve, reject) => {
-          let interval = setInterval(() => {
-            if (document.getElementById(id)) {
-              clearInterval(interval);
-              resolve();
-            }
-          }, 100);
-        });
-      }
+    function waitForElementById(id) {
+      return new Promise((resolve) => {
+        const interval = setInterval(() => {
+          if (document.getElementById(id)) {
+            clearInterval(interval);
+            resolve();
+          }
+        }, 100);
+      });
+    }
 
-      async function loader() {
-        await waitForElementById("catalog");
-        await waitForElementById("map-asset-vcc");
-        setTimeout(() => {
-          document.querySelectorAll("button[data-href]").forEach((element) => {
+    async function loader() {
+      await waitForElementById("catalog");
+      await waitForElementById("map-asset-vcc");
+      setTimeout(() => {
+        document.querySelectorAll("button[data-href]").forEach((element) => {
+          if (!element.hasAttribute("data-processed")) {
             element.setAttribute("data-processed", "true");
             element.onclick = () =>
-              handleDownload(element.getAttribute("data-href"));
-          });
-        }, 250);
-      }
+                    handleDownload(
+                            element.getAttribute("data-href"),
+                            element
+                    );
+          }
+        });
+      }, 250);
+    }
 
-      loader().then(() => {
-        document
-          .getElementById("catalog")
-          .setAttribute("data-processed", "true");
-        document.getElementById("catalog").setAttribute("data-trunk", "true");
-        document
-          .getElementById("map-asset-vcc")
-          .setAttribute("data-trunk", "true");
-      });
-
-      // // wait for the element #catalog to appear
-      // let interval = setInterval(() => {
-      //   if (document.getElementById("catalog")) {
-      //     clearInterval(interval);
-      //     document
-      //       .getElementById("catalog")
-      //       .setAttribute("data-processed", "true");
-      //     document.getElementById("catalog").setAttribute("data-trunk", "true");
-      //     map-asset-vcc
-      //
-      //
-      //   }
-      // }, 100);
-    </script>
-  </head>
+    loader().then(() => {
+      document
+              .getElementById("catalog")
+              .setAttribute("data-processed", "true");
+      document.getElementById("catalog").setAttribute("data-trunk", "true");
+      document
+              .getElementById("map-asset-vcc")
+              .setAttribute("data-trunk", "true");
+    });
+  </script>
+</head>
+<body></body>
 </html>

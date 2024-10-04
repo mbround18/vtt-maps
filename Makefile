@@ -1,32 +1,42 @@
-# Following this tutorial: https://markentier.tech/posts/2022/01/speedy-rust-builds-under-wsl2/
-# This makes developing on windows significantly easier for rust projects!!
+.PHONY: lint build compile release serve thumbnails ssr_catalog clean all
 
-SOURCE_DIR = $(PWD)
-# `notdir` returns the part after the last `/`
-# so if the source was "/some/nested/project", only "project" remains
-BUILD_DIR  = ~/tmp/$(notdir $(SOURCE_DIR))
+# Efficient Makefile for building and managing Rust and WebAssembly projects
+# Following the approach in https://markentier.tech/posts/2022/01/speedy-rust-builds-under-wsl2/
+# to improve Rust build performance under WSL2.
+
+SOURCE_DIR := $(PWD)
+PROJECT_NAME := $(notdir $(SOURCE_DIR))
+BUILD_DIR := ~/tmp/$(PROJECT_NAME)
+DIST_DIRS := ./dist packages/gh-pagify/dist
+INDEX_FILE := packages/gh-pagify/index.html
+
+all: build
 
 lint:
-	npx prettier --write .
-	cargo fmt
+	@npx prettier --write .
+	@cargo fmt
+	@echo "Linting completed successfully."
 
-build:
-	cargo build
+build: ssr_catalog
+	@cargo build --target-dir $(BUILD_DIR)
+	@echo "Build completed successfully."
 
-compile:
-	trunk build packages/gh-pagify/index.html \
-    			--dist packages/gh-pagify/dist \
-    && cargo run --release --bin ssr-catalog
+ssr_catalog: thumbnails
+	@cargo run --bin ssr_catalog --release
+	@echo "SSR catalog generation completed."
 
-release:
-	cargo run --release --bin ssr-catalog
+compile: build
+	@trunk build $(INDEX_FILE) --dist packages/gh-pagify/dist
+	@echo "Compilation and SSR completed successfully."
 
+serve: ssr_catalog
+	@trunk serve $(INDEX_FILE) --no-autoreload
 
-serve: compile
-	npx http-server packages/gh-pagify/dist
+thumbnails:
+	@cargo run --bin thumbnail-generator "./maps"
+	@echo "Thumbnail generation completed."
 
-thumbs:
-	cargo run --bin thumbnail-generator "./maps"
-
-dev: 
-	cargo run --bin ssr-catalog
+clean:
+	@cargo clean --target-dir $(BUILD_DIR)
+	@rm -rf $(DIST_DIRS)
+	@echo "Clean up completed successfully."

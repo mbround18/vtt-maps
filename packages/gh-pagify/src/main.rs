@@ -13,10 +13,14 @@ use pages::{Catalog, NotFound, ReadMe, Route};
 fn switch(routes: Route) -> Html {
     match routes {
         Route::ReadMe => html! { <ReadMe /> },
-        Route::Catalog => html! { <Catalog /> },
+        Route::Catalog => {
+            // Attempt to server-side render the catalog if available
+            html! { <Catalog /> }
+        }
         Route::NotFound => html! { <NotFound /> },
     }
 }
+
 #[function_component]
 fn App() -> Html {
     html! {

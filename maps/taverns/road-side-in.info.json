@@ -1,0 +1,13 @@
+{
+  "name": "road-side-in",
+  "path": "maps/taverns/road-side-in.dd2vtt",
+  "hash": "f27f5c66eee0669a86928fafb8699577d40730e3038d139195d5a14e76e18852",
+  "bytes": 4306426,
+  "resolution": {
+    "map_size": {
+      "x": 48,
+      "y": 27
+    },
+    "pixels_per_grid": 128
+  }
+}

@@ -1,57 +1,201 @@
 @use "base";
 
 #catalog {
-  //@include base.theme;
-
-  padding: 2em;
-  margin: 2em;
+  padding: 1em;
+  margin: 1em auto;
+  max-width: 100%;
   border-radius: 1em;
+  background: linear-gradient(
+                  135deg,
+                  base.$background-color 0%,
+                  darken(base.$background-color, 10%) 100%
+  );
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
 
   & > #map-asset-vcc {
-    display: flex;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 2em;
     overflow: auto;
-    flex-flow: wrap;
+    padding: 1em;
   }
 
   .card {
     display: flex;
     flex-direction: column;
-    min-height: min-content;
+    align-items: center;
     padding: 1em;
-    margin: 1em;
+    margin: 0;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+    border-radius: 15px;
+    transition:
+            transform 0.3s,
+            box-shadow 0.3s,
+            background-color 0.3s;
+    animation: card-entry 0.8s ease-out;
+    background-color: lighten(base.$background-color, 3%);
+    width: 100%;
+
+    &:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 6px 18px rgba(0, 0, 0, 0.3);
+      background-color: lighten(base.$background-color, 8%);
+    }
+
+    h1 {
+      font-size: 1.2em;
+      color: base.$accent-color;
+      margin-bottom: 0.5em;
+      text-align: center;
+    }
+
+    img {
+      width: 100%;
+      height: auto;
+      border-radius: 10px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+      transition: transform 0.3s;
+      object-fit: cover;
+
+      &:hover {
+        transform: scale(1.05);
+      }
+    }
+
+    p {
+      font-size: 0.9em;
+      line-height: 1.4;
+      color: lighten(base.$foreground-color, 20%);
+      margin: 0.5em 0;
+      text-align: center;
+    }
 
     button {
       background: none !important;
-      border: none;
-      padding: 0 !important;
-      /*optional*/
+      border: 2px solid base.$accent-color;
+      padding: 0.5em 1em !important;
       font-family: arial, sans-serif;
-      /*input has OS specific font-family*/
-      color: #0683c1;
-      text-decoration: underline;
+      color: base.$accent-color;
+      text-decoration: none;
       cursor: pointer;
       font-weight: bold;
+      border-radius: 5px;
+      transition:
+              background-color 0.3s,
+              color 0.3s;
+      margin-top: 1em;
+      position: relative;
+
+      &:hover {
+        background-color: base.$accent-color;
+        color: white;
+      }
+
+      &.loading {
+        pointer-events: none;
+        opacity: 0.6;
+
+        &:after {
+          content: "";
+          position: absolute;
+          top: 50%;
+          left: 50%;
+          width: 24px;
+          height: 24px;
+          border: 4px solid transparent;
+          border-top-color: base.$accent-color;
+          border-radius: 50%;
+          animation: throbber-spin 1s linear infinite;
+          transform: translate(-50%, -50%);
+        }
+      }
     }
-  }
 
-  .image-mosaic {
-    display: flex;
-    flex-direction: row;
-    flex-wrap: wrap;
+    a {
+      margin-top: 0.5em;
+      font-weight: bold;
+      color: base.$accent-color;
+      text-decoration: none;
+      transition: color 0.3s;
 
-    .card {
-      padding: 0;
-      margin: 1vh;
-
-      .responsive {
-        width: 100%;
-        max-width: 400px;
-        height: auto;
+      &:hover {
+        color: lighten(base.$accent-color, 15%);
       }
     }
   }
 
   .card:last-child {
     position: relative;
+  }
+}
+
+@media (min-width: 768px) {
+  #catalog {
+    padding: 2em;
+    margin: 2em auto;
+    max-width: 1200px;
+  }
+
+  .card {
+    padding: 1.5em;
+  }
+
+  .card h1 {
+    font-size: 1.4em;
+  }
+
+  .card p {
+    font-size: 1em;
+  }
+}
+
+@media (min-width: 1600px) {
+  #catalog {
+    padding: 4em;
+    margin: 4em auto;
+    max-width: 1800px;
+  }
+
+  .card {
+    padding: 2em;
+  }
+
+  .card h1 {
+    font-size: 1.6em;
+  }
+
+  .card p {
+    font-size: 1.2em;
+  }
+}
+
+@keyframes card-entry {
+  0% {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes image-mosaic-entry {
+  0% {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes throbber-spin {
+  0% {
+    transform: translate(-50%, -50%) rotate(0deg);
+  }
+  100% {
+    transform: translate(-50%, -50%) rotate(360deg);
   }
 }
