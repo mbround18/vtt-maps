@@ -59,7 +59,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: build
-          path: target/release/
+          path: packages/gh-pagify/dist
 
   deploy:
     name: Deploy
