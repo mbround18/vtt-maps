@@ -32,7 +32,7 @@ jobs:
       - name: Checkout code and LFS
         uses: actions/checkout@v4
         with:
-          lfs: true
+          lfs: false
 
       - name: Setup
         uses: ./.github/actions/setup
@@ -47,7 +47,7 @@ jobs:
       - name: Checkout code and LFS
         uses: actions/checkout@v4
         with:
-          lfs: true
+          lfs: false
 
       - name: Setup
         uses: ./.github/actions/setup
@@ -71,7 +71,7 @@ jobs:
       - name: Checkout code and LFS
         uses: actions/checkout@v4
         with:
-          lfs: true
+          lfs: false
 
       - name: Download Build Artifacts
         uses: actions/download-artifact@v4
