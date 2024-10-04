@@ -1,0 +1,10 @@
+target
+/dist/
+maps/
+/packages/*
+!packages/gh-pagify/dist
+.idea
+.vscode
+.github
+assets
+README.md

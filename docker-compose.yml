@@ -1,0 +1,7 @@
+services:
+  web:
+    image: mbround18/vtt-maps:static-site
+    build:
+      context: .
+    ports:
+      - "8080:80"
