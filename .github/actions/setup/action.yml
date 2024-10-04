@@ -36,3 +36,9 @@ runs:
       with:
         repository: trunk-rs/trunk
         asset: trunk-x86_64-unknown-linux-gnu.tar.gz
+
+    - name: install trunk
+      uses: mbround18/gh-reusable/actions/install-cli@main
+      with:
+        repository: rustwasm/wasm-bindgen
+        asset: "wasm-bindgen-%VERSION%-x86_64-unknown-linux-musl.tar.gz"

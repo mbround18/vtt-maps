@@ -1,40 +1,39 @@
 mod pages;
+mod render;
 
-use crate::pages::app::{App, AppProps};
-use glob::glob;
-use shared::types::map_reference::MapReference;
 use shared::utils::root_dir::root_dir;
-use std::path::Path;
+use std::fs;
 
 #[tokio::main]
 async fn main() {
-    // let bytes = include_bytes!("../index.html") as &[u8];
-    // let index = String::from_utf8(Vec::from(bytes)).unwrap();
-    let glob_path = format!(
-        "{}/**/*.info.json",
-        &root_dir()
-            .expect("Failed to find root dir")
-            .to_str()
-            .unwrap()
-    );
-    println!("{}", &glob_path);
-    let references = glob(&glob_path)
-        .unwrap()
-        .map(|result| result.unwrap())
-        .map(|result| MapReference::from(&result))
-        .collect::<Vec<MapReference>>();
+    let root_directory = match root_dir() {
+        Ok(dir) => dir,
+        Err(e) => {
+            eprintln!("Error finding root directory: {}", e);
+            return;
+        }
+    };
 
-    let renderer = yew::ServerRenderer::<App>::with_props(|| AppProps { references });
-    let rendered = renderer.render().await;
+    let dist_path = root_directory.join("dist/assets");
+    println!("Path: {dist_path:?}");
 
-    // Prints: <div>Hello, World!</div>
-    // println!("{}", &rendered);
-    let dist_path = Path::new(&root_dir().expect("Failed to find root dir"))
-        .join("packages/gh-pagify/dist/assets");
-    if !dist_path.exists() {
-        std::fs::create_dir_all(&dist_path).expect("Failed to create dist dir");
+    if let Err(e) = fs::create_dir_all(&dist_path) {
+        eprintln!("Failed to create dist directory: {}", e);
+        return;
     }
 
+    let rendered = match render::render_catalog().await {
+        Ok(content) => content,
+        Err(e) => {
+            eprintln!("Error rendering catalog: {}", e);
+            return;
+        }
+    };
+
     let output = dist_path.join("catalog.html");
-    std::fs::write(output, rendered).expect("Unable to write file");
+    if let Err(e) = fs::write(&output, rendered.as_bytes()) {
+        eprintln!("Unable to write file {}: {}", output.display(), e);
+    } else {
+        println!("Catalog successfully written to: {}", output.display());
+    }
 }

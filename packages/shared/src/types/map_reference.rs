@@ -17,7 +17,7 @@ impl From<&PathBuf> for MapReference {
         let data = std::fs::read_to_string(value).expect("Unable to read file");
         let mut content: Self = serde_json::from_str(&data).expect("Unable to parse");
         if content.path.starts_with("maps") {
-            let relative_path = content.path.strip_prefix("maps/").unwrap_or("");
+            let relative_path = content.path;
             content.path = root_dir().map_or(relative_path.to_string(), |mut root| {
                 root.push(relative_path);
                 root.to_str().unwrap_or("").to_string()

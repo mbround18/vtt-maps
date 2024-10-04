@@ -1,16 +1,39 @@
 use base64::{engine::general_purpose, Engine as _};
-use image::ImageFormat;
-use std::fs;
+use image::{ImageError, ImageFormat};
 use std::io::Cursor;
-use std::path::PathBuf;
+use std::{fs, io, path::PathBuf};
+use thiserror::Error;
 
-pub fn image_to_base64(file: &PathBuf) -> String {
-    let mut image_data = fs::read(file).unwrap();
-    let image = image::load_from_memory(&image_data).unwrap();
+#[derive(Error, Debug)]
+pub enum ImageConversionError {
+    #[error("Failed to read the file: {0}")]
+    FileReadError(#[source] io::Error),
 
-    image
-        .write_to(&mut Cursor::new(&mut image_data), ImageFormat::Png)
-        .unwrap();
+    #[error("Failed to load image from memory: {0}")]
+    ImageLoadError(#[source] ImageError),
 
-    general_purpose::STANDARD.encode(image_data)
+    #[error("Failed to write image to memory: {0}")]
+    ImageWriteError(#[source] ImageError),
+}
+
+impl From<io::Error> for ImageConversionError {
+    fn from(error: io::Error) -> Self {
+        ImageConversionError::FileReadError(error)
+    }
+}
+
+impl From<ImageError> for ImageConversionError {
+    fn from(error: ImageError) -> Self {
+        ImageConversionError::ImageLoadError(error)
+    }
+}
+
+pub fn image_to_base64(file: &PathBuf) -> Result<String, ImageConversionError> {
+    println!("Loading file {file:?}");
+    let mut image_data = fs::read(file)?;
+    let image = image::load_from_memory(&image_data)?;
+
+    image.write_to(&mut Cursor::new(&mut image_data), ImageFormat::Png)?;
+
+    Ok(general_purpose::STANDARD.encode(image_data))
 }

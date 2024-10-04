@@ -1,47 +1,35 @@
-use crate::api::local::get_readme;
-use yew::{html, Component, Context, Html, Properties};
+use gloo_utils::document;
+use pulldown_cmark::{html as cmark_html, Options, Parser};
+use wasm_bindgen::JsCast;
+use web_sys::HtmlElement;
+use yew::{function_component, html, Html};
 
-#[derive(PartialEq, Properties)]
-pub struct Props;
+const README_CONTENT: &str = include_str!("../../../../README.md");
 
-pub enum Msg {
-    SetReadme(String),
-}
+#[function_component(ReadMe)]
+pub fn readme() -> Html {
+    let mut options = Options::empty();
+    options.insert(Options::ENABLE_FOOTNOTES);
+    options.insert(Options::ENABLE_TABLES);
+    let parser = Parser::new_ext(README_CONTENT, options);
+    let mut html_output = String::new();
+    cmark_html::push_html(&mut html_output, parser);
 
-pub struct ReadMe {
-    readme: String,
-}
+    let div = document().create_element("div").unwrap_or_else(|_| {
+        let fallback = document().create_element("div").unwrap();
+        fallback.set_inner_html("Error creating README element.");
+        fallback
+    });
+    div.set_inner_html(&html_output);
+    div.set_id("readme");
+    div.set_class_name("card");
 
-impl Component for ReadMe {
-    type Message = Msg;
-    type Properties = Props;
-
-    fn create(ctx: &Context<Self>) -> Self {
-        ctx.link().send_future(async move {
-            let body = get_readme().await;
-            Msg::SetReadme(body)
-        });
-        Self {
-            readme: String::from("# VTT-Maps"),
-        }
+    if let Some(html_element) = div.dyn_ref::<HtmlElement>() {
+        html_element.set_tab_index(0); // Make the readme section focusable for better accessibility.
     }
 
-    fn update(&mut self, _ctx: &Context<Self>, msg: Self::Message) -> bool {
-        match msg {
-            Msg::SetReadme(readme) => {
-                self.readme = markdown::to_html(&readme);
-                true
-            }
-        }
-    }
-
-    fn view(&self, _ctx: &Context<Self>) -> Html {
-        let div = gloo_utils::document().create_element("div").unwrap();
-        div.set_inner_html(&self.readme);
-        div.set_id("readme");
-        div.set_class_name("card");
-        html! {
-            <>{ Html::VRef(div.into()) }</>
-        }
+    // Convert the element to Html for rendering
+    html! {
+        <>{ Html::VRef(div.into()) }</>
     }
 }

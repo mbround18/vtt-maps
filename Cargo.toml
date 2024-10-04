@@ -8,6 +8,7 @@ members=[
 resolver = "2"
 
 
+
 [profile.release]
 # less code to include into binary
 panic = 'abort'
@@ -17,5 +18,5 @@ codegen-units = 1
 opt-level = 'z'
 # optimization for size
 # opt-level = 's'
-# link time optimization using using whole-program analysis
+# link time optimization using whole-program analysis
 lto = true

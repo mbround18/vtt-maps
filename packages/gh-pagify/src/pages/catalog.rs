@@ -1,43 +1,12 @@
-use crate::api::local::get_catalog;
-use yew::prelude::*;
+use yew::{function_component, html, Html};
 
-pub struct Catalog {
-    content: Html,
-}
+const CATALOG_CONTENT: &str = include_str!("../../../../dist/assets/catalog.html");
 
-pub enum CatalogMessage {
-    SetContent(Html),
-}
-
-impl Component for Catalog {
-    type Message = CatalogMessage;
-    type Properties = ();
-
-    fn create(ctx: &Context<Self>) -> Self {
-        ctx.link().send_future(async move {
-            let body = get_catalog().await;
-            let content: Html = Html::from_html_unchecked(body.into());
-            CatalogMessage::SetContent(content)
-        });
-        Self {
-            content: html! { "loading..."},
-        }
-    }
-
-    fn update(&mut self, _ctx: &Context<Self>, msg: Self::Message) -> bool {
-        match msg {
-            CatalogMessage::SetContent(content) => {
-                self.content = content;
-                true
-            }
-        }
-    }
-
-    fn view(&self, _ctx: &Context<Self>) -> Html {
-        html! {
-        <>
-         <div id="catalog">{self.content.clone()}</div>
-        </>
-        }
+#[function_component(Catalog)]
+pub fn catalog() -> Html {
+    html! {
+        <div id="catalog">
+            { Html::from_html_unchecked(CATALOG_CONTENT.into()) }
+        </div>
     }
 }

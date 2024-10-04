@@ -31,7 +31,16 @@ html {
 }
 
 * {
-  scrollbar-color: #454a4d #202324;
+  scrollbar-width: thin;
+  scrollbar-color: base.$accent-color base.$background-color;
+}
+
+button,
+a {
+  &:focus {
+    outline: 2px solid base.$accent-color;
+    outline-offset: 2px;
+  }
 }
 
 // imports
