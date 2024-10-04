@@ -4,10 +4,10 @@ mod utils;
 use crate::files::dd2vtt::DD2VTTFile;
 use crate::utils::{get_files, path_to_thumbnail_path};
 use clap::{Arg, Command};
+use colored::*;
 use shared::types::map_reference::MapReference;
 use std::path::Path;
 use tokio;
-use colored::*;
 
 async fn handle_file(file_path: &str) {
     let dd2vtt = DD2VTTFile::from_path(Path::new(file_path).to_path_buf()).await;
@@ -34,11 +34,14 @@ async fn handle_file(file_path: &str) {
 
     // If old info doesn't match new info, generate new thumbnail & info.
     if info.bytes.ne(&reference.bytes) {
-        println!("\nUpdating the following to reference file: {:?}", file_path);
+        println!(
+            "\nUpdating the following to reference file: {:?}",
+            file_path
+        );
         DD2VTTFile::from_path(Path::new(file_path).to_path_buf())
-          .await
-          .to_thumbnail_file(&thumbnail_path)
-          .await;
+            .await
+            .to_thumbnail_file(&thumbnail_path)
+            .await;
         reference.to_file(&info_path);
         print!("{}", "•".green());
     }
@@ -47,16 +50,16 @@ async fn handle_file(file_path: &str) {
 #[tokio::main]
 async fn main() {
     let matches = Command::new("dd2vtt parser")
-      .version("1.0")
-      .author("mbround18")
-      .about("Parses and minifies the image contained in a dd2vtt file")
-      .arg(
-          Arg::new("INPUT")
-            .help("Sets the input directory to use")
-            .required(true)
-            .index(1),
-      )
-      .get_matches();
+        .version("1.0")
+        .author("mbround18")
+        .about("Parses and minifies the image contained in a dd2vtt file")
+        .arg(
+            Arg::new("INPUT")
+                .help("Sets the input directory to use")
+                .required(true)
+                .index(1),
+        )
+        .get_matches();
 
     // Calling .unwrap() is safe here because "INPUT" is required (if "INPUT" wasn't
     // required we could have used an 'if let' to conditionally get the value)

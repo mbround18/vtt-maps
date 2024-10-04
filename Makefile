@@ -29,7 +29,7 @@ compile: build
 	@trunk build $(INDEX_FILE) --dist packages/gh-pagify/dist
 	@echo "Compilation and SSR completed successfully."
 
-serve:
+serve: ssr_catalog
 	@trunk serve $(INDEX_FILE) --no-autoreload
 
 thumbnails:

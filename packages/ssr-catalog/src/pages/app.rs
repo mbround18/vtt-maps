@@ -1,4 +1,5 @@
 use shared::utils::img_to_base64::image_to_base64;
+use shared::utils::root_dir::root_dir;
 use std::path::{Path, PathBuf};
 use titlecase::titlecase;
 use wasm_bindgen::prelude::wasm_bindgen;
@@ -22,7 +23,10 @@ pub fn app(props: &AppProps) -> Html {
     let html_references = list_of_maps.iter()
       .map(|item| {
           let name = titlecase(&item.name.replace(['_', '-'], " "));
-          let download_url = format!("https://raw.githubusercontent.com/dnd-apps/vtt-maps/main/{}", &item.path);
+          let download_url = {
+            let download_path = item.path.strip_prefix(root_dir().unwrap().to_str().unwrap()).unwrap_or("README.md");
+            format!("https://raw.githubusercontent.com/dnd-apps/vtt-maps/main/{download_path}").replace("//", "/")
+          };
 
           // Correct the path to ensure it is always looking in the "maps" directory
           let path_without_extension: PathBuf = Path::new(&item.path).with_extension("");
