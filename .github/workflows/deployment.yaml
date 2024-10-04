@@ -61,6 +61,13 @@ jobs:
           name: build
           path: packages/gh-pagify/dist
 
+      - name: Build and push Docker image
+        uses: docker/build-push-action@v6
+        with:
+          file: ./Dockerfile
+          push: ${{ github.event_name != 'pull_request' }}
+          tags: mbround18/vtt-maps:static-site
+
   deploy:
     name: Deploy
     runs-on: ubuntu-latest
