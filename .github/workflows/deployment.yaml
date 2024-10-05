@@ -74,29 +74,3 @@ jobs:
           name: build
           path: dist
 
-  deploy:
-    name: Deploy
-    runs-on: ubuntu-latest
-    needs: build
-    if: github.event_name != 'pull_request'
-    environment: aws-s3
-    steps:
-      - name: Download Build Artifacts
-        uses: actions/download-artifact@v4
-        with:
-          name: build
-
-      - name: Configure AWS credentials
-        uses: aws-actions/configure-aws-credentials@v4
-        with:
-          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY }}
-          aws-secret-access-key: ${{ secrets.AWS_SECRET_KEY }}
-          aws-region: us-west-2
-
-      - name: Upload to S3
-        run: |
-          aws                         \
-            s3 sync                   \
-            ./                        \
-            s3://mbruno-static-files/dnd-apps/vtt-maps \
-            --request-payer requester
