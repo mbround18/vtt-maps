@@ -1,4 +1,4 @@
-.PHONY: lint build compile release serve thumbnails ssr_catalog clean all
+.PHONY: lint build compile release serve thumbnails ssr_catalog clean all docker-build
 
 # Efficient Makefile for building and managing Rust and WebAssembly projects
 # Following the approach in https://markentier.tech/posts/2022/01/speedy-rust-builds-under-wsl2/
@@ -26,7 +26,7 @@ ssr_catalog: thumbnails
 	@echo "SSR catalog generation completed."
 
 compile: build
-	@trunk build $(INDEX_FILE) --dist packages/gh-pagify/dist --minify
+	@trunk build $(INDEX_FILE) --dist ./dist --minify
 	@echo "Compilation and SSR completed successfully."
 
 serve: ssr_catalog
@@ -40,3 +40,8 @@ clean:
 	@cargo clean --target-dir $(BUILD_DIR)
 	@rm -rf $(DIST_DIRS)
 	@echo "Clean up completed successfully."
+
+
+docker-build: compile
+	@docker compose build
+

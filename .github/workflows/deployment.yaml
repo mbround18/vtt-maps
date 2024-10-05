@@ -55,11 +55,24 @@ jobs:
       - name: Compile Project
         run: make compile
 
+      - name: Log in to DockerHub
+        uses: docker/login-action@v3
+        with:
+          username: mbround18
+          password: ${{ secrets.DOCKER_TOKEN }}
+
+      - name: Build and push Docker image
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          push: ${{ github.event_name != 'pull_request'  || (github.event_name == 'pull_request' && contains(github.event.pull_request.labels.*.name, 'canary')) }}
+          tags: mbround18/vtt-maps:static-site
+
       - name: Upload Build Artifacts
         uses: actions/upload-artifact@v4
         with:
           name: build
-          path: packages/gh-pagify/dist
+          path: dist
 
   deploy:
     name: Deploy
