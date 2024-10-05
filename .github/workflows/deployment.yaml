@@ -64,7 +64,7 @@ jobs:
       - name: Build and push Docker image
         uses: docker/build-push-action@v6
         with:
-          file: ./Dockerfile
+          context: .
           push: ${{ github.event_name != 'pull_request'  || (github.event_name == 'pull_request' && contains(github.event.pull_request.labels.*.name, 'canary')) }}
           tags: mbround18/vtt-maps:static-site
 
@@ -72,7 +72,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: build
-          path: packages/gh-pagify/dist
+          path: dist
 
   deploy:
     name: Deploy

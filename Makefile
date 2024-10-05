@@ -26,7 +26,7 @@ ssr_catalog: thumbnails
 	@echo "SSR catalog generation completed."
 
 compile: build
-	@trunk build $(INDEX_FILE) --dist packages/gh-pagify/dist --minify
+	@trunk build $(INDEX_FILE) --dist ./dist --minify
 	@echo "Compilation and SSR completed successfully."
 
 serve: ssr_catalog

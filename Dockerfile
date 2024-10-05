@@ -2,7 +2,7 @@ FROM nginx:alpine AS web
 
 WORKDIR /usr/share/nginx/html
 
-COPY ./packages/gh-pagify/dist .
+COPY ./dist ./
 
 ADD ./config/nginx/default.conf /etc/nginx/conf.d/default.conf
 
