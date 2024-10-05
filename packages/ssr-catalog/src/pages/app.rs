@@ -25,7 +25,7 @@ pub fn app(props: &AppProps) -> Html {
           let name = titlecase(&item.name.replace(['_', '-'], " "));
           let download_url = {
             let download_path = item.path.strip_prefix(root_dir().unwrap().to_str().unwrap()).unwrap_or("README.md");
-            format!("https://raw.githubusercontent.com/dnd-apps/vtt-maps/main/{download_path}").replace("//", "/")
+            format!("https://raw.githubusercontent.com/dnd-apps/vtt-maps/main/{download_path}").replace("main//", "main/")
           };
 
           // Correct the path to ensure it is always looking in the "maps" directory

@@ -97,7 +97,7 @@ function handleDownload(path, button) {
 function waitForElementById(id) {
   console.log("Waiting for element with ID: ", id);
   return new Promise((resolve) => {
-    // Poll the DOM every 100ms to check if the element is available
+    // Poll the DOM every 100ms to check if the element is available`zzF
     const interval = setInterval(() => {
       if (document.getElementById(id)) {
         console.log("Element found with ID: ", id);

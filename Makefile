@@ -1,4 +1,4 @@
-.PHONY: lint build compile release serve thumbnails ssr_catalog clean all docker-build
+.PHONY: lint build compile release serve thumbnails ssr_catalog clean all docker-build docker-up docker-dev
 
 # Efficient Makefile for building and managing Rust and WebAssembly projects
 # Following the approach in https://markentier.tech/posts/2022/01/speedy-rust-builds-under-wsl2/
@@ -45,3 +45,8 @@ clean:
 docker-build: compile
 	@docker compose build
 
+docker-up:
+	@docker compose up
+
+
+docker-dev: docker-build docker-up
