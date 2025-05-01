@@ -1,0 +1,21 @@
+// VTT Maps API - Debug Endpoints
+// Use this file to test API endpoints during development
+
+// Rebuild Maps Index
+// Triggers the server to re-scan the maps directory and rebuild the maps index
+POST http://127.0.0.1:8080/api/maps/rebuild
+Content-Type: application/json
+
+// You can add a request body here if needed, currently the endpoint doesn't require one
+// Example: { "force": true }
+
+###
+
+// Get All Maps
+// Retrieves a list of all available maps from the server
+GET http://127.0.0.1:8080/api/maps/all?limit=100
+Accept: application/json
+
+###
+
+// For health check endpoints, see probes.http

@@ -1,0 +1,42 @@
+@use "variables" as vars;
+@use "mixins";
+
+#readme {
+  padding: 3em;
+  margin: 3em auto;
+  max-width: 800px;
+  background: rgba(vars.$background-color, 0.8);
+  backdrop-filter: blur(8px);
+  border-radius: vars.$border-radius-large;
+  @include mixins.shadow(2);
+  transition: box-shadow 0.3s ease;
+
+  h2 {
+    font-size: mixins.fluid(20, 28);
+    color: vars.$accent-color;
+    margin-bottom: 1em;
+  }
+
+  ul {
+    list-style: none;
+    padding: 0;
+
+    li {
+      margin: 1em 0;
+      font-size: mixins.fluid(14, 18);
+      color: vars.$text-color;
+
+      a {
+        color: vars.$accent-color;
+        font-weight: bold;
+        text-decoration: none;
+        transition: color 0.3s;
+
+        &:hover {
+          color: var(--accent-color);
+          filter: brightness(1.2);
+        }
+      }
+    }
+  }
+}

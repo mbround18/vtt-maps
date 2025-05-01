@@ -1,0 +1,161 @@
+@use "variables" as vars;
+@use "mixins";
+
+#catalog {
+  padding: vars.$spacing-medium;
+  margin: vars.$spacing-medium auto;
+  max-width: 100%;
+  border-radius: vars.$border-radius-large;
+  background: linear-gradient(
+    135deg,
+    var(--background-color) 0%,
+    var(--background-color-dark, var(--background-color)) 100%
+  );
+  filter: var(--background-color-dark) brightness(0.95);
+  @include mixins.shadow(2);
+
+  & {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(vars.$card-min-width, 1fr));
+    gap: vars.$spacing-medium;
+    padding: vars.$spacing-small;
+
+    @include mixins.respond(xs) {
+      grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+      gap: vars.$spacing-medium;
+    }
+
+    @include mixins.respond(sm) {
+      grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+      gap: vars.$spacing-large;
+      padding: vars.$spacing-medium;
+    }
+
+    @include mixins.respond(md) {
+      grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    }
+
+    @include mixins.respond(lg) {
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      padding: vars.$spacing-large;
+    }
+  }
+
+  .card {
+    @include mixins.card;
+    @include mixins.flex(column, flex-start, center, nowrap);
+    padding: vars.$spacing-medium;
+    width: 100%;
+    height: 100%;
+    background-color: vars.$card-bg;
+    animation: card-entry 0.8s ease-out;
+    animation-fill-mode: both;
+    animation-delay: calc(var(--card-index, 0) * 0.05s);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+
+    .card-actions {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      margin-top: vars.$spacing-small;
+
+      a {
+        margin-right: vars.$spacing-small;
+        padding: vars.$spacing-small vars.$spacing-medium;
+        background-color: var(--accent-color);
+        color: white;
+        border-radius: vars.$border-radius-small;
+        font-weight: 600;
+        transition: background-color 0.3s ease;
+        width: 100%;
+
+        &:hover {
+          background-color: var(--accent-color-dark);
+          filter: brightness(1.1);
+        }
+      }
+    }
+
+    h1 {
+      font-size: mixins.fluid(16, 20);
+      color: vars.$accent-color;
+      margin: vars.$spacing-small 0;
+      text-align: center;
+    }
+
+    img {
+      width: 100%;
+      height: auto;
+      border-radius: vars.$border-radius-small;
+      @include mixins.shadow(1);
+      transition: transform 0.3s ease;
+      object-fit: cover;
+
+      &:hover {
+        transform: scale(1.03);
+      }
+    }
+
+    p {
+      font-size: mixins.fluid(14, 16);
+      line-height: 1.4;
+      color: vars.$text-color;
+      margin: vars.$spacing-small 0;
+      text-align: center;
+    }
+
+    button {
+      margin-top: vars.$spacing-medium;
+      position: relative;
+
+      &.loading {
+        pointer-events: none;
+        opacity: 0.6;
+      }
+    }
+
+    a {
+      margin-top: vars.$spacing-small;
+      font-weight: 600;
+
+      &:hover {
+        color: var(--accent-color);
+        filter: brightness(1.2);
+      }
+    }
+  }
+}
+
+@keyframes card-entry {
+  0% {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes image-mosaic-entry {
+  0% {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes throbber-spin {
+  0% {
+    transform: translate(-50%, -50%) rotate(0deg);
+  }
+  100% {
+    transform: translate(-50%, -50%) rotate(360deg);
+  }
+}

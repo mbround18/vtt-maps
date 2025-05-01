@@ -1,13 +1,12 @@
 [workspace]
 members=[
-    "packages/thumbnail-generator",
-    "packages/gh-pagify",
-    "packages/ssr-catalog",
-    "packages/shared"
+    "packages/*",
 ]
 resolver = "2"
 
-
+# Add a patch section to fix the mio dependency issues for wasm
+[patch.crates-io]
+mio = { git = "https://github.com/tokio-rs/mio.git", branch = "master" }
 
 [profile.release]
 # less code to include into binary

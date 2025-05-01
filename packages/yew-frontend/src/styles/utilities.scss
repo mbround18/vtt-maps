@@ -1,0 +1,251 @@
+@use "variables" as vars;
+@use "mixins";
+
+// Box model
+html {
+  box-sizing: border-box;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: inherit;
+}
+
+// Container
+.container {
+  width: 100%;
+  padding-right: vars.$spacing-medium;
+  padding-left: vars.$spacing-medium;
+  margin-right: auto;
+  margin-left: auto;
+  max-width: vars.$container-max-width;
+}
+
+// Flex utilities
+.d-flex {
+  display: flex;
+}
+.flex-column {
+  flex-direction: column;
+}
+.flex-row {
+  flex-direction: row;
+}
+.flex-wrap {
+  flex-wrap: wrap;
+}
+.flex-nowrap {
+  flex-wrap: nowrap;
+}
+.justify-start {
+  justify-content: flex-start;
+}
+.justify-end {
+  justify-content: flex-end;
+}
+.justify-center {
+  justify-content: center;
+}
+.justify-between {
+  justify-content: space-between;
+}
+.justify-around {
+  justify-content: space-around;
+}
+.align-start {
+  align-items: flex-start;
+}
+.align-end {
+  align-items: flex-end;
+}
+.align-center {
+  align-items: center;
+}
+.align-stretch {
+  align-items: stretch;
+}
+
+// Grid utilities
+.d-grid {
+  display: grid;
+}
+
+// Spacing utilities
+@each $size-name,
+  $size-value
+    in (
+      "xs": vars.$spacing-xs,
+      "sm": vars.$spacing-small,
+      "md": vars.$spacing-medium,
+      "lg": vars.$spacing-large,
+      "xl": vars.$spacing-xl
+    )
+{
+  .m-#{$size-name} {
+    margin: $size-value;
+  }
+  .mt-#{$size-name} {
+    margin-top: $size-value;
+  }
+  .mr-#{$size-name} {
+    margin-right: $size-value;
+  }
+  .mb-#{$size-name} {
+    margin-bottom: $size-value;
+  }
+  .ml-#{$size-name} {
+    margin-left: $size-value;
+  }
+  .mx-#{$size-name} {
+    margin-left: $size-value;
+    margin-right: $size-value;
+  }
+  .my-#{$size-name} {
+    margin-top: $size-value;
+    margin-bottom: $size-value;
+  }
+
+  .p-#{$size-name} {
+    padding: $size-value;
+  }
+  .pt-#{$size-name} {
+    padding-top: $size-value;
+  }
+  .pr-#{$size-name} {
+    padding-right: $size-value;
+  }
+  .pb-#{$size-name} {
+    padding-bottom: $size-value;
+  }
+  .pl-#{$size-name} {
+    padding-left: $size-value;
+  }
+  .px-#{$size-name} {
+    padding-left: $size-value;
+    padding-right: $size-value;
+  }
+  .py-#{$size-name} {
+    padding-top: $size-value;
+    padding-bottom: $size-value;
+  }
+}
+
+// Display utilities
+.d-none {
+  display: none;
+}
+.d-block {
+  display: block;
+}
+.d-inline-block {
+  display: inline-block;
+}
+
+@each $bp in (xs, sm, md, lg) {
+  @include mixins.respond($bp) {
+    .d-#{$bp}-none {
+      display: none;
+    }
+    .d-#{$bp}-block {
+      display: block;
+    }
+    .d-#{$bp}-inline-block {
+      display: inline-block;
+    }
+    .d-#{$bp}-flex {
+      display: flex;
+    }
+    .d-#{$bp}-grid {
+      display: grid;
+    }
+  }
+}
+
+// Text utilities
+.text-center {
+  text-align: center;
+}
+.text-left {
+  text-align: left;
+}
+.text-right {
+  text-align: right;
+}
+.text-justify {
+  text-align: justify;
+}
+.text-truncate {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+// Visual helpers
+.rounded {
+  border-radius: vars.$border-radius-small;
+}
+.rounded-md {
+  border-radius: vars.$border-radius-medium;
+}
+.rounded-lg {
+  border-radius: vars.$border-radius-large;
+}
+.rounded-circle {
+  border-radius: 50%;
+}
+
+.shadow-sm {
+  @include mixins.shadow(1);
+}
+.shadow-md {
+  @include mixins.shadow(2);
+}
+.shadow-lg {
+  @include mixins.shadow(3);
+}
+
+// Animations
+.fade-in {
+  animation: fadeIn 0.3s ease-in;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+// Accessibility
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border-width: 0;
+}
+
+// Scrollbar styling
+* {
+  scrollbar-width: thin;
+  scrollbar-color: vars.$accent-color vars.$background-color;
+}
+
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+::-webkit-scrollbar-track {
+  background: vars.$background-color;
+}
+::-webkit-scrollbar-thumb {
+  background-color: vars.$accent-color;
+  border-radius: 4px;
+}

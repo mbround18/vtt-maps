@@ -1,4 +1,4 @@
-use base64::{engine::general_purpose, Engine as _};
+use base64::{Engine as _, engine::general_purpose};
 use image::{ImageError, ImageFormat};
 use std::io::Cursor;
 use std::{fs, io, path::PathBuf};

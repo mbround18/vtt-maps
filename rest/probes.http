@@ -1,0 +1,11 @@
+// Kubernetes health endpoints for debugging
+
+// Liveness probe - check if application is running
+GET http://127.0.0.1:8080/health/liveness
+Accept: application/json
+
+###
+
+// Readiness probe - check if application is ready to receive traffic
+GET http://127.0.0.1:8080/health/readiness
+Accept: application/json
