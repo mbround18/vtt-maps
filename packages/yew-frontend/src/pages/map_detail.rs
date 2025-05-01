@@ -110,8 +110,9 @@ pub fn map_detail(props: &MapDetailProps) -> Html {
                                     let loading_clone = loading.clone();
                                     let onload = Closure::wrap(Box::new(move || {
                                         loading_clone.set(LoadingState::FullMapLoaded);
-                                    }) as Box<dyn FnMut()>);
-                                    
+                                    })
+                                        as Box<dyn FnMut()>);
+
                                     img.set_onload(Some(onload.as_ref().unchecked_ref()));
                                     img.set_src(&format!("/maps/tiled/{}", map_id));
                                     onload.forget();
