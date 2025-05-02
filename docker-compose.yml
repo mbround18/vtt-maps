@@ -1,7 +1,9 @@
 services:
   backend:
+    image: mbround18/vtt-maps:v2-dev
     build:
-      context: ./packages/actix-backend
+      context: .
+      dockerfile: Dockerfile
     ports:
       - "8080:8080"
     environment:

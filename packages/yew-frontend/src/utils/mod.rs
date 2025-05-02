@@ -1,4 +1,3 @@
-pub mod api;
 pub mod externals;
 
 pub fn capitalize(s: &str) -> String {

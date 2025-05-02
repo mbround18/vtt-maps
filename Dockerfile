@@ -1,24 +1,46 @@
-FROM ubuntu:24.04 AS cert-generator
+FROM ubuntu:latest AS trunk
 
 RUN apt-get update && \
-    apt-get install -y openssl && \
-    mkdir -p /certs && \
-    openssl req -x509 -nodes -days 365 -newkey rsa:4096 \
-    -keyout /certs/tls.key \
-    -out /certs/tls.crt \
-    -subj "/CN=localhost"
+    apt-get install -y --no-install-recommends \
+        curl \
+        ca-certificates \
+        jq \
+        tar && \
+    rm -rf /var/lib/apt/lists/*
 
-FROM nginx:alpine AS web
+ENV TRUNK_REPO="https://api.github.com/repos/trunk-rs/trunk/releases/latest" \
+    ARCH="x86_64-unknown-linux-gnu"
 
-WORKDIR /usr/share/nginx/html
+RUN --mount=type=cache,target=/var/cache/apt \
+    set -eux; \
+    LATEST_VERSION=$(curl -sSL $TRUNK_REPO | jq -r '.tag_name'); \
+    curl -sSL "https://github.com/trunk-rs/trunk/releases/download/${LATEST_VERSION}/trunk-${ARCH}.tar.gz" | \
+    tar -xz -C /usr/local/bin trunk
 
-COPY ./dist ./
+FROM rust:1.86 AS builder
 
-COPY --from=cert-generator /certs/tls.key /etc/ssl/certs/tls.key
-COPY --from=cert-generator /certs/tls.crt /etc/ssl/certs/tls.crt
+WORKDIR /usr/src/app
 
-ADD ./config/nginx/default.conf /etc/nginx/conf.d/default.conf
+COPY --from=trunk /usr/local/bin/trunk /usr/local/bin/trunk
 
-EXPOSE 80 443
+COPY . .
 
-CMD ["nginx", "-g", "daemon off;"]
+RUN rustup target add wasm32-unknown-unknown
+
+RUN cargo build --release
+RUN cd ./packages/yew-frontend && trunk build --release \
+    --public-url / \
+    --dist /usr/src/app/dist
+
+FROM ubuntu:latest
+
+WORKDIR /usr/src/app
+
+ENV DIST_DIR=/usr/src/app/dist
+    REPO_PATH=/data
+    REPO_REF="main"
+
+COPY --from=builder /usr/src/app/dist /usr/src/app/dist
+COPY --from=builder /usr/src/app/target/release/actix-backend /usr/src/server
+
+CMD ["./server"]

@@ -1,0 +1,43 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: vtt-maps
+  labels:
+    app: vtt-maps
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: vtt-maps
+  template:
+    metadata:
+      labels:
+        app: vtt-maps
+        version: v1
+      annotations:
+        sidecar.istio.io/inject: "true"
+    spec:
+      containers:
+        - name: vtt-maps
+          image: mbround18/vtt-maps:v2-dev
+          ports:
+            - containerPort: 8080
+          env:
+            - name: MEILI_URL
+              value: "http://meilisearch:7700"
+            - name: MEILI_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: vtt-maps-secrets
+                  key: meili-key
+            - name: REPO_REF
+              value: "PLACEHOLDER_REPO_REF"
+            - name: REPO_PATH
+              value: "/usr/src/repository"
+          volumeMounts:
+            - name: maps-repository
+              mountPath: /usr/src/repository
+      volumes:
+        - name: maps-repository
+          persistentVolumeClaim:
+            claimName: vtt-maps-repository-pvc

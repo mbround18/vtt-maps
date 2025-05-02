@@ -1,17 +1,18 @@
-use crate::utils::api;
 use crate::utils::externals::updateReadmeAnchors;
 use gloo_console::log;
 use yew::prelude::*;
+use crate::api::api::ApiEndpoint;
 
 #[function_component(ReadMe)]
 pub fn readme() -> Html {
     let content = use_state(|| String::new());
+    let readme_api = ApiEndpoint::GetReadme;
 
     {
         let content = content.clone();
         use_effect_with((), move |_| {
             wasm_bindgen_futures::spawn_local(async move {
-                match api::get("/docs/readme").send().await {
+                match readme_api.request().send().await {
                     Ok(response) if response.ok() => match response.text().await {
                         Ok(txt) => {
                             content.set(txt);

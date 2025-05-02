@@ -5,13 +5,16 @@ mod maps;
 mod utils;
 
 use actix_cors::Cors;
-use actix_files::Files;
+use actix_files::{Files, NamedFile};
 use actix_web::{
     App, HttpServer,
+    dev::ServiceRequest,
+    dev::ServiceResponse,
     web::{self},
 };
-
+use shared::utils::root_dir::root_dir;
 use std::env;
+use std::path::PathBuf;
 use tokio::fs;
 use tracing_actix_web::TracingLogger;
 use utils::folders::thumbnails_dir;
@@ -28,7 +31,13 @@ async fn main() -> std::io::Result<()> {
         panic!("Failed to create thumbnail directory: {:?}", thumb_dir);
     });
 
+
     HttpServer::new(move || {
+        let dist_dir = {
+            env::var("DIST_DIR")
+                .map(PathBuf::from)
+                .unwrap_or_else(|_| root_dir().unwrap().join("dist"))
+        };
         App::new()
             .wrap(TracingLogger::default())
             .wrap({
@@ -59,6 +68,19 @@ async fn main() -> std::io::Result<()> {
                 web::scope("/health")
                     .route("/liveness", web::get().to(health::liveness))
                     .route("/readiness", web::get().to(health::readiness)),
+            )
+            .service(
+                Files::new("/", &dist_dir)
+                    .index_file("index.html")
+                    .default_handler(move |req: ServiceRequest| {
+                        let (http_req, _payload) = req.into_parts();
+                        let source_folder = dist_dir.clone();
+                        async move {
+                            let file = NamedFile::open(&source_folder.join("index.html"))?;
+                            let response = file.into_response(&http_req);
+                            Ok(ServiceResponse::new(http_req, response))
+                        }
+                    }),
             )
     })
     .bind(format!("{}:{}", address, port))?

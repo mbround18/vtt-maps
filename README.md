@@ -1,9 +1,7 @@
-
-
   <img src="/assets/vtt-maps-logo.png" alt="VTT Maps Logo" width="200" />
 
+# VTT Maps
 
-# VTT Maps  
 _A library of high-quality, ready-to-use maps for virtual tabletop RPGs_
 
 [![Discussions](https://img.shields.io/github/discussions/dnd-apps/vtt-maps)](https://github.com/dnd-apps/vtt-maps/discussions/4) [![Ko-fi](https://img.shields.io/badge/Support-Ko--fi-29ABE0?logo=ko-fi)](https://ko-fi.com/mbround18) [![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
@@ -12,15 +10,15 @@ _A library of high-quality, ready-to-use maps for virtual tabletop RPGs_
 
 ## 📑 Table of Contents
 
-1. [About](#about)  
-2. [Features](#features)  
-3. [Getting Started](#getting-started)  
-4. [Usage](#usage)  
-5. [Asset Packs](#asset-packs)  
-6. [Sponsors](#sponsors)  
-7. [Support & Feedback](#support--feedback)  
-8. [Contributing](#contributing)  
-9. [License](#license)  
+1. [About](#about)
+2. [Features](#features)
+3. [Getting Started](#getting-started)
+4. [Usage](#usage)
+5. [Asset Packs](#asset-packs)
+6. [Sponsors](#sponsors)
+7. [Support & Feedback](#support--feedback)
+8. [Contributing](#contributing)
+9. [License](#license)
 
 ---
 
@@ -28,9 +26,9 @@ _A library of high-quality, ready-to-use maps for virtual tabletop RPGs_
 
 **VTT Maps** is a curated collection of high-resolution, fully prepped maps built for virtual tabletop platforms (Foundry VTT, Roll20, Fantasy Grounds, etc.). All maps come with:
 
-- ✅ **Source files** in DungeonDraft format  
-- ✅ **Exported `.dd2vtt`** JSON ready for import  
-- ✅ **Preview images** for quick browsing  
+- ✅ **Source files** in DungeonDraft format
+- ✅ **Exported `.dd2vtt`** JSON ready for import
+- ✅ **Preview images** for quick browsing
 
 > **Note:** Editing source files requires a valid [DungeonDraft](https://dungeondraft.net/) license.
 
@@ -38,10 +36,10 @@ _A library of high-quality, ready-to-use maps for virtual tabletop RPGs_
 
 ## ✨ Features
 
-- **High-Resolution Art** – Beautiful, hand-crafted assets  
-- **Multiple Themes** – Fantasy dungeons, wilderness, town maps, and more  
-- **Grid- & Grid-less** versions  
-- **Consistent Style** – Designed for seamless integration across your campaigns  
+- **High-Resolution Art** – Beautiful, hand-crafted assets
+- **Multiple Themes** – Fantasy dungeons, wilderness, town maps, and more
+- **Grid- & Grid-less** versions
+- **Consistent Style** – Designed for seamless integration across your campaigns
 
 ---
 
@@ -49,9 +47,9 @@ _A library of high-quality, ready-to-use maps for virtual tabletop RPGs_
 
 These free packs powered our maps—please support the artists!
 
-* **[DungeonDraft Integration 3.0](https://www.forgotten-adventures.net/product/map-making/assets/dungeondraft-integration/)**
-* **[Pirates & Ports](https://essendi.gumroad.com/l/PiratesAndPorts)**
-* **[Crosshead Ghibli Pack](https://crossheadstudios.com/dungeondraft/)**
+- **[DungeonDraft Integration 3.0](https://www.forgotten-adventures.net/product/map-making/assets/dungeondraft-integration/)**
+- **[Pirates & Ports](https://essendi.gumroad.com/l/PiratesAndPorts)**
+- **[Crosshead Ghibli Pack](https://crossheadstudios.com/dungeondraft/)**
 
 ---
 
@@ -69,9 +67,9 @@ Want to see your logo here? [Become a sponsor →](https://ko-fi.com/mbround18)
 
 ## 💬 Support & Feedback
 
-* **Discussions:** [Project discussion board](https://github.com/dnd-apps/vtt-maps/discussions/4)
-* **Report Issues:** [Issue tracker](https://github.com/dnd-apps/vtt-maps/issues)
-* **Say Thanks:** [Ko-fi](https://ko-fi.com/mbround18)
+- **Discussions:** [Project discussion board](https://github.com/dnd-apps/vtt-maps/discussions/4)
+- **Report Issues:** [Issue tracker](https://github.com/dnd-apps/vtt-maps/issues)
+- **Say Thanks:** [Ko-fi](https://ko-fi.com/mbround18)
 
 ---
 
@@ -89,5 +87,3 @@ Please follow our [Code of Conduct](CODE_OF_CONDUCT.md) and [Contribution Guidel
 ## 📜 License
 
 Distributed under the **MIT License**. See [LICENSE](LICENSE) for details.
-
-

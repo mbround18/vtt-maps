@@ -1,7 +1,10 @@
-target
-maps/
-.idea
-.vscode
-.github
-assets
-README.md
+/target
+/maps
+/.idea
+/.vscode
+/.github
+/assets/thumbnails
+/rest
+/packages/yew-frontend/dist
+
+

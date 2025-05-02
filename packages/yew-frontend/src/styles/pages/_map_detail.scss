@@ -18,11 +18,21 @@
 
 // Animated loading dots
 @keyframes loading-dots {
-  0% { content: ""; }
-  25% { content: "."; }
-  50% { content: ".."; }
-  75% { content: "..."; }
-  100% { content: ""; }
+  0% {
+    content: "";
+  }
+  25% {
+    content: ".";
+  }
+  50% {
+    content: "..";
+  }
+  75% {
+    content: "...";
+  }
+  100% {
+    content: "";
+  }
 }
 
 .loading-text {
@@ -38,7 +48,7 @@
   width: 24px;
   height: 1em;
   margin-left: 4px;
-  
+
   &::after {
     content: "";
     display: inline-block;
@@ -51,16 +61,16 @@
   margin: 0 auto;
   max-width: 1400px;
   padding: 1rem;
-  
+
   h1 {
     margin-bottom: 1rem;
     font-size: 1.8rem;
-    
+
     @media (max-width: 768px) {
       font-size: 1.5rem;
     }
   }
-  
+
   .error {
     color: #cc0000;
     background-color: #ffeeee;
@@ -75,13 +85,13 @@
 #map-asset-vcc {
   display: flex;
   flex-direction: column;
-  
+
   p {
     margin-bottom: 1rem;
     color: #555;
     font-style: italic;
   }
-  
+
   img.responsive {
     max-width: 100%;
     height: auto;
@@ -95,26 +105,26 @@
   display: flex;
   flex-direction: column;
   max-height: 90vh;
-  
+
   img.responsive {
     max-width: 100%;
     height: auto;
     object-fit: contain;
     border-radius: 4px;
     box-shadow: 0 3px 15px rgba(0, 0, 0, 0.15);
-    
+
     // Enable touch scrolling on mobile
     @media (max-width: 1024px) {
       max-height: 70vh;
       overflow: auto;
       touch-action: pan-x pan-y;
       cursor: grab;
-      
+
       &:active {
         cursor: grabbing;
       }
     }
-    
+
     // For large maps on desktop
     @media (min-width: 1025px) {
       overflow: auto;
@@ -129,22 +139,22 @@
   max-height: 80vh;
   border: 1px solid #ddd;
   border-radius: 4px;
-  
+
   // Improved scrollbar appearance
   &::-webkit-scrollbar {
     width: 10px;
     height: 10px;
   }
-  
+
   &::-webkit-scrollbar-track {
     background: #f1f1f1;
     border-radius: 4px;
   }
-  
+
   &::-webkit-scrollbar-thumb {
     background: #888;
     border-radius: 4px;
-    
+
     &:hover {
       background: #555;
     }
@@ -163,4 +173,3 @@
 }
 
 // Remove canvas specific styles since we're not using canvas anymore
-

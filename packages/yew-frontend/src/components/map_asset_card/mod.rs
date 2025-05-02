@@ -1,7 +1,7 @@
-use crate::utils::api::api_base_url;
 use crate::utils::capitalize;
 use shared::types::map_document::MapDocument;
 use yew::prelude::*;
+use crate::api::api::ApiEndpoint;
 
 // Definition
 pub struct MapAssetCard {
@@ -38,7 +38,8 @@ impl Component for MapAssetCard {
                 .collect::<Vec<String>>()
                 .join(" "),
         );
-        let download_url = format!("{}/api/maps/download/{}", api_base_url(), self.asset.id);
+        let download_url = ApiEndpoint::DownloadMap { id: self.asset.id.clone()}
+            .url();
 
         html! {
             <div class={"card map-asset"}>
