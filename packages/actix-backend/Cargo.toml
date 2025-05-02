@@ -11,11 +11,8 @@ tokio = { version = "1.44.2", features = ["full"] }
 serde = { version = "1.0.219", features = ["derive"] }
 serde_json = "1.0.140"
 glob = "0.3.2"
-sha1 = "0.10.6"
 shared = { path = "../shared" }
 meilisearch-sdk = "0.28.0"
-yew = { version = "0.21.0", features = ["ssr"] }
-hex = "0.4.3"
 anyhow = "1.0.98"
 tracing = "0.1.41"
 tracing-subscriber = { version = "0.3.19", features = ["env-filter", "fmt"] }

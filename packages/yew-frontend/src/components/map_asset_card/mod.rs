@@ -33,8 +33,7 @@ impl Component for MapAssetCard {
                 .name
                 .clone()
                 .split('-')
-                .map(|e| e.split('_'))
-                .flatten()
+                .flat_map(|e| e.split('_'))
                 .map(capitalize)
                 .collect::<Vec<String>>()
                 .join(" "),

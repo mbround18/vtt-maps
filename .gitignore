@@ -4,3 +4,4 @@ docs
 dist
 *.png~
 assets/thumbnails
+*.bak

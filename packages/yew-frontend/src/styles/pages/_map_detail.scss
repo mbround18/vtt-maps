@@ -1,0 +1,166 @@
+// Loading and error states
+.loading-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 80vh;
+  flex-direction: column;
+}
+
+.error-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 80vh;
+  flex-direction: column;
+  color: #cc0000;
+}
+
+// Animated loading dots
+@keyframes loading-dots {
+  0% { content: ""; }
+  25% { content: "."; }
+  50% { content: ".."; }
+  75% { content: "..."; }
+  100% { content: ""; }
+}
+
+.loading-text {
+  display: flex;
+  align-items: center;
+  margin-bottom: 1rem;
+  color: #555;
+  font-style: italic;
+}
+
+.loading-dots {
+  display: inline-block;
+  width: 24px;
+  height: 1em;
+  margin-left: 4px;
+  
+  &::after {
+    content: "";
+    display: inline-block;
+    animation: loading-dots 1.5s infinite;
+  }
+}
+
+// Map container and common styles
+#map-container {
+  margin: 0 auto;
+  max-width: 1400px;
+  padding: 1rem;
+  
+  h1 {
+    margin-bottom: 1rem;
+    font-size: 1.8rem;
+    
+    @media (max-width: 768px) {
+      font-size: 1.5rem;
+    }
+  }
+  
+  .error {
+    color: #cc0000;
+    background-color: #ffeeee;
+    border: 1px solid #ffcccc;
+    padding: 1rem;
+    border-radius: 4px;
+    margin: 1rem 0;
+  }
+}
+
+// Map asset view during loading
+#map-asset-vcc {
+  display: flex;
+  flex-direction: column;
+  
+  p {
+    margin-bottom: 1rem;
+    color: #555;
+    font-style: italic;
+  }
+  
+  img.responsive {
+    max-width: 100%;
+    height: auto;
+    border-radius: 4px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  }
+}
+
+// Full map viewer
+#map-viewer {
+  display: flex;
+  flex-direction: column;
+  max-height: 90vh;
+  
+  img.responsive {
+    max-width: 100%;
+    height: auto;
+    object-fit: contain;
+    border-radius: 4px;
+    box-shadow: 0 3px 15px rgba(0, 0, 0, 0.15);
+    
+    // Enable touch scrolling on mobile
+    @media (max-width: 1024px) {
+      max-height: 70vh;
+      overflow: auto;
+      touch-action: pan-x pan-y;
+      cursor: grab;
+      
+      &:active {
+        cursor: grabbing;
+      }
+    }
+    
+    // For large maps on desktop
+    @media (min-width: 1025px) {
+      overflow: auto;
+      max-height: 80vh;
+    }
+  }
+}
+
+// For very large maps, wrap in a container to enable scrolling
+.map-scroll-container {
+  overflow: auto;
+  max-height: 80vh;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  
+  // Improved scrollbar appearance
+  &::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+  }
+  
+  &::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 4px;
+  }
+  
+  &::-webkit-scrollbar-thumb {
+    background: #888;
+    border-radius: 4px;
+    
+    &:hover {
+      background: #555;
+    }
+  }
+}
+
+// Optional map controls
+.map-controls {
+  display: flex;
+  justify-content: space-between;
+  padding: 8px 16px;
+  background-color: #f0f0f0;
+  border-radius: 4px;
+  margin-top: 8px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+// Remove canvas specific styles since we're not using canvas anymore
+
