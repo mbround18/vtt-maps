@@ -1,10 +1,10 @@
 use crate::components::map_asset_card::MapAssetCard;
 use shared::types::map_document::MapDocument;
 
+use crate::api::api::ApiEndpoint;
 use wasm_bindgen_futures::spawn_local;
 use yew::prelude::*;
 use yew_hooks::prelude::*;
-use crate::api::api::ApiEndpoint;
 
 #[function_component(Catalog)]
 pub fn catalog() -> Html {
@@ -17,7 +17,16 @@ pub fn catalog() -> Html {
 
         use_effect_once(move || {
             spawn_local(async move {
-                if let Ok(response) = {ApiEndpoint::GetAllMaps { limit: None, offset: None }}.request().send().await {
+                if let Ok(response) = {
+                    ApiEndpoint::GetAllMaps {
+                        limit: None,
+                        offset: None,
+                    }
+                }
+                .request()
+                .send()
+                .await
+                {
                     if let Ok(list) = response.json::<Vec<MapDocument>>().await {
                         maps.set(list);
                     }

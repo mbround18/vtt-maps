@@ -1,12 +1,14 @@
-use wasm_bindgen::prelude::Closure;
+use crate::api::api::ApiEndpoint;
+use crate::components::map_downloader::MapDownloader;
+use shared::types::map_document::MapDocument;
+use shared::utils::casing::titlecase;
+
+use gloo_console::info;
 use wasm_bindgen::JsCast;
+use wasm_bindgen::prelude::Closure;
 use wasm_bindgen_futures::spawn_local;
 use web_sys::HtmlImageElement;
 use yew::prelude::*;
-
-use crate::utils::capitalize;
-use shared::types::map_document::MapDocument;
-use crate::api::api::ApiEndpoint;
 
 #[derive(Debug, Clone, PartialEq)]
 enum LoadingState {
@@ -24,14 +26,20 @@ pub struct MapDetailProps {
 
 #[function_component(MapDetail)]
 pub fn map_detail(props: &MapDetailProps) -> Html {
-    let name = use_state(|| String::new());
+    // --- state hooks ---
+    let name = use_state(String::new);
     let data = use_state(|| None as Option<MapDocument>);
     let loading = use_state(|| LoadingState::Loading);
     let thumb_ref = use_node_ref();
+    let content = use_state(String::new);
 
-    // pull your endpoints up-front
-    let metadata_ep = ApiEndpoint::GetMap { id: props.id.clone() };
-    let tiled_ep    = ApiEndpoint::GetTiledMap { id: props.id.clone() };
+    // --- API endpoints ---
+    let metadata_ep = ApiEndpoint::GetMap {
+        id: props.id.clone(),
+    };
+    let tiled_ep = ApiEndpoint::GetTiledMap {
+        id: props.id.clone(),
+    };
 
     // 1) Fetch metadata when `props.id` changes
     {
@@ -40,39 +48,33 @@ pub fn map_detail(props: &MapDetailProps) -> Html {
         let data = data.clone();
         let loading = loading.clone();
 
-        use_effect_with(
-            props.id.clone(),
-            move |_map_id| {
-                let metadata_ep = metadata_ep.clone();
-                let name = name.clone();
-                let data = data.clone();
-                let loading = loading.clone();
+        use_effect_with(props.id.clone(), move |_| {
+            spawn_local(async move {
+                match metadata_ep.request().send().await {
+                    Ok(resp) if resp.status() == 200 => {
+                        if let Ok(map) = resp.json::<MapDocument>().await {
+                            let pretty = map
+                                .name
+                                .split('-')
+                                .map(titlecase)
+                                .collect::<Vec<_>>()
+                                .join(" ");
 
-                spawn_local(async move {
-                    match metadata_ep.request().send().await {
-                        Ok(resp) if resp.status() == 200 => {
-                            match resp.json::<MapDocument>().await {
-                                Ok(map) => {
-                                    let pretty = map
-                                        .name
-                                        .split('-')
-                                        .map(capitalize)
-                                        .collect::<Vec<_>>()
-                                        .join(" ");
-                                    name.set(pretty);
-                                    data.set(Some(map));
-                                    loading.set(LoadingState::ThumbnailLoaded);
-                                }
-                                Err(_) => loading.set(LoadingState::Error("Failed to parse metadata".into())),
-                            }
+                            name.set(pretty);
+                            data.set(Some(map));
+                            loading.set(LoadingState::ThumbnailLoaded);
+                        } else {
+                            loading.set(LoadingState::Error("Failed to parse metadata".into()));
                         }
-                        _ => loading.set(LoadingState::Error("Failed to fetch metadata".into())),
                     }
-                });
+                    _ => {
+                        loading.set(LoadingState::Error("Failed to fetch metadata".into()));
+                    }
+                }
+            });
 
-                || ()
-            },
-        );
+            || ()
+        });
     }
 
     // 2) Preload full tiled map when thumbnail has loaded
@@ -81,83 +83,165 @@ pub fn map_detail(props: &MapDetailProps) -> Html {
         let loading = loading.clone();
         let thumb_ref = thumb_ref.clone();
 
-        use_effect_with(
-            loading.clone(),
-            move |state| {
-                if **state == LoadingState::ThumbnailLoaded {
-                    let tiled_ep = tiled_ep.clone();
-                    let loading = loading.clone();
-                    let thumb_ref = thumb_ref.clone();
+        use_effect_with(loading.clone(), move |state| {
+            if **state == LoadingState::ThumbnailLoaded {
+                spawn_local(async move {
+                    loading.set(LoadingState::FullMapLoading);
 
-                    spawn_local(async move {
-                        loading.set(LoadingState::FullMapLoading);
-                        if let Some(img) = thumb_ref.cast::<HtmlImageElement>() {
-                            let onload = Closure::wrap(Box::new(move || {
-                                loading.set(LoadingState::FullMapLoaded);
-                            }) as Box<dyn FnMut()>);
+                    if let Some(img) = thumb_ref.cast::<HtmlImageElement>() {
+                        let onload = Closure::wrap(Box::new(move || {
+                            loading.set(LoadingState::FullMapLoaded);
+                        }) as Box<dyn FnMut()>);
 
-                            img.set_onload(Some(onload.as_ref().unchecked_ref()));
-                            img.set_src(&tiled_ep.url());
-                            onload.forget();
-                        } else {
-                            loading.set(LoadingState::Error("Preload element missing".into()));
-                        }
-                    });
-                }
-                || ()
-            },
-        );
+                        img.set_onload(Some(onload.as_ref().unchecked_ref()));
+                        img.set_src(&tiled_ep.url());
+                        onload.forget();
+                    } else {
+                        loading.set(LoadingState::Error("Preload element missing".into()));
+                    }
+                });
+            }
+
+            || ()
+        });
     }
 
-    // 3) Render
-    html! {
-        <div id="map-container">
-            {
-                match &*loading {
-                    LoadingState::Loading => html! {
-                        <p>{"Loading map..."}</p>
-                    },
-                    LoadingState::ThumbnailLoaded | LoadingState::FullMapLoading => {
-                        if let Some(map) = &*data {
-                            html! {
-                                <div id="map-asset-view">
-                                    <h1>{ &*name }</h1>
-                                    <p class="loading-text">
-                                        {"Loading full map"}<span class="loading-dots"></span>
-                                    </p>
-                                    <img
-                                        src={ map.thumbnail.clone() }
-                                        class="responsive"
-                                        alt={ format!("{} thumbnail", map.name) }
-                                    />
-                                    <img
-                                        ref={ thumb_ref.clone() }
-                                        style="display:none;"
-                                        alt="preload full map"
-                                    />
-                                </div>
-                            }
+    // 3) Fetch map content markdown
+    {
+        let content = content.clone();
+        use_effect_with(props.id.clone(), move |id: &String| {
+            let id = id.clone();
+
+            spawn_local(async move {
+                let request = ApiEndpoint::GetMapContent { id };
+
+                match request.request().send().await {
+                    Ok(resp) if resp.status() == 200 => {
+                        if let Ok(txt) = resp.text().await {
+                            content.set(txt);
                         } else {
-                            html! { <p>{"Waiting for metadata..."}</p> }
+                            info!("Failed to read body");
                         }
                     }
-                    LoadingState::FullMapLoaded => html! {
-                        <div id="map-viewer">
-                            <h1>{ &*name }</h1>
-                            <div class="map-scroll-container">
-                                <img
-                                    src={ tiled_ep.url() }
-                                    class="responsive"
-                                    alt={ format!("{} full map", &*name) }
-                                />
-                            </div>
-                        </div>
-                    },
-                    LoadingState::Error(msg) => html! {
-                        <div class="error">{ msg }</div>
+                    Ok(resp) => {
+                        info!("Fetch failed: {}", resp.status());
+                    }
+                    Err(err) => {
+                        info!("Network error: {}", err.to_string());
                     }
                 }
-            }
+            });
+
+            || ()
+        });
+    }
+
+    // --- render ---
+    html! {
+        <div id="map-container" class="map-container">
+            <div id="map-asset-view" class="map-asset-view">
+                {
+                    match &*loading {
+                        LoadingState::Loading => html! {
+                            <div>
+                                <h1 id="map-title" class="map-title">{ &*name }</h1>
+                                <p id="loading-text" class="loading-text loading-message">
+                                    {"Loading full map"}<span class="loading-dots"></span>
+                                </p>
+                            </div>
+                        },
+
+                        LoadingState::ThumbnailLoaded | LoadingState::FullMapLoading => {
+                            if let Some(map) = &*data {
+                                html! {
+                                    <div>
+                                        <h1 id="map-title" class="map-title">{ &*name }</h1>
+                                        <p id="loading-text" class="loading-text loading-message">
+                                            {"Loading full map"}<span class="loading-dots"></span>
+                                        </p>
+                                        <img
+                                            id="map-thumbnail"
+                                            src={ map.thumbnail.clone() }
+                                            class="map-thumbnail responsive"
+                                            alt={ format!("{} thumbnail", map.name) }
+                                        />
+                                        <img
+                                            id="preload-image"
+                                            ref={ thumb_ref.clone() }
+                                            class="preload-image"
+                                            style="display:none;"
+                                            alt="preload full map"
+                                        />
+                                    </div>
+                                }
+                            } else {
+                                html! {
+                                    <p id="metadata-wait" class="metadata-wait">
+                                        {"Waiting for metadata..."}
+                                    </p>
+                                }
+                            }
+                        },
+
+                        LoadingState::FullMapLoaded => {
+                            let inner = Html::from_html_unchecked(
+                                AttrValue::from((*content).clone())
+                            );
+
+                            let loaded_map =html! {
+                                <div id="map-scroll-container" class="map-scroll-container">
+                                    <img
+                                        id="full-map-image"
+                                        src={ tiled_ep.url() }
+                                        class="responsive pointer-events-none full-map"
+                                        alt={ format!("{} full map", &*name) }
+                                    />
+                                </div>
+                            };
+
+                            if content.is_empty() {
+                                html! {
+                                    <div id="map-viewer" class="map-viewer">
+                                        <h1 id="map-title" class="map-title">
+                                            { &*name }
+                                        </h1>
+                                        { loaded_map }
+                                    </div>
+                                }
+                            } else {
+                                html! {
+                                    <div id="map-viewer" class="map-viewer">
+                                        { loaded_map }
+                                        <div id="map-content" class="map-content markdown">
+                                            { inner }
+                                        </div>
+                                    </div>
+                                }
+                            }
+                        },
+
+                        LoadingState::Error(msg) => html! {
+                            <div id="error-message" class="error-message error">
+                                { msg }
+                            </div>
+                        },
+                    }
+                }
+               <div id="map-download" class="flex flex-col gap-2">
+                    <div>
+                        <MapDownloader id={ props.id.clone() } />
+                    </div>
+                    <div>
+                     <iframe
+                        id={"kofiframe"}
+                        src={"https://ko-fi.com/mbround18/?hidefeed=true&widget=true&embed=true&preview=true"}
+                        style={"border:none;width:100%;padding:4px;background:#f9f9f9;"}
+                        height={"712"}
+                        title="mbround18"
+                        ></iframe>
+                    </div>
+                </div>
+            </div>
         </div>
     }
 }

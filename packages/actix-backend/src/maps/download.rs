@@ -1,12 +1,11 @@
+use crate::clients::meilisearch::meilisearch_index;
 use actix_web::{
     Error, HttpResponse,
     error::{ErrorInternalServerError, ErrorNotFound},
     web,
 };
-use meilisearch_sdk::client::Client;
 use shared::types::map_document::MapDocument as MapDoc;
 use shared::utils::root_dir::root_dir;
-use std::env;
 use tokio::fs;
 use tracing::{debug, error};
 
@@ -14,10 +13,7 @@ pub async fn download_map(id: web::Path<String>) -> Result<HttpResponse, Error> 
     let id = id.into_inner();
     debug!("Request for map download with id: {}", id);
 
-    let url = env::var("MEILI_URL").unwrap_or_else(|_| "http://127.0.0.1:7700".into());
-    let key = env::var("MEILI_KEY").unwrap_or_default();
-    let client = Client::new(&url, Some(&key)).map_err(ErrorInternalServerError)?;
-    let index = client.index("maps");
+    let index = meilisearch_index("maps")?;
 
     let doc = index.get_document::<MapDoc>(&id).await.map_err(|e| {
         debug!("Document metadata not found: {}", e);

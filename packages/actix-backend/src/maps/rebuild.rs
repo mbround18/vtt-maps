@@ -18,6 +18,7 @@ use glob::glob;
 use meilisearch_sdk::client::Client;
 use shared::types::map_document::MapDocument as MapDoc;
 use shared::types::{dd2vtt::DD2VTTFile, map_reference::MapReference};
+use shared::utils::casing::titlecase;
 use shared::utils::root_dir::{maps_dir, root_dir};
 
 const TASK_BATCH_SIZE: usize = 50;
@@ -171,20 +172,16 @@ pub async fn maps_rebuild() -> Result<HttpResponse, actix_web::Error> {
 
     // if lock exists, return its JSON state
     if let Some(state) = read_lock(&lockfile) {
-        match state {
+        return match state {
             BuildLock::Processing {
                 processed, total, ..
-            } => {
-                return Ok(HttpResponse::Ok().json(serde_json::json!({
-                    "status":"processing","processed":processed,"total":total
-                })));
-            }
-            BuildLock::Complete { maps, .. } => {
-                return Ok(HttpResponse::Ok().json(serde_json::json!({
-                    "status":"up-to-date","processed":maps,"total":maps
-                })));
-            }
-        }
+            } => Ok(HttpResponse::Ok().json(serde_json::json!({
+                "status":"processing","processed":processed,"total":total
+            }))),
+            BuildLock::Complete { maps, .. } => Ok(HttpResponse::Ok().json(serde_json::json!({
+                "status":"up-to-date","processed":maps,"total":maps
+            }))),
+        };
     }
 
     // prepare workset and lock
@@ -212,10 +209,8 @@ pub async fn maps_rebuild() -> Result<HttpResponse, actix_web::Error> {
             processed: 0,
             total,
             sha: sha.clone()
-        })
-        .unwrap()
-    )
-    .unwrap();
+        })?
+    )?;
 
     // spawn background update
     actix_web::rt::spawn(async move {
@@ -250,12 +245,27 @@ pub async fn maps_rebuild() -> Result<HttpResponse, actix_web::Error> {
                 let base_as_str = base.to_string_lossy().to_string();
                 let path_relative_to_base = r.path.strip_prefix(&base_as_str).unwrap_or(&r.path);
                 let asset_path = path_relative_to_base.replace(".dd2vtt", ".png");
-
+                let content_path = path_relative_to_base.replace(".dd2vtt", ".md");
+                debug!(
+                    "Map: {}\nPath: {:?}\nContent: {:?}\nThumbnail: {:?}",
+                    r.name,
+                    path_relative_to_base.to_string(),
+                    content_path,
+                    asset_path
+                );
                 MapDoc {
                     id: r.hash.clone(),
-                    name: r.name,
+                    name: titlecase(&r.name),
                     path: format!("/maps{}", path_relative_to_base),
                     thumbnail: format!("/assets/thumbnails{}", asset_path),
+                    content: {
+                        let full_path = format!("{}/{}", base.to_string_lossy(), content_path);
+                        if Path::new(&full_path).exists() {
+                            Some(format!("/maps{}", content_path))
+                        } else {
+                            None
+                        }
+                    },
                     resolution: r.resolution,
                 }
             })

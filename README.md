@@ -4,21 +4,7 @@
 
 _A library of high-quality, ready-to-use maps for virtual tabletop RPGs_
 
-[![Discussions](https://img.shields.io/github/discussions/dnd-apps/vtt-maps)](https://github.com/dnd-apps/vtt-maps/discussions/4) [![Ko-fi](https://img.shields.io/badge/Support-Ko--fi-29ABE0?logo=ko-fi)](https://ko-fi.com/mbround18) [![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
-
----
-
-## 📑 Table of Contents
-
-1. [About](#about)
-2. [Features](#features)
-3. [Getting Started](#getting-started)
-4. [Usage](#usage)
-5. [Asset Packs](#asset-packs)
-6. [Sponsors](#sponsors)
-7. [Support & Feedback](#support--feedback)
-8. [Contributing](#contributing)
-9. [License](#license)
+[![Discussions](https://img.shields.io/github/discussions/dnd-apps/vtt-maps)](https://github.com/dnd-apps/vtt-maps/discussions/4) [![Ko-fi](https://img.shields.io/badge/Support-Ko--fi-29ABE0?logo=ko-fi)](https://ko-fi.com/mbround18) [![License: MIT](https://img.shields.io/badge/License-CCC-green.svg)](LICENSE)
 
 ---
 
@@ -70,17 +56,6 @@ Want to see your logo here? [Become a sponsor →](https://ko-fi.com/mbround18)
 - **Discussions:** [Project discussion board](https://github.com/dnd-apps/vtt-maps/discussions/4)
 - **Report Issues:** [Issue tracker](https://github.com/dnd-apps/vtt-maps/issues)
 - **Say Thanks:** [Ko-fi](https://ko-fi.com/mbround18)
-
----
-
-## 🤝 Contributing
-
-1. Fork the repo
-2. Create a feature branch (`git checkout -b feature/YourMap`)
-3. Add your map assets and update `README.md` if necessary
-4. Submit a PR
-
-Please follow our [Code of Conduct](CODE_OF_CONDUCT.md) and [Contribution Guidelines](CONTRIBUTING.md).
 
 ---
 

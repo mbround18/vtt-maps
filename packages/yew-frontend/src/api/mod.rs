@@ -1,2 +1,2 @@
-pub mod gh;
 pub mod api;
+pub mod gh;

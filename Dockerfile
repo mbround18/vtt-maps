@@ -36,11 +36,11 @@ FROM ubuntu:latest
 
 WORKDIR /usr/src/app
 
-ENV DIST_DIR=/usr/src/app/dist
-    REPO_PATH=/data
+ENV DIST_DIR=/usr/src/app/dist \
+    REPO_PATH=/data \
     REPO_REF="main"
 
 COPY --from=builder /usr/src/app/dist /usr/src/app/dist
 COPY --from=builder /usr/src/app/target/release/actix-backend /usr/src/server
 
-CMD ["./server"]
+CMD ["/usr/src/server"]

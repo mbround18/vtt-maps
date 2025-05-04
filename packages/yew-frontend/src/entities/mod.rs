@@ -1,8 +1,8 @@
 mod dd2vtt;
 
 use crate::api::gh::{GHRepoTree, GitTree};
-use crate::utils::capitalize;
 use gloo_console::debug;
+use shared::utils::casing::titlecase;
 
 #[derive(PartialEq)]
 pub struct MapAsset {
@@ -21,7 +21,7 @@ impl From<&GitTree> for MapAsset {
             .unwrap()
             .replace(".preview.png", "")
             .split('-')
-            .map(capitalize)
+            .map(titlecase)
             .collect::<Vec<String>>()
             .join(" ");
         let preview_url = format!(

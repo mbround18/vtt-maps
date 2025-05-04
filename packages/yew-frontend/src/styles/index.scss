@@ -58,3 +58,48 @@ button {
     background-position: center;
   }
 }
+
+p {
+  // if this <p> contains one or more <a> wrapping an <img> from img.shields.io
+  &:has(a img[src*="img.shields.io"]) {
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start;
+    gap: 0.5rem; // optional spacing between rows
+  }
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 1rem 0;
+  font-family: sans-serif;
+
+  th,
+  td {
+    padding: 0.75rem 1rem;
+    text-align: left;
+    border-bottom: 1px solid #ddd;
+  }
+
+  th {
+    background-color: #f5f5f5;
+    font-weight: bold;
+  }
+
+  tbody tr:nth-child(even) {
+    background-color: #fafafa;
+  }
+
+  tbody tr:hover {
+    background-color: #f0f0f0;
+  }
+
+  caption {
+    caption-side: bottom;
+    padding-top: 0.5rem;
+    font-size: 0.9rem;
+    color: #666;
+  }
+}
+

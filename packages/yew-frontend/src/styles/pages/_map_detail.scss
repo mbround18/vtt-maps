@@ -1,24 +1,28 @@
-// Loading and error states
-.loading-container {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 80vh;
-  flex-direction: column;
-}
+// —————————————————————————————————————————————————
+// Animations
+// —————————————————————————————————————————————————
 
-.error-container {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 80vh;
-  flex-direction: column;
-  color: #cc0000;
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
 }
-
-// Animated loading dots
+@keyframes slideInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
 @keyframes loading-dots {
-  0% {
+  0%,
+  100% {
     content: "";
   }
   25% {
@@ -30,9 +34,23 @@
   75% {
     content: "...";
   }
-  100% {
-    content: "";
-  }
+}
+
+// —————————————————————————————————————————————————
+// Base (mobile-first)
+// —————————————————————————————————————————————————
+
+.loading-container,
+.error-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  height: 80vh;
+  animation: fadeIn 0.5s ease-in;
+}
+.error-container {
+  color: #cc0000;
 }
 
 .loading-text {
@@ -41,135 +59,174 @@
   margin-bottom: 1rem;
   color: #555;
   font-style: italic;
-}
+  animation: slideInUp 0.5s ease-out;
 
-.loading-dots {
-  display: inline-block;
-  width: 24px;
-  height: 1em;
-  margin-left: 4px;
-
-  &::after {
-    content: "";
+  .loading-dots {
     display: inline-block;
-    animation: loading-dots 1.5s infinite;
+    width: 24px;
+    height: 1em;
+    margin-left: 4px;
+    &::after {
+      content: "";
+      animation: loading-dots 1.5s infinite;
+    }
   }
 }
 
-// Map container and common styles
 #map-container {
   margin: 0 auto;
-  max-width: 1400px;
   padding: 1rem;
-
-  h1 {
+  width: 100%;
+  animation: fadeIn 0.5s ease-in;
+  
+  h1.map-title {
+    font-size: 1.5rem;
     margin-bottom: 1rem;
-    font-size: 1.8rem;
-
-    @media (max-width: 768px) {
-      font-size: 1.5rem;
-    }
+    color: #2dd4bf;
   }
 
   .error {
-    color: #cc0000;
-    background-color: #ffeeee;
+    background: #ffeeee;
     border: 1px solid #ffcccc;
+    border-radius: 4px;
     padding: 1rem;
-    border-radius: 4px;
     margin: 1rem 0;
+    color: #cc0000;
+  }
+
+  // Mobile: everything is a column
+  #map-asset-view {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    width: 100%;
   }
 }
 
-// Map asset view during loading
-#map-asset-vcc {
-  display: flex;
-  flex-direction: column;
-
-  p {
-    margin-bottom: 1rem;
-    color: #555;
-    font-style: italic;
-  }
-
-  img.responsive {
-    max-width: 100%;
-    height: auto;
-    border-radius: 4px;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-  }
-}
-
-// Full map viewer
 #map-viewer {
   display: flex;
   flex-direction: column;
-  max-height: 90vh;
+  gap: 1rem;
+  width: 100%;
+  animation: fadeIn 0.6s ease-in;
 
-  img.responsive {
-    max-width: 100%;
-    height: auto;
-    object-fit: contain;
+  /* 1) Full-width map */
+  #map-scroll-container {
+    width: 100%;
+    border: 1px solid #ddd;
     border-radius: 4px;
-    box-shadow: 0 3px 15px rgba(0, 0, 0, 0.15);
+    animation: fadeIn 0.8s ease-in;
+    overflow: auto;
+    -webkit-overflow-scrolling: touch; // Smooth scrolling on iOS
 
-    // Enable touch scrolling on mobile
-    @media (max-width: 1024px) {
-      max-height: 70vh;
-      overflow: auto;
-      touch-action: pan-x pan-y;
-      cursor: grab;
+    img.responsive {
+      width: 100%;
+      height: auto;
+      object-fit: contain;
+      border-radius: 4px;
+      box-shadow: 0 3px 15px rgba(0, 0, 0, 0.15);
+      animation: fadeIn 0.8s ease-in;
+    }
+  }
 
-      &:active {
-        cursor: grabbing;
-      }
+  /* 2) Markdown content */
+  #map-content {
+    animation: slideInUp 0.6s ease-out;
+    p,
+    ul,
+    ol,
+    table,
+    hr {
+      margin-bottom: 0.75rem;
+    }
+    hr {
+      border-color: #444;
+    }
+    &:empty {
+      display: none;
+    }
+  }
+
+  /* 3) Buttons + dimensions */
+  #action-buttons {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    animation: slideInUp 0.6s ease-out 0.4s;
+
+    a.btn {
+      display: block;
+      width: 100%;
+      text-align: center;
     }
 
-    // For large maps on desktop
-    @media (min-width: 1025px) {
-      overflow: auto;
-      max-height: 80vh;
+    #dimensions-text {
+      font-size: 0.9rem;
+      color: #666;
     }
   }
 }
 
-// For very large maps, wrap in a container to enable scrolling
-.map-scroll-container {
-  overflow: auto;
-  max-height: 80vh;
-  border: 1px solid #ddd;
-  border-radius: 4px;
+// —————————————————————————————————————————————————
+// Mobile: sticky action-buttons
+// —————————————————————————————————————————————————
 
-  // Improved scrollbar appearance
-  &::-webkit-scrollbar {
-    width: 10px;
-    height: 10px;
+@media (max-width: 767px) {
+  #action-buttons {
+    position: sticky;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    padding: 0.75rem 1rem;
+    background: #0f172a;
+    box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.3);
+    z-index: 100;
   }
+}
 
-  &::-webkit-scrollbar-track {
-    background: #f1f1f1;
-    border-radius: 4px;
-  }
+// —————————————————————————————————————————————————
+// Tablet & up: transition to row layout for map-asset-view
+// —————————————————————————————————————————————————
 
-  &::-webkit-scrollbar-thumb {
-    background: #888;
-    border-radius: 4px;
-
-    &:hover {
-      background: #555;
+@media (min-width: 768px) {
+  #map-container {
+    padding: 1.5rem;
+    
+    // Switch to row layout for tablet
+    #map-asset-view {
+      flex-direction: row;
+      //align-items: flex-start;
     }
   }
+
+  #map-viewer {
+    flex: 1;
+    min-width: 0; // Prevent overflow issues
+  }
+
+  #action-buttons {
+    flex: 0 0 250px; // Fixed width
+    position: sticky;
+    top: 1rem;
+    align-self: flex-start;
+    background: #0f172a;
+    padding: 1rem;
+    border-radius: 4px;
+    z-index: 10;
+  }
 }
 
-// Optional map controls
-.map-controls {
-  display: flex;
-  justify-content: space-between;
-  padding: 8px 16px;
-  background-color: #f0f0f0;
-  border-radius: 4px;
-  margin-top: 8px;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-}
+// —————————————————————————————————————————————————
+// Desktop tweaks
+// —————————————————————————————————————————————————
 
-// Remove canvas specific styles since we're not using canvas anymore
+@media (min-width: 1024px) {
+  #map-container {
+    max-width: 1400px;
+    margin: 0 auto;
+  }
+  
+  #map-scroll-container {
+    max-height: 80vh; // Limit height on large screens
+  }
+}

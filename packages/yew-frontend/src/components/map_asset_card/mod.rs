@@ -1,7 +1,7 @@
-use crate::utils::capitalize;
+// use crate::api::api::ApiEndpoint;
 use shared::types::map_document::MapDocument;
+use shared::utils::casing::titlecase;
 use yew::prelude::*;
-use crate::api::api::ApiEndpoint;
 
 // Definition
 pub struct MapAssetCard {
@@ -34,28 +34,30 @@ impl Component for MapAssetCard {
                 .clone()
                 .split('-')
                 .flat_map(|e| e.split('_'))
-                .map(capitalize)
+                .map(titlecase)
                 .collect::<Vec<String>>()
                 .join(" "),
         );
-        let download_url = ApiEndpoint::DownloadMap { id: self.asset.id.clone()}
-            .url();
+        // let download_url = ApiEndpoint::DownloadMap {
+        //     id: self.asset.id.clone(),
+        // }
+        // .url();
 
         html! {
             <div class={"card map-asset"}>
                 <h3>{name.to_string()}</h3>
                 <img {src} class={"preview-image"} />
                 <div class={"card-actions"}>
-                    <a
-                        href={download_url.clone()}
-                        download={"true"}
-                        class="btn btn-primary"
-                    >
-                        { "Download DD2VTT File" }
-                    </a>
+                    // <a
+                    //     href={download_url.clone()}
+                    //     download={"true"}
+                    //     class="btn btn-primary"
+                    // >
+                    //     { "Download DD2VTT File" }
+                    // </a>
                     <a
                         href={format!("/maps/{}", self.asset.id)}
-                        class="btn btn-primary"
+                        class="btn btn-primary width-100"
                     >
                         { "Explore" }
                     </a>

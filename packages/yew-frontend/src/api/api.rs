@@ -3,14 +3,28 @@ use gloo_net::http::{Request, RequestBuilder};
 const BASE_LIMIT: u32 = 100;
 const API_BASE: &str = "/api";
 
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq)]
 pub enum ApiEndpoint {
-    GetAllMaps {limit: Option<u32>, offset: Option<u32>},
-    GetMap { id: String },
+    GetAllMaps {
+        limit: Option<u32>,
+        offset: Option<u32>,
+    },
+    GetMap {
+        id: String,
+    },
     // RebuildMaps,
-    DownloadMap { id: String },
-    GetTiledMap { id: String },
-    GetReadme,
+    DownloadMap {
+        id: String,
+    },
+    GetTiledMap {
+        id: String,
+    },
+    GetMarkdown {
+        path: String,
+    },
+    GetMapContent {
+        id: String,
+    },
 }
 
 impl ApiEndpoint {
@@ -20,7 +34,7 @@ impl ApiEndpoint {
                 let mut params = Vec::new();
                 if let Some(l) = limit {
                     params.push(format!("limit={}", l));
-                } else { 
+                } else {
                     params.push(format!("limit={}", BASE_LIMIT));
                 }
                 if let Some(o) = offset {
@@ -37,7 +51,8 @@ impl ApiEndpoint {
             // ApiEndpoint::RebuildMaps => format!("{}/maps/rebuild", API_BASE),
             ApiEndpoint::DownloadMap { id } => format!("{}/maps/download/{}", API_BASE, id),
             ApiEndpoint::GetTiledMap { id } => format!("{}/maps/tiled/{}", API_BASE, id),
-            ApiEndpoint::GetReadme => format!("{}/docs/readme", API_BASE),
+            ApiEndpoint::GetMarkdown { path } => format!("{}/docs/{path}", API_BASE),
+            ApiEndpoint::GetMapContent { id } => format!("{}/maps/content/{}", API_BASE, id),
         }
     }
 
@@ -47,8 +62,8 @@ impl ApiEndpoint {
             | ApiEndpoint::GetMap { .. }
             | ApiEndpoint::DownloadMap { .. }
             | ApiEndpoint::GetTiledMap { .. }
-            | ApiEndpoint::GetReadme => Request::get(&self.url()),
-            // ApiEndpoint::RebuildMaps => Request::post(&self.url()),
+            | ApiEndpoint::GetMapContent { .. }
+            | ApiEndpoint::GetMarkdown { .. } => Request::get(&self.url()),
         }
     }
 }

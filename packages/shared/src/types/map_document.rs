@@ -7,5 +7,6 @@ pub struct MapDocument {
     pub name: String,
     pub path: String,
     pub thumbnail: String,
+    pub content: Option<String>,
     pub resolution: MapResolution,
 }
