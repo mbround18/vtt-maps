@@ -40,7 +40,12 @@ ENV DIST_DIR=/usr/src/app/dist \
     REPO_PATH=/data \
     REPO_REF="main"
 
+RUN mkdir -p $REPO_PATH && \
+    mkdir -p $DIST_DIR
+
 COPY --from=builder /usr/src/app/dist /usr/src/app/dist
 COPY --from=builder /usr/src/app/target/release/actix-backend /usr/src/server
+
+COPY ./assets /usr/src/app/assets
 
 CMD ["/usr/src/server"]
