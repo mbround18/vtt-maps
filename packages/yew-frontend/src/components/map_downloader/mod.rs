@@ -77,7 +77,7 @@ pub fn map_downloader(props: &MapDownloaderProps) -> Html {
         };
 
         html! {
-            <div id="action-buttons" class="map-downloader">
+            <div id="action-buttons" class="map-downloader rounded">
                 <div class="flex flex-row gap-2">
                     <div>
                         <a href={dd2vtt_url} download={"true"} class="btn btn-primary">
@@ -90,7 +90,7 @@ pub fn map_downloader(props: &MapDownloaderProps) -> Html {
                     </a>
                    </div>
                </div>
-                <div class="text-center break-words space-y-1">
+                <div class="space-y-1 pt-2">
                   <p class="text-sm m-0">
                     <span class="font-bold">{"DD2VTT"}</span> {" Files are used to import into your VTT of choice!"}
                   </p>
@@ -100,7 +100,7 @@ pub fn map_downloader(props: &MapDownloaderProps) -> Html {
                       href="https://foundryvtt.com/packages/dd-import/"
                       target="_blank"
                       rel="noopener noreferrer"
-                      class="text-blue-600 hover:underline"
+                      class="text-blue-600 hover:underline pl-1"
                     >
                       {"Universal Battlemap Importer"}
                     </a>

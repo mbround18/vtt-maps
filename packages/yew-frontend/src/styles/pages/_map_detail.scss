@@ -73,12 +73,16 @@
   }
 }
 
+#map-download {
+  width: 100%;
+}
+
 #map-container {
   margin: 0 auto;
   padding: 1rem;
   width: 100%;
   animation: fadeIn 0.5s ease-in;
-  
+
   h1.map-title {
     font-size: 1.5rem;
     margin-bottom: 1rem;
@@ -158,6 +162,11 @@
       display: block;
       width: 100%;
       text-align: center;
+      padding: 0.75rem 1rem;
+    }
+
+    p {
+      padding: 1rem;
     }
 
     #dimensions-text {
@@ -191,10 +200,11 @@
 @media (min-width: 768px) {
   #map-container {
     padding: 1.5rem;
-    
+
     // Switch to row layout for tablet
     #map-asset-view {
       flex-direction: row;
+      justify-items: auto;
       //align-items: flex-start;
     }
   }
@@ -225,7 +235,7 @@
     max-width: 1400px;
     margin: 0 auto;
   }
-  
+
   #map-scroll-container {
     max-height: 80vh; // Limit height on large screens
   }

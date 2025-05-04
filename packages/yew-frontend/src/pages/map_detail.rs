@@ -140,22 +140,31 @@ pub fn map_detail(props: &MapDetailProps) -> Html {
     html! {
         <div id="map-container" class="map-container">
             <div id="map-asset-view" class="map-asset-view">
+                <div>
+
+                {
+                    if content.is_empty() {
+                        html! {
+                            <h1 id="map-title" class="map-title">{ &*name }</h1>
+                        }
+                    } else {
+                        html! {}
+                    }
+                }
+
                 {
                     match &*loading {
                         LoadingState::Loading => html! {
-                            <div>
-                                <h1 id="map-title" class="map-title">{ &*name }</h1>
                                 <p id="loading-text" class="loading-text loading-message">
                                     {"Loading full map"}<span class="loading-dots"></span>
                                 </p>
-                            </div>
+
                         },
 
                         LoadingState::ThumbnailLoaded | LoadingState::FullMapLoading => {
                             if let Some(map) = &*data {
                                 html! {
                                     <div>
-                                        <h1 id="map-title" class="map-title">{ &*name }</h1>
                                         <p id="loading-text" class="loading-text loading-message">
                                             {"Loading full map"}<span class="loading-dots"></span>
                                         </p>
@@ -184,9 +193,7 @@ pub fn map_detail(props: &MapDetailProps) -> Html {
                         },
 
                         LoadingState::FullMapLoaded => {
-                            let inner = Html::from_html_unchecked(
-                                AttrValue::from((*content).clone())
-                            );
+
 
                             let loaded_map =html! {
                                 <div id="map-scroll-container" class="map-scroll-container">
@@ -199,25 +206,12 @@ pub fn map_detail(props: &MapDetailProps) -> Html {
                                 </div>
                             };
 
-                            if content.is_empty() {
-                                html! {
-                                    <div id="map-viewer" class="map-viewer">
-                                        <h1 id="map-title" class="map-title">
-                                            { &*name }
-                                        </h1>
-                                        { loaded_map }
-                                    </div>
-                                }
-                            } else {
-                                html! {
-                                    <div id="map-viewer" class="map-viewer">
-                                        { loaded_map }
-                                        <div id="map-content" class="map-content markdown">
-                                            { inner }
-                                        </div>
-                                    </div>
-                                }
+                            html! {
+                                <div id="map-viewer" class="map-viewer">
+                                    { loaded_map }
+                                </div>
                             }
+
                         },
 
                         LoadingState::Error(msg) => html! {
@@ -227,7 +221,22 @@ pub fn map_detail(props: &MapDetailProps) -> Html {
                         },
                     }
                 }
-               <div id="map-download" class="flex flex-col gap-2">
+                {
+                    if ! content.is_empty() {
+                        let inner = Html::from_html_unchecked(
+                            AttrValue::from((*content).clone())
+                        );
+                        html! {
+                            <div id="map-content" class="map-content markdown pt-4">
+                                { inner }
+                            </div>
+                        }
+                    } else {
+                        html! {}
+                    }
+                }
+                </div>
+               <div id="map-download" class="flex flex-col gap-2 w-full">
                     <div>
                         <MapDownloader id={ props.id.clone() } />
                     </div>

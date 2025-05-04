@@ -12,10 +12,6 @@ pub enum ApiEndpoint {
     GetMap {
         id: String,
     },
-    // RebuildMaps,
-    DownloadMap {
-        id: String,
-    },
     GetTiledMap {
         id: String,
     },
@@ -48,8 +44,6 @@ impl ApiEndpoint {
                 format!("{}/maps/all{}", API_BASE, qs)
             }
             ApiEndpoint::GetMap { id } => format!("{}/maps/{}", API_BASE, id),
-            // ApiEndpoint::RebuildMaps => format!("{}/maps/rebuild", API_BASE),
-            ApiEndpoint::DownloadMap { id } => format!("{}/maps/download/{}", API_BASE, id),
             ApiEndpoint::GetTiledMap { id } => format!("{}/maps/tiled/{}", API_BASE, id),
             ApiEndpoint::GetMarkdown { path } => format!("{}/docs/{path}", API_BASE),
             ApiEndpoint::GetMapContent { id } => format!("{}/maps/content/{}", API_BASE, id),
@@ -60,7 +54,6 @@ impl ApiEndpoint {
         match self {
             ApiEndpoint::GetAllMaps { .. }
             | ApiEndpoint::GetMap { .. }
-            | ApiEndpoint::DownloadMap { .. }
             | ApiEndpoint::GetTiledMap { .. }
             | ApiEndpoint::GetMapContent { .. }
             | ApiEndpoint::GetMarkdown { .. } => Request::get(&self.url()),

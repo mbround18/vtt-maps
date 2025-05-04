@@ -14,6 +14,8 @@ _A library of high-quality, ready-to-use maps for virtual tabletop RPGs_
 
 - ✅ **Source files** in DungeonDraft format
 - ✅ **Exported `.dd2vtt`** JSON ready for import
+  - ✅ `.dd2vtt` files are compatible with [Foundry VTT](https://foundryvtt.com/) and other VTT platforms.
+  - For Foundry VTT, you can use the [Universal Battlemap Importer Module](https://foundryvtt.com/packages/dd-import/) to import maps directly.
 - ✅ **Preview images** for quick browsing
 
 > **Note:** Editing source files requires a valid [DungeonDraft](https://dungeondraft.net/) license.
