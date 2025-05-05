@@ -1,18 +1,30 @@
 use shared::utils::root_dir::root_dir;
-use std::fs;
+use std::fs::{canonicalize, create_dir_all};
 use std::io;
 use std::path::PathBuf;
 
 pub fn assets_dir() -> Result<PathBuf, io::Error> {
-    let mut path = root_dir().unwrap_or_else(|e| panic!("Unable to get root directory: {:?}", e));
+    let mut path = root_dir()?;
     path.push("assets");
-    fs::canonicalize(path)
+    create_dir_all(&path)?;
+    if !path.exists() {
+        return Err(io::Error::new(
+            io::ErrorKind::NotFound,
+            format!("Assets path missing: {}", path.display()),
+        ));
+    }
+    canonicalize(path)
 }
 
 pub fn thumbnails_dir() -> Result<PathBuf, io::Error> {
-    let mut path =
-        assets_dir().unwrap_or_else(|e| panic!("Unable to get assets directory: {:?}", e));
+    let mut path = assets_dir()?;
     path.push("thumbnails");
-    fs::create_dir_all(&path)?;
-    fs::canonicalize(path)
+    create_dir_all(&path)?;
+    if !path.exists() {
+        return Err(io::Error::new(
+            io::ErrorKind::NotFound,
+            format!("Thumbnails path missing: {}", path.display()),
+        ));
+    }
+    canonicalize(path)
 }

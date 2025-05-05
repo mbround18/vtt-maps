@@ -31,8 +31,8 @@ spec:
                   name: vtt-maps-secrets
                   key: meili-key
             - name: REPO_REF
-              value: "PLACEHOLDER_REPO_REF"
-            - name: REPO_PATH
+              value: "PLACEHOLDER"
+            - name: REPO_DIR
               value: "/usr/src/repository"
           volumeMounts:
             - name: maps-repository

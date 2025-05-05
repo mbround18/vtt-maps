@@ -8,12 +8,12 @@ use std::{
     fs::{File, OpenOptions},
     io::{Read, Write},
     path::{Path, PathBuf},
-    process::Command,
 };
 use tokio::task;
 use tracing::{debug, error, info};
 
 use crate::utils::folders::thumbnails_dir;
+use crate::utils::repo::{get_sha, update_repo};
 use glob::glob;
 use meilisearch_sdk::client::Client;
 use shared::types::map_document::MapDocument as MapDoc;
@@ -43,6 +43,10 @@ fn lock_path() -> PathBuf {
 
 /// Atomically create lock (fails if exists)
 fn try_acquire_lock(path: &Path) -> std::io::Result<File> {
+    // Create parent directory if it doesn't exist
+    if let Some(parent) = path.parent() {
+        std::fs::create_dir_all(parent)?;
+    }
     OpenOptions::new().write(true).create_new(true).open(path)
 }
 
@@ -55,6 +59,11 @@ fn read_lock(path: &Path) -> Option<BuildLock> {
 
 /// Atomically overwrite lock file
 fn write_lock(path: &Path, data: &BuildLock) -> std::io::Result<()> {
+    // Create parent directory if it doesn't exist
+    if let Some(parent) = path.parent() {
+        std::fs::create_dir_all(parent)?;
+    }
+
     let tmp = path.with_extension("lock.tmp");
     let mut f = OpenOptions::new()
         .write(true)
@@ -69,6 +78,13 @@ fn write_lock(path: &Path, data: &BuildLock) -> std::io::Result<()> {
 // find all .dd2vtt files
 fn find_dd2vtt_paths() -> Result<Vec<PathBuf>, actix_web::Error> {
     let base = maps_dir().map_err(ErrorInternalServerError)?;
+
+    // Ensure the maps directory exists
+    if !base.exists() {
+        error!("Maps directory not found: {}", base.display());
+        return Err(ErrorInternalServerError("Maps directory not found"));
+    }
+
     let pattern = format!("{}/**/*.dd2vtt", base.to_string_lossy());
     debug!("Globbing {}", pattern);
 
@@ -110,6 +126,13 @@ fn process_one(
 async fn collect_references() -> Result<Vec<MapReference>, actix_web::Error> {
     let base = maps_dir().map_err(ErrorInternalServerError)?;
     let thumb_dir = thumbnails_dir().map_err(ErrorInternalServerError)?;
+
+    // Ensure the thumbnails directory exists
+    std::fs::create_dir_all(&thumb_dir).map_err(|e| {
+        error!("Failed to create thumbnails directory: {}", e);
+        ErrorInternalServerError("Failed to create thumbnails directory")
+    })?;
+
     let paths = find_dd2vtt_paths()?;
     info!("Found {} maps", paths.len());
 
@@ -136,38 +159,21 @@ async fn collect_references() -> Result<Vec<MapReference>, actix_web::Error> {
     Ok(refs)
 }
 
-// git clone & update logic
-fn update_repo(path: &Path) -> Result<(), anyhow::Error> {
-    let branch = env::var("REPO_REF").unwrap_or_else(|_| "main".into());
-    let maps_p = path.join("maps");
-
-    if !maps_p.exists() {
-        Command::new("git")
-            .args([
-                "clone",
-                "--branch",
-                &branch,
-                "https://github.com/mbround18/vtt-maps.git",
-                &path.to_string_lossy(),
-            ])
-            .status()?;
-    } else {
-        for args in &[
-            vec!["fetch", "origin", &branch],
-            vec!["checkout", "--force", &branch],
-            vec!["pull", "origin", &branch],
-        ] {
-            Command::new("git").current_dir(path).args(args).status()?;
-        }
-    }
-    Ok(())
-}
-
 // main handler
 pub async fn maps_rebuild() -> Result<HttpResponse, actix_web::Error> {
     info!("Map rebuild requested");
 
-    let root = root_dir().map_err(ErrorInternalServerError)?;
+    let root = root_dir().map_err(|e| {
+        error!("Failed to resolve root directory: {:?}", e);
+        ErrorInternalServerError("Failed to resolve root directory")
+    })?;
+
+    // Ensure the root directory exists
+    std::fs::create_dir_all(&root).map_err(|e| {
+        error!("Failed to create root directory: {}", e);
+        ErrorInternalServerError("Failed to create root directory")
+    })?;
+
     let lockfile = lock_path();
 
     // if lock exists, return its JSON state
@@ -186,19 +192,17 @@ pub async fn maps_rebuild() -> Result<HttpResponse, actix_web::Error> {
 
     // prepare workset and lock
     let base = maps_dir().map_err(ErrorInternalServerError)?;
-    // let thumb_dir = thumbnails_dir().map_err(ErrorInternalServerError)?;
+
+    // Ensure the maps directory exists
+    std::fs::create_dir_all(&base).map_err(|e| {
+        error!("Failed to create maps directory: {}", e);
+        ErrorInternalServerError("Failed to create maps directory")
+    })?;
+
     let paths = find_dd2vtt_paths()?;
     let total = paths.len();
-    let sha = String::from_utf8_lossy(
-        &Command::new("git")
-            .args(["rev-parse", "HEAD"])
-            .current_dir(&base)
-            .output()
-            .map_err(ErrorInternalServerError)?
-            .stdout,
-    )
-    .trim()
-    .to_string();
+
+    let sha = get_sha().map_err(ErrorInternalServerError)?;
 
     let mut lock =
         try_acquire_lock(&lockfile).map_err(|_| ErrorConflict("Rebuild already running"))?;
@@ -214,8 +218,8 @@ pub async fn maps_rebuild() -> Result<HttpResponse, actix_web::Error> {
 
     // spawn background update
     actix_web::rt::spawn(async move {
-        if env::var("REPO_PATH").is_ok() {
-            if let Err(e) = update_repo(&root) {
+        if env::var("REPO_DIR").is_ok() {
+            if let Err(e) = update_repo() {
                 error!("repo error: {:?}", e);
                 return;
             }

@@ -1,7 +1,6 @@
 use actix_web::{HttpRequest, error::ErrorInternalServerError};
 use html5ever::{QualName, local_name, namespace_url};
-use kuchikiki::traits::TendrilSink;
-use kuchikiki::{parse_fragment, parse_html};
+use kuchikiki::{parse_fragment, parse_html, traits::TendrilSink};
 
 pub struct SeoData {
     pub title: String,
@@ -62,17 +61,16 @@ pub fn inject_seo_metadata(
     .one(blob);
 
     let document = parse_html().one(html);
-    if let Ok(head) = document.select_first("head") {
+    if let Ok(head) = document.document_node.select_first("head") {
         // 4) Move each child from the parsed fragment into the document's head:
-        for child in fragment.children() {
+        for child in fragment.document_node.children() {
             head.as_node().append(child.clone());
         }
     }
 
-    // head.append(NodeRef::new_text(blob));
-
     let mut out = Vec::new();
     document
+        .document_node
         .serialize(&mut out)
         .map_err(|_| ErrorInternalServerError("Serialization failed"))?;
 

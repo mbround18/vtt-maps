@@ -4,9 +4,8 @@ members=[
 ]
 resolver = "2"
 
-# Add a patch section to fix the mio dependency issues for wasm
-[patch.crates-io]
-mio = { git = "https://github.com/tokio-rs/mio.git", branch = "master" }
+#[patch.crates-io]
+#markup5ever = { version = "0.11.1", package = "markup5ever" }
 
 [profile.release]
 # less code to include into binary

@@ -7,4 +7,6 @@
 /rest
 /packages/yew-frontend/dist
 
-
+**/thumbnails/**
+**/dist/**
+/.git

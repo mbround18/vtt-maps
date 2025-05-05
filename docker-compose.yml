@@ -10,11 +10,11 @@ services:
       - MEILI_URL=http://meilisearch:7700
       - MEILI_KEY=${MEILI_MASTER_KEY:-masterKey}
       - REPO_REF=${REPO_REF:-main}
-      - REPO_PATH=/data
-    volumes:
-      - ./maps:/data/maps
+      - REPO_DIR=/data
     depends_on:
       - meilisearch
+    volumes:
+      - data:/data
 
   meilisearch:
     image: getmeili/meilisearch:v1.14
@@ -22,3 +22,7 @@ services:
       - "7700:7700"
     environment:
       - MEILI_MASTER_KEY=${MEILI_MASTER_KEY:-masterKey}
+
+
+volumes:
+  data: {}

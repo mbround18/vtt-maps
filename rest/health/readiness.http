@@ -1,0 +1,2 @@
+### Check readiness of the application
+GET http://localhost:8080/health/readiness

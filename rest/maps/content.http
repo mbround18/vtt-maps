@@ -1,0 +1,7 @@
+### Get map content by ID
+GET http://localhost:8080/api/maps/content/{{map_id}}
+Accept: application/json
+
+### Example with specific ID
+GET http://localhost:8080/api/maps/content/b9a8748105a0442a2e7530c1737e24dfab6ace77d8722a1241947b4f0b370380
+Accept: application/json
