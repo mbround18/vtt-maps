@@ -4,7 +4,7 @@ metadata:
   name: vtt-maps-vs
 spec:
   hosts:
-    - "PLACEHOLDER"
+    - "PLACEHOLDER.com"
   gateways:
     - vtt-maps-gateway
   http:

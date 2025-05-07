@@ -11,7 +11,7 @@ spec:
         name: https
         protocol: HTTPS
       hosts:
-        - "PLACEHOLDER"
+        - "PLACEHOLDER.com"
       tls:
         mode: SIMPLE
         credentialName: "PLACEHOLDER"
