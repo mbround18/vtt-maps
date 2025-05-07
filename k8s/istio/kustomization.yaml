@@ -1,0 +1,33 @@
+
+
+replacements:
+  - source:
+      kind: ConfigMap
+      name: vtt-maps-config
+      fieldPath: data.GATEWAY_HOST
+    targets:
+      - select:
+          kind: Gateway
+          name: vtt-maps-gateway
+        fieldPaths:
+          - spec/servers/0/hosts/0
+  - source:
+      kind: Secret
+      name: vtt-maps-secrets
+      fieldPath: data.gateway-credential
+    targets:
+      - select:
+          kind: Gateway
+          name: vtt-maps-gateway
+        fieldPaths:
+          - spec/servers/0/tls/credentialName
+  - source:
+      kind: ConfigMap
+      name: vtt-maps-config
+      fieldPath: data.VIRTUAL_SERVICE_HOST
+    targets:
+      - select:
+          kind: VirtualService
+          name: vtt-maps-virtualservice
+        fieldPaths:
+          - spec/hosts/0

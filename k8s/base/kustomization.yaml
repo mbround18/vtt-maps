@@ -2,11 +2,10 @@ apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 
 resources:
+  - pvc.yaml
   - deployment.yaml
   - service.yaml
-  - meilisearch-deployment.yaml
-  - meilisearch-service.yaml
-  - pvc.yaml
+  - meilisearch.yaml
 
 labels:
   - pairs:
@@ -24,43 +23,3 @@ replacements:
           name: vtt-maps
         fieldPaths:
           - spec/template/spec/containers/0/env/2/value
-  - source:
-      kind: Secret
-      name: vtt-maps-secrets
-      fieldPath: data.meili-key
-    targets:
-      - select:
-          kind: Deployment
-          name: vtt-maps
-        fieldPaths:
-          - spec/template/spec/containers/0/env/1/valueFrom/secretKeyRef/key
-  - source:
-      kind: ConfigMap
-      name: vtt-maps-config
-      fieldPath: data.GATEWAY_HOST
-    targets:
-      - select:
-          kind: Gateway
-          name: vtt-maps-gateway
-        fieldPaths:
-          - spec/servers/0/hosts/0
-  - source:
-      kind: Secret
-      name: vtt-maps-secrets
-      fieldPath: data.gateway-credential
-    targets:
-      - select:
-          kind: Gateway
-          name: vtt-maps-gateway
-        fieldPaths:
-          - spec/servers/0/tls/credentialName
-  - source:
-      kind: ConfigMap
-      name: vtt-maps-config
-      fieldPath: data.VIRTUAL_SERVICE_HOST
-    targets:
-      - select:
-          kind: VirtualService
-          name: vtt-maps-virtualservice
-        fieldPaths:
-          - spec/hosts/0

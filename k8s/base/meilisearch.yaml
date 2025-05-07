@@ -1,10 +1,11 @@
 apiVersion: apps/v1
-kind: Deployment
+kind: StatefulSet
 metadata:
   name: meilisearch
   labels:
     app: meilisearch
 spec:
+  serviceName: meilisearch
   replicas: 1
   selector:
     matchLabels:
@@ -17,6 +18,13 @@ spec:
       containers:
         - name: meilisearch
           image: getmeili/meilisearch:v1.14
+          resources:
+            requests:
+              memory: "512Mi"
+              cpu: "500m"
+            limits:
+              memory: "1Gi"
+              cpu: "1"
           ports:
             - containerPort: 7700
           env:
@@ -28,7 +36,12 @@ spec:
           volumeMounts:
             - name: meilisearch-data
               mountPath: /meili_data
-      volumes:
-        - name: meilisearch-data
-          persistentVolumeClaim:
-            claimName: meilisearch-data-pvc
+  volumeClaimTemplates:
+    - metadata:
+        name: meilisearch-data
+      spec:
+        accessModes:
+          - ReadWriteOnce
+        resources:
+          requests:
+            storage: 5Gi

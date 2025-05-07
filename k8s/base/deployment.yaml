@@ -20,6 +20,14 @@ spec:
       containers:
         - name: vtt-maps
           image: mbround18/vtt-maps:v2-dev
+          resources:
+            requests:
+              memory: "512Mi"
+              cpu: "500m"
+            limits:
+              memory: "1Gi"
+              cpu: "1"
+          imagePullPolicy: Always
           ports:
             - containerPort: 8080
           env:
