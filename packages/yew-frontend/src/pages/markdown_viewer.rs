@@ -1,5 +1,5 @@
 // src/components/markdown_viewer.rs
-use crate::api::api::ApiEndpoint;
+use crate::api::context::ApiEndpoint;
 use crate::utils::externals::updateReadmeAnchors;
 use gloo_console::log;
 use yew::prelude::*;

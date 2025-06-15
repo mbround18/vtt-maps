@@ -9,11 +9,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     curl ca-certificates pkg-config libssl-dev build-essential \
     && rm -rf /var/lib/apt/lists/*
 
-RUN cargo install --locked cargo-chef sccache
-
-ENV RUSTC_WRAPPER=sccache
-
-ENV SCCACHE_DIR=/sccache
+COPY --from=lukemathwalker/cargo-chef:latest  /usr/local/cargo/bin/cargo-chef /usr/local/cargo/bin/cargo-chef
 
 ###############
 # Trunk Setup
@@ -62,16 +58,15 @@ COPY --from=planner /app/recipe.json recipe.json
 
 RUN --mount=type=cache,target=/usr/local/cargo/registry \
     --mount=type=cache,target=/usr/local/cargo/git \
-    --mount=type=cache,target=/sccache \
     cargo chef cook --release --recipe-path recipe.json
 
 COPY . .
 
+# Use --locked for reproducible builds
 RUN rustup target add wasm32-unknown-unknown
 RUN --mount=type=cache,target=/usr/local/cargo/registry \
     --mount=type=cache,target=/usr/local/cargo/git \
-    --mount=type=cache,target=/sccache \
-    cargo build --release
+    cargo build --release --locked
 
 COPY --from=trunk /usr/local/bin/trunk /usr/local/bin/trunk
 
@@ -85,7 +80,7 @@ RUN cd ./packages/yew-frontend && trunk build --release \
 FROM debian:${DEBIAN_VERSION}-slim
 
 RUN apt-get update && apt-get install -y --no-install-recommends \
-    ca-certificates && rm -rf /var/lib/apt/lists/*
+    ca-certificates git git-lfs heaptrack && rm -rf /var/lib/apt/lists/*
 
 WORKDIR /app
 
@@ -103,4 +98,5 @@ RUN adduser --disabled-password --gecos "" appuser \
 
 USER appuser
 
-CMD ["/app/server"]
+# Use exec form for CMD for better signal handling
+CMD ["heaptrack","/app/server"]

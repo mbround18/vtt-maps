@@ -10,9 +10,10 @@ mod wrappers;
 use actix_files::Files;
 use actix_web::dev::Service;
 use actix_web::{App, HttpServer, http::header::CONTENT_TYPE, web};
-use tracing::info;
+use tracing::{error, info};
 
 use crate::hooks::{cors, identity, logger::setup_logger, security};
+use crate::maps::rebuild::rebuild_maps_core;
 use crate::services::file_service::file_service;
 use crate::wrappers::seo::SeoMetadata;
 use actix_identity::IdentityMiddleware;
@@ -40,6 +41,26 @@ async fn main() -> std::io::Result<()> {
     }
 
     info!("Operating out of directory: {}", root.display());
+
+    // Run map rebuild process during initialization
+    info!("🔧 Initializing maps rebuild process...");
+    match rebuild_maps_core().await {
+        Ok(count) => info!(
+            "✅ Map rebuild completed successfully: {} maps processed",
+            count
+        ),
+        Err(e) => {
+            if e.to_string().contains("already in progress") || e.to_string().contains("up-to-date")
+            {
+                info!("ℹ️  Map rebuild: {}", e);
+            } else {
+                error!("❌ Map rebuild failed during initialization: {:?}", e);
+                eprintln!("Map rebuild failed: {:?}", e);
+                std::process::exit(1);
+            }
+        }
+    }
+
     info!("Listening on {}:{}", &address, &port);
 
     HttpServer::new(move || {

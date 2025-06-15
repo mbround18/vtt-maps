@@ -1,5 +1,5 @@
 // src/components/map_downloader.rs
-use crate::api::api::ApiEndpoint;
+use crate::api::context::ApiEndpoint;
 use gloo_console::log;
 use serde::Deserialize;
 use yew::prelude::*;
@@ -32,7 +32,7 @@ pub struct MapDownloaderProps {
 pub fn map_downloader(props: &MapDownloaderProps) -> Html {
     let details = use_state(|| None::<MapDetails>);
     let id = props.id.clone();
-    let request = ApiEndpoint::GetMap { id: id.clone() };
+    let request = ApiEndpoint::Map { id: id.clone() };
 
     {
         let details = details.clone();

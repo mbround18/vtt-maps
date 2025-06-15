@@ -1,7 +1,7 @@
 use actix_cors::Cors;
 
 pub fn cors() -> Cors {
-    let cors = if let Ok(origins) = std::env::var("CORS_ALLOWED_ORIGINS") {
+    if let Ok(origins) = std::env::var("CORS_ALLOWED_ORIGINS") {
         let mut c = Cors::default().allow_any_method().allow_any_header();
         for origin in origins.split(',').map(str::trim).filter(|s| !s.is_empty()) {
             c = c.allowed_origin(origin);
@@ -13,7 +13,5 @@ pub fn cors() -> Cors {
             .allow_any_method()
             .allow_any_header()
             .supports_credentials()
-    };
-
-    cors
+    }
 }

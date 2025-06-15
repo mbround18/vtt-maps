@@ -23,6 +23,5 @@ services:
     environment:
       - MEILI_MASTER_KEY=${MEILI_MASTER_KEY:-masterKey}
 
-
 volumes:
   data: {}

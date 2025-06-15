@@ -210,14 +210,25 @@
   }
 
   @keyframes wave-drift {
-    0%   { transform: translateX(0) translateY(0) rotate(0deg); }
-    20%  { transform: translateX(6px) translateY(3px) rotate(0.5deg); }
-    40%  { transform: translateX(10px) translateY(-3px) rotate(1deg); }
-    60%  { transform: translateX(-10px) translateY(3px) rotate(-1deg); }
-    80%  { transform: translateX(-6px) translateY(-3px) rotate(-0.5deg); }
-    100% { transform: translateX(0) translateY(0) rotate(0deg); }
+    0% {
+      transform: translateX(0) translateY(0) rotate(0deg);
+    }
+    20% {
+      transform: translateX(6px) translateY(3px) rotate(0.5deg);
+    }
+    40% {
+      transform: translateX(10px) translateY(-3px) rotate(1deg);
+    }
+    60% {
+      transform: translateX(-10px) translateY(3px) rotate(-1deg);
+    }
+    80% {
+      transform: translateX(-6px) translateY(-3px) rotate(-0.5deg);
+    }
+    100% {
+      transform: translateX(0) translateY(0) rotate(0deg);
+    }
   }
-
 
   //   .wave-divider {
   //     position: absolute;

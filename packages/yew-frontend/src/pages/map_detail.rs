@@ -1,4 +1,4 @@
-use crate::api::api::ApiEndpoint;
+use crate::api::context::ApiEndpoint;
 use crate::components::map_downloader::MapDownloader;
 use shared::types::map_document::MapDocument;
 use shared::utils::casing::titlecase;
@@ -34,10 +34,10 @@ pub fn map_detail(props: &MapDetailProps) -> Html {
     let content = use_state(String::new);
 
     // --- API endpoints ---
-    let metadata_ep = ApiEndpoint::GetMap {
+    let metadata_ep = ApiEndpoint::Map {
         id: props.id.clone(),
     };
-    let tiled_ep = ApiEndpoint::GetTiledMap {
+    let tiled_ep = ApiEndpoint::TiledMap {
         id: props.id.clone(),
     };
 
@@ -113,7 +113,7 @@ pub fn map_detail(props: &MapDetailProps) -> Html {
             let id = id.clone();
 
             spawn_local(async move {
-                let request = ApiEndpoint::GetMapContent { id };
+                let request = ApiEndpoint::MapContent { id };
 
                 match request.request().send().await {
                     Ok(resp) if resp.status() == 200 => {

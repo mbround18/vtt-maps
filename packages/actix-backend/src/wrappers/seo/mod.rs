@@ -63,7 +63,7 @@ where
                 .headers()
                 .get(CONTENT_TYPE)
                 .and_then(|v| v.to_str().ok())
-                .map_or(false, |ct| ct.starts_with("text/html"));
+                .is_some_and(|ct| ct.starts_with("text/html"));
 
             if !is_html {
                 return Ok(res.map_into_boxed_body());

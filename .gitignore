@@ -4,3 +4,4 @@ dist
 *.png~
 assets/thumbnails
 *.bak
+.env

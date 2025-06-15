@@ -4,9 +4,6 @@ members=[
 ]
 resolver = "2"
 
-#[patch.crates-io]
-#markup5ever = { version = "0.11.1", package = "markup5ever" }
-
 [profile.release]
 # less code to include into binary
 panic = 'abort'

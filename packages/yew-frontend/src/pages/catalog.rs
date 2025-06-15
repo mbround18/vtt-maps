@@ -1,7 +1,7 @@
 use crate::components::map_asset_card::MapAssetCard;
 use shared::types::map_document::MapDocument;
 
-use crate::api::api::ApiEndpoint;
+use crate::api::context::ApiEndpoint;
 use wasm_bindgen_futures::spawn_local;
 use yew::prelude::*;
 use yew_hooks::prelude::*;
@@ -18,7 +18,7 @@ pub fn catalog() -> Html {
         use_effect_once(move || {
             spawn_local(async move {
                 if let Ok(response) = {
-                    ApiEndpoint::GetAllMaps {
+                    ApiEndpoint::AllMaps {
                         limit: None,
                         offset: None,
                     }
