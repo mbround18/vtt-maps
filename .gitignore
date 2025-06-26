@@ -6,4 +6,4 @@ assets/thumbnails
 *.bak
 .env
 .admin-token
-./rest/http-client.env.json
+rest/http-client.env.json
