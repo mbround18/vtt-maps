@@ -1,6 +1,6 @@
 services:
   backend:
-    image: mbround18/vtt-maps:v2-dev
+    image: mbround18/vtt-maps:latest
     build:
       context: .
       dockerfile: Dockerfile
