@@ -53,7 +53,7 @@ fn create_download_response(data: Vec<u8>, filename: &str) -> HttpResponse {
         .content_type("application/octet-stream")
         .append_header((
             "Content-Disposition",
-            format!("attachment; filename=\"{}\"", filename),
+            format!("attachment; filename=\"{filename}\""),
         ))
         .body(data)
 }

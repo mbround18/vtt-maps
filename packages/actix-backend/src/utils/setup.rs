@@ -53,7 +53,7 @@ pub fn setup_folders() -> Result<()> {
 
         builder
             .clone(repo_url, &root)
-            .with_context(|| format!("Failed to clone branch '{}' from {}", branch, repo_url))?;
+            .with_context(|| format!("Failed to clone branch '{branch}' from {repo_url}"))?;
 
         info!("Clone complete.");
     } else {

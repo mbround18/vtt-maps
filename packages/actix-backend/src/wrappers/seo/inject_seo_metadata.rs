@@ -18,7 +18,7 @@ pub fn inject_seo_metadata(
     let scheme = connection_info.scheme();
     let host = connection_info.host();
     let uri = req.uri();
-    let canonical = format!("{}://{}{}", scheme, host, uri);
+    let canonical = format!("{scheme}://{host}{uri}");
     let keywords = seo.keywords.unwrap_or_default();
 
     let blob = format!(

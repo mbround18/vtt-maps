@@ -29,24 +29,24 @@ impl Endpoint {
             Endpoint::AllMaps { limit, offset } => {
                 let mut params = Vec::new();
                 if let Some(l) = limit {
-                    params.push(format!("limit={}", l));
+                    params.push(format!("limit={l}"));
                 } else {
-                    params.push(format!("limit={}", BASE_LIMIT));
+                    params.push(format!("limit={BASE_LIMIT}"));
                 }
                 if let Some(o) = offset {
-                    params.push(format!("offset={}", o));
+                    params.push(format!("offset={o}"));
                 }
                 let qs = if params.is_empty() {
                     String::new()
                 } else {
                     format!("?{}", params.join("&"))
                 };
-                format!("{}/maps/all{}", API_BASE, qs)
+                format!("{API_BASE}/maps/all{qs}")
             }
-            Endpoint::Map { id } => format!("{}/maps/{}", API_BASE, id),
-            Endpoint::TiledMap { id } => format!("{}/maps/tiled/{}", API_BASE, id),
-            Endpoint::Markdown { path } => format!("{}/docs/{path}", API_BASE),
-            Endpoint::MapContent { id } => format!("{}/maps/content/{}", API_BASE, id),
+            Endpoint::Map { id } => format!("{API_BASE}/maps/{id}"),
+            Endpoint::TiledMap { id } => format!("{API_BASE}/maps/tiled/{id}"),
+            Endpoint::Markdown { path } => format!("{API_BASE}/docs/{path}"),
+            Endpoint::MapContent { id } => format!("{API_BASE}/maps/content/{id}"),
         }
     }
 

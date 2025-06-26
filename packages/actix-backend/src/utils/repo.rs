@@ -75,15 +75,15 @@ pub fn update_repo() -> Result<()> {
 
     // 4) decide clone vs. update by checking for `.git`
     let is_git_repo = root.join(".git").exists();
-    if !is_git_repo {
-        info!("📥 No .git found—cloning {}@{}…", url, branch);
-        clone_repository(url, &branch, &root)?;
-    } else {
+    if is_git_repo {
         info!(
             "🔍 .git detected—updating existing repo at {}",
             root.display()
         );
         update_existing_repository(&root, &branch)?;
+    } else {
+        info!("📥 No .git found—cloning {}@{}…", url, branch);
+        clone_repository(url, &branch, &root)?;
     }
 
     // 5) initialize your asset/thumb folders
@@ -160,8 +160,7 @@ fn update_existing_repository(root: &std::path::Path, branch: &str) -> Result<()
     let old_commit = repo
         .head()
         .and_then(|head| head.peel_to_commit())
-        .map(|commit| commit.id().to_string())
-        .unwrap_or_else(|_| "unknown".to_string());
+        .map_or_else(|_| "unknown".to_string(), |commit| commit.id().to_string());
     info!("📋 Current commit: {}", old_commit);
 
     let progress_counter = Arc::new(AtomicUsize::new(0));
@@ -201,14 +200,14 @@ fn update_existing_repository(root: &std::path::Path, branch: &str) -> Result<()
 
     remote
         .fetch(&[branch], Some(&mut fo), None)
-        .with_context(|| format!("Failed to fetch branch `{}`", branch))?;
+        .with_context(|| format!("Failed to fetch branch `{branch}`"))?;
 
-    let fetch_ref = format!("refs/remotes/origin/{}", branch);
+    let fetch_ref = format!("refs/remotes/origin/{branch}");
     info!("🔍 Looking for reference: {}", fetch_ref);
 
     let fetch_commit = repo
         .find_reference(&fetch_ref)
-        .with_context(|| format!("Reference `{}` not found", fetch_ref))?
+        .with_context(|| format!("Reference `{fetch_ref}` not found"))?
         .peel_to_commit()
         .context("Failed to peel fetched reference to commit")?;
 
@@ -228,14 +227,14 @@ fn update_existing_repository(root: &std::path::Path, branch: &str) -> Result<()
     if repo.find_branch(branch, BranchType::Local).is_err() {
         info!("🌿 Creating local branch: {}", branch);
         repo.branch(branch, &fetch_commit, true)
-            .with_context(|| format!("Failed to create local branch `{}`", branch))?;
+            .with_context(|| format!("Failed to create local branch `{branch}`"))?;
     }
 
     info!("🔄 Updating working directory");
 
     // hard‐reset working tree
-    repo.set_head(&format!("refs/heads/{}", branch))
-        .with_context(|| format!("Failed to set HEAD to `{}`", branch))?;
+    repo.set_head(&format!("refs/heads/{branch}"))
+        .with_context(|| format!("Failed to set HEAD to `{branch}`"))?;
 
     info!("🛠️  Checking out files");
     repo.checkout_head(Some(CheckoutBuilder::default().force()))

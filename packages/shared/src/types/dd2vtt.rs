@@ -17,6 +17,11 @@ pub struct DD2VTTFile {
 }
 
 impl DD2VTTFile {
+    /// Creates a DD2VTT file from a file path.
+    ///
+    /// # Panics
+    /// Panics if the file cannot be opened, read, or parsed as JSON.
+    #[must_use]
     pub fn from_path(value: PathBuf) -> Self {
         let mut file = fs::File::open(&value).expect("Unable to open file");
         let mut data = String::new();
@@ -26,6 +31,10 @@ impl DD2VTTFile {
         dd2vtt_file
     }
 
+    /// Exports a thumbnail image to the specified output path.
+    ///
+    /// # Panics
+    /// Panics if the image format cannot be guessed, the image cannot be decoded, or the thumbnail cannot be saved.
     pub fn export_thumbnail_file(self, output: &Path) {
         let bytes = decode(self.image);
         let img = ImageReader::new(Cursor::new(bytes))

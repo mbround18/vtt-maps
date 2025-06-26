@@ -13,7 +13,7 @@ use actix_web::{App, HttpServer, http::header::CONTENT_TYPE, web};
 use tracing::{error, info};
 
 use crate::hooks::{cors, identity, logger::setup_logger, security};
-use crate::maps::rebuild::rebuild_maps_core;
+use crate::maps::rebuild_maps_init;
 use crate::services::file_service::file_service;
 use crate::wrappers::seo::SeoMetadata;
 use actix_identity::IdentityMiddleware;
@@ -33,18 +33,28 @@ async fn main() -> std::io::Result<()> {
     let root = root_dir()?;
     let thumb_dir = thumbnails_dir()?;
     match setup_folders() {
-        Ok(_) => info!("Base setup complete."),
+        Ok(()) => info!("Base setup complete."),
         Err(e) => {
-            eprintln!("Error when checking for base setup!: {:?}", e);
+            eprintln!("Error when checking for base setup!: {e:?}");
             std::process::exit(1);
         }
     }
 
     info!("Operating out of directory: {}", root.display());
 
+    // Initialize admin token system
+    match utils::admin_token::get_or_create_admin_token() {
+        Ok(_) => info!("🔐 Admin token system initialized"),
+        Err(e) => {
+            error!("❌ Failed to initialize admin token system: {:?}", e);
+            eprintln!("Admin token initialization failed: {e:?}");
+            std::process::exit(1);
+        }
+    }
+
     // Run map rebuild process during initialization
     info!("🔧 Initializing maps rebuild process...");
-    match rebuild_maps_core().await {
+    match rebuild_maps_init().await {
         Ok(count) => info!(
             "✅ Map rebuild completed successfully: {} maps processed",
             count
@@ -55,7 +65,7 @@ async fn main() -> std::io::Result<()> {
                 info!("ℹ️  Map rebuild: {}", e);
             } else {
                 error!("❌ Map rebuild failed during initialization: {:?}", e);
-                eprintln!("Map rebuild failed: {:?}", e);
+                eprintln!("Map rebuild failed: {e:?}");
                 std::process::exit(1);
             }
         }
@@ -93,7 +103,17 @@ async fn main() -> std::io::Result<()> {
                         web::scope("/maps")
                             .route("/all", web::get().to(maps::maps_all))
                             .route("/{id}", web::get().to(maps::map_detail))
-                            .route("/rebuild", web::post().to(maps::maps_rebuild))
+                            .service(
+                                web::resource("/rebuild")
+                                    .wrap(hooks::admin_auth::AdminAuth)
+                                    .route(web::post().to(maps::maps_rebuild)),
+                            )
+                            .route("/rebuild/status", web::get().to(maps::rebuild_status))
+                            .service(
+                                web::resource("/rebuild/clear")
+                                    .wrap(hooks::admin_auth::AdminAuth)
+                                    .route(web::delete().to(maps::clear_rebuild_lock)),
+                            )
                             .route("/download/{id}", web::get().to(maps::download_map))
                             .route("/tiled/{id}", web::get().to(maps::tiled_map))
                             .route("/content/{id}", web::get().to(maps::map_content)),
@@ -102,7 +122,11 @@ async fn main() -> std::io::Result<()> {
                         web::scope("/docs")
                             .route("/readme", web::get().to(docs::docs_readme))
                             .route("/license", web::get().to(docs::docs_license)),
-                    ),
+                    )
+                    .service(web::scope("/admin").route(
+                        "/token/info",
+                        web::get().to(utils::admin_info::get_admin_token_info),
+                    )),
             )
             // Health checks
             .service(
@@ -113,7 +137,7 @@ async fn main() -> std::io::Result<()> {
             // SPA file service with fallback
             .configure(file_service)
     })
-    .bind(format!("{}:{}", address, port))?
+    .bind(format!("{address}:{port}"))?
     .run()
     .await
 }

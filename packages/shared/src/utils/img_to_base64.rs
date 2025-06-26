@@ -28,6 +28,10 @@ impl From<ImageError> for ImageConversionError {
     }
 }
 
+/// Converts an image file to a base64 encoded string.
+///
+/// # Errors
+/// Returns an error if the file cannot be read or the image cannot be loaded/processed.
 pub fn image_to_base64(file: &PathBuf) -> Result<String, ImageConversionError> {
     let mut image_data = fs::read(file)?;
     let image = image::load_from_memory(&image_data)?;

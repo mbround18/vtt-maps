@@ -18,9 +18,11 @@ pub fn header() -> Html {
                         .await
                 {
                     if let Ok(json) = response.json::<serde_json::Value>().await {
-                        if let Some(stargazers_count) =
-                            json.get("stargazers_count").and_then(|v| v.as_u64())
+                        if let Some(stargazers_count) = json
+                            .get("stargazers_count")
+                            .and_then(serde_json::Value::as_u64)
                         {
+                            #[allow(clippy::cast_possible_truncation)]
                             stars.set(Some(stargazers_count as u32));
                         }
                     }
@@ -32,14 +34,16 @@ pub fn header() -> Html {
 
     let on_toggle = {
         let is_open = is_open.clone();
-        Callback::from(move |_| is_open.toggle())
+        Callback::from(move |_| {
+            is_open.toggle();
+        })
     };
 
     let on_close = {
         let is_open = is_open.clone();
         Callback::from(move |_| {
             if *is_open {
-                is_open.toggle()
+                is_open.toggle();
             }
         })
     };
@@ -48,7 +52,7 @@ pub fn header() -> Html {
         let is_open = is_open.clone();
         use_click_away(nav_ref.clone(), move |_| {
             if *is_open {
-                is_open.toggle()
+                is_open.toggle();
             }
         });
     }
@@ -56,7 +60,7 @@ pub fn header() -> Html {
         let is_open = is_open.clone();
         use_event_with_window("resize", move |_: web_sys::Event| {
             if *is_open {
-                is_open.toggle()
+                is_open.toggle();
             }
         });
     }

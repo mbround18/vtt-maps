@@ -1,0 +1,13 @@
+### Check rebuild status (public)
+GET http://localhost:8080/api/maps/rebuild/status
+
+### Start rebuild (admin required)
+POST http://localhost:8080/api/maps/rebuild
+Authorization: Bearer {{$dotenv ADMIN_TOKEN}}
+
+### Clear stale lock (admin required)
+DELETE http://localhost:8080/api/maps/rebuild/clear
+Authorization: Bearer {{$dotenv ADMIN_TOKEN}}
+
+### Get admin token info (public - shows how to get token)
+GET http://localhost:8080/api/admin/token/info

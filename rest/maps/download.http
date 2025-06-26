@@ -1,5 +1,5 @@
 ### Download map by ID
-GET http://localhost:8080/api/maps/download/{{map_id}}
+GET http://localhost:8080/api/maps/download/{{$dotenv MAP_ID}}
 Accept: application/octet-stream
 
 ### Example with specific ID

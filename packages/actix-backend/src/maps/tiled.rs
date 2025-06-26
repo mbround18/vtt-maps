@@ -17,7 +17,7 @@ async fn get_map_document(id: &str) -> Result<MapDoc, HttpResponse> {
 
     index.get_document::<MapDoc>(id).await.map_err(|e| {
         error!("Failed to find map document: {}", e);
-        HttpResponse::NotFound().body(format!("Map with ID {} not found", id))
+        HttpResponse::NotFound().body(format!("Map with ID {id} not found"))
     })
 }
 

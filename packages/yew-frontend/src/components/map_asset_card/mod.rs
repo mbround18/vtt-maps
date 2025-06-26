@@ -21,7 +21,7 @@ impl Component for MapAssetCard {
 
     fn create(ctx: &Context<Self>) -> Self {
         let props = &ctx.props();
-        let asset = props.asset.to_owned();
+        let asset = props.asset.clone();
         Self { asset }
     }
 

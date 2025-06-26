@@ -42,13 +42,13 @@ impl From<DD2VTTFile> for MapReference {
         let path = value.path.expect("DD2VTTFile path missing");
         let file_name = path.file_name().unwrap().to_string_lossy().into_owned();
         let bytes = std::fs::read(&path)
-            .unwrap_or_else(|_| panic!("Unable to read file bytes: {:?}", path));
+            .unwrap_or_else(|_| panic!("Unable to read file bytes: {}", path.display()));
         let hash = Sha256::digest(&bytes);
 
         MapReference {
             name: file_name.replace(".dd2vtt", ""),
             path: path.to_string_lossy().to_string(),
-            hash: format!("{:x}", hash),
+            hash: format!("{hash:x}"),
             bytes: bytes.len() as u64,
             resolution: value.resolution,
         }
@@ -56,6 +56,10 @@ impl From<DD2VTTFile> for MapReference {
 }
 
 impl MapReference {
+    /// Writes the map reference to a file as JSON.
+    ///
+    /// # Panics
+    /// Panics if the map reference cannot be serialized or the file cannot be written.
     pub fn to_file(&self, output: &PathBuf) {
         println!("Writing file info {:?}", &self);
         let data = serde_json::to_string_pretty(&self).expect("Unable to serialize");

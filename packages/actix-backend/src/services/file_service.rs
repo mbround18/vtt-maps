@@ -11,9 +11,7 @@ use std::path::PathBuf;
 /// Configure static file serving (SPA shell fallback)
 pub fn file_service(cfg: &mut web::ServiceConfig) {
     // Determine the dist directory
-    let dist = env::var("DIST_DIR")
-        .map(PathBuf::from)
-        .unwrap_or_else(|_| PathBuf::from("dist"));
+    let dist = env::var("DIST_DIR").map_or_else(|_| PathBuf::from("dist"), PathBuf::from);
 
     // Build the Files service with SPA fallback to index.html
     let files = Files::new("/", &dist)

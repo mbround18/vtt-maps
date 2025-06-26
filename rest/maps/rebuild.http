@@ -1,3 +1,14 @@
-### Rebuild maps index
+### Rebuild maps index (admin required)
 POST https://vtt-maps.dnd-apps.dev/api/maps/rebuild
+Content-Type: application/json
+Authorization: Bearer {{$dotenv ADMIN_TOKEN}}
+
+
+### Rebuild maps index (admin required) - Local
+POST http://localhost:8080/api/maps/rebuild
+Content-Type: application/json
+Authorization: Bearer {{$dotenv ADMIN_TOKEN}}
+
+### Rebuild maps index (admin required) - Using query param
+POST http://localhost:8080/api/maps/rebuild?admin_token={{$dotenv ADMIN_TOKEN}}
 Content-Type: application/json

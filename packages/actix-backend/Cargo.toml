@@ -27,3 +27,4 @@ html5ever = "0.29"
 bytes = "1.10.1"
 actix-session   = { version = "0.10.1", features = ["cookie-session"] }
 actix-identity  = "0.8.0"
+rand = "0.8.5"

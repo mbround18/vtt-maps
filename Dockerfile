@@ -80,23 +80,26 @@ RUN cd ./packages/yew-frontend && trunk build --release \
 FROM debian:${DEBIAN_VERSION}-slim
 
 RUN apt-get update && apt-get install -y --no-install-recommends \
-    ca-certificates git git-lfs heaptrack && rm -rf /var/lib/apt/lists/*
+    ca-certificates git git-lfs curl jq && rm -rf /var/lib/apt/lists/*
 
 WORKDIR /app
 
 COPY --from=builder /app/dist ./dist
 COPY --from=builder /app/target/release/actix-backend ./server
 COPY ./assets ./assets
+COPY --chmod=755 ./scripts/check-rebuild-status.sh ./check-rebuild-status.sh
 
 ENV DIST_DIR="/app/dist"
+ENV CONTAINER="true"
 
 RUN adduser --disabled-password --gecos "" appuser \
     && chown -R appuser:appuser /app \
     && chmod +x /app/server \
+    && chmod +x /app/check-rebuild-status.sh \
     && mkdir -p /data \
     && chown -R appuser:appuser /data
 
 USER appuser
 
 # Use exec form for CMD for better signal handling
-CMD ["heaptrack","/app/server"]
+CMD ["/app/server"]

@@ -6,6 +6,7 @@ pub fn titlecase(s: &str) -> String {
         .join(" ")
 }
 
+#[must_use]
 pub fn capitalize(s: &str) -> String {
     let mut c = s.chars();
     match c.next() {

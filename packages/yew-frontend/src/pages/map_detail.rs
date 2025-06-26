@@ -222,7 +222,9 @@ pub fn map_detail(props: &MapDetailProps) -> Html {
                     }
                 }
                 {
-                    if ! content.is_empty() {
+                    if content.is_empty() {
+                        html! {}
+                    } else {
                         let inner = Html::from_html_unchecked(
                             AttrValue::from((*content).clone())
                         );
@@ -231,8 +233,6 @@ pub fn map_detail(props: &MapDetailProps) -> Html {
                                 { inner }
                             </div>
                         }
-                    } else {
-                        html! {}
                     }
                 }
                 </div>

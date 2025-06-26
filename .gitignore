@@ -5,3 +5,5 @@ dist
 assets/thumbnails
 *.bak
 .env
+.admin-token
+./rest/http-client.env.json

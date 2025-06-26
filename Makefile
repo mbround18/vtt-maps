@@ -6,7 +6,7 @@
 
 SOURCE_DIR := $(PWD)
 PROJECT_NAME := $(notdir $(SOURCE_DIR))
-BUILD_DIR := ~/tmp/$(PROJECT_NAME)
+BUILD_DIR := $(if $(CI),$(SOURCE_DIR)/target,~/tmp/$(PROJECT_NAME))
 DIST_DIR := $(SOURCE_DIR)/dist
 INDEX_FILE := packages/gh-pagify/index.html
 
@@ -16,6 +16,17 @@ MEILI_URL ?= http://127.0.0.1:7700
 MEILI_KEY ?= $(MEILI_MASTER_KEY)
 
 all: build
+
+build: build-frontend build-backend
+	@echo "Build completed successfully."
+
+build-frontend:
+	@echo "Building frontend..."
+	@cd packages/yew-frontend && trunk build --release --dist $(DIST_DIR)
+
+build-backend:
+	@echo "Building backend..."
+	@cargo build --release --target-dir $(BUILD_DIR)
 
 setup:
 	@mkdir -p $(BUILD_DIR)

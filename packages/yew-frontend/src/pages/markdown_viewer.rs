@@ -26,7 +26,7 @@ pub fn markdown_viewer(props: &MarkdownViewerProps) -> Html {
 
     {
         let content = content.clone();
-        use_effect_with((), move |_| {
+        use_effect_with((), move |()| {
             wasm_bindgen_futures::spawn_local(async move {
                 match api.request().send().await {
                     Ok(response) if response.ok() => match response.text().await {
