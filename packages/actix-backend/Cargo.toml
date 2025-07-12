@@ -23,7 +23,7 @@ base64 = "0.22.1"
 futures = "0.3.31"
 kuchikiki = "0.8.8-speedreader"
 futures-util = "0.3.31"
-html5ever = "0.29"
+html5ever = "0.35"
 bytes = "1.10.1"
 actix-session   = { version = "0.10.1", features = ["cookie-session"] }
 actix-identity  = "0.8.0"
