@@ -1,0 +1,242 @@
+// —————————————————————————————————————————————————
+// Animations
+// —————————————————————————————————————————————————
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+@keyframes slideInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+@keyframes loading-dots {
+  0%,
+  100% {
+    content: "";
+  }
+  25% {
+    content: ".";
+  }
+  50% {
+    content: "..";
+  }
+  75% {
+    content: "...";
+  }
+}
+
+// —————————————————————————————————————————————————
+// Base (mobile-first)
+// —————————————————————————————————————————————————
+
+.loading-container,
+.error-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  height: 80vh;
+  animation: fadeIn 0.5s ease-in;
+}
+.error-container {
+  color: #cc0000;
+}
+
+.loading-text {
+  display: flex;
+  align-items: center;
+  margin-bottom: 1rem;
+  color: #555;
+  font-style: italic;
+  animation: slideInUp 0.5s ease-out;
+
+  .loading-dots {
+    display: inline-block;
+    width: 24px;
+    height: 1em;
+    margin-left: 4px;
+    &::after {
+      content: "";
+      animation: loading-dots 1.5s infinite;
+    }
+  }
+}
+
+#map-download {
+  width: 100%;
+}
+
+#map-container {
+  margin: 0 auto;
+  padding: 1rem;
+  width: 100%;
+  animation: fadeIn 0.5s ease-in;
+
+  h1.map-title {
+    font-size: 1.5rem;
+    margin-bottom: 1rem;
+    color: #2dd4bf;
+  }
+
+  .error {
+    background: #ffeeee;
+    border: 1px solid #ffcccc;
+    border-radius: 4px;
+    padding: 1rem;
+    margin: 1rem 0;
+    color: #cc0000;
+  }
+
+  // Mobile: everything is a column
+  #map-asset-view {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    width: 100%;
+  }
+}
+
+#map-viewer {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  width: 100%;
+  animation: fadeIn 0.6s ease-in;
+
+  /* 1) Full-width map */
+  #map-scroll-container {
+    width: 100%;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    animation: fadeIn 0.8s ease-in;
+    overflow: auto;
+    -webkit-overflow-scrolling: touch; // Smooth scrolling on iOS
+
+    img.responsive {
+      width: 100%;
+      height: auto;
+      object-fit: contain;
+      border-radius: 4px;
+      box-shadow: 0 3px 15px rgba(0, 0, 0, 0.15);
+      animation: fadeIn 0.8s ease-in;
+    }
+  }
+
+  /* 2) Markdown content */
+  #map-content {
+    animation: slideInUp 0.6s ease-out;
+    p,
+    ul,
+    ol,
+    table,
+    hr {
+      margin-bottom: 0.75rem;
+    }
+    hr {
+      border-color: #444;
+    }
+    &:empty {
+      display: none;
+    }
+  }
+
+  /* 3) Buttons + dimensions */
+  #action-buttons {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    animation: slideInUp 0.6s ease-out 0.4s;
+
+    a.btn {
+      display: block;
+      width: 100%;
+      text-align: center;
+      padding: 0.75rem 1rem;
+    }
+
+    p {
+      padding: 1rem;
+    }
+
+    #dimensions-text {
+      font-size: 0.9rem;
+      color: #666;
+    }
+  }
+}
+
+// —————————————————————————————————————————————————
+// Mobile: sticky action-buttons
+// —————————————————————————————————————————————————
+
+@media (max-width: 767px) {
+  #action-buttons {
+    position: sticky;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    padding: 0.75rem 1rem;
+    background: #0f172a;
+    box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.3);
+    z-index: 100;
+  }
+}
+
+// —————————————————————————————————————————————————
+// Tablet & up: transition to row layout for map-asset-view
+// —————————————————————————————————————————————————
+
+@media (min-width: 768px) {
+  #map-container {
+    padding: 1.5rem;
+
+    // Switch to row layout for tablet
+    #map-asset-view {
+      flex-direction: row;
+      justify-items: auto;
+      //align-items: flex-start;
+    }
+  }
+
+  #map-viewer {
+    flex: 1;
+    min-width: 0; // Prevent overflow issues
+  }
+
+  #action-buttons {
+    flex: 0 0 250px; // Fixed width
+    position: sticky;
+    top: 1rem;
+    align-self: flex-start;
+    background: #0f172a;
+    padding: 1rem;
+    border-radius: 4px;
+    z-index: 10;
+  }
+}
+
+// —————————————————————————————————————————————————
+// Desktop tweaks
+// —————————————————————————————————————————————————
+
+@media (min-width: 1024px) {
+  #map-container {
+    max-width: 1400px;
+    margin: 0 auto;
+  }
+
+  #map-scroll-container {
+    max-height: 80vh; // Limit height on large screens
+  }
+}

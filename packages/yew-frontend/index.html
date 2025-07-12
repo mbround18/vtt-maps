@@ -1,0 +1,36 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <!-- Core Meta -->
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <meta name="robots" content="index, follow" />
+
+    <!-- PWA Support -->
+    <meta name="theme-color" content="#0D1B2A" />
+    <!--    <link rel="manifest" href="manifest.json" data-trunk rel="copy-file" />-->
+
+    <!-- Favicons & Touch Icons -->
+    <link rel="icon" href="/assets/vtt-maps-logo.png" type="image/x-icon" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+
+    <!-- Performance Hints -->
+    <link rel="preload" as="image" href="/assets/vtt-maps-logo.png" />
+
+    <!-- Styles -->
+    <link data-trunk rel="scss" href="./src/styles/index.scss" />
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser/dist/index.global.min.js"></script>
+
+    <!-- Copy Resources -->
+    <link data-trunk rel="copy-file" href="../../README.md" />
+    <link data-trunk rel="copy-dir" href="../../assets" />
+
+    <!-- JS Bundle -->
+    <script data-trunk src="js/index.js" type="module" defer></script>
+  </head>
+  <body>
+    <div id="root"></div>
+    <noscript>Please enable JavaScript to run this application.</noscript>
+  </body>
+</html>

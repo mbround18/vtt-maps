@@ -19,6 +19,9 @@ on:
 env:
   NAME: "Rust Test"
   CARGO_TERM_COLOR: always
+  CARGO_INCREMENTAL: 0
+  CARGO_NET_RETRY: 10
+  RUSTUP_MAX_RETRIES: 10
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
@@ -37,11 +40,23 @@ jobs:
       - name: Setup
         uses: ./.github/actions/setup
 
+      - name: Cache Cargo Dependencies
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.cargo/registry
+            ~/.cargo/git
+            target
+          key: ${{ runner.os }}-cargo-${{ hashFiles('**/Cargo.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-cargo-
+
       - name: Run Tests
         run: cargo test --all-features
 
   build:
     name: Build
+    needs: test
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code and LFS
@@ -52,8 +67,46 @@ jobs:
       - name: Setup
         uses: ./.github/actions/setup
 
-      - name: Compile Project
-        run: make compile
+      - name: Cache Cargo Dependencies
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.cargo/registry
+            ~/.cargo/git
+            target
+          key: ${{ runner.os }}-cargo-${{ hashFiles('**/Cargo.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-cargo-
+
+      - name: Cache Node Dependencies
+        uses: actions/cache@v4
+        with:
+          path: ~/.npm
+          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-node-
+
+      - name: Setup Project Dependencies
+        run: make setup
+
+      - name: Lint Project
+        run: make lint
+
+      - name: Build Project
+        run: make build
+
+      - name: Docker meta
+        id: meta
+        uses: docker/metadata-action@v5
+        with:
+          images: |
+            mbround18/vtt-maps
+          tags: |
+            type=raw,value=static-site
+            type=sha
+            type=ref,event=branch
+            type=ref,event=tag
+            type=raw,value=latest,enable={{is_default_branch}}
 
       - name: Log in to DockerHub
         uses: docker/login-action@v3
@@ -65,12 +118,12 @@ jobs:
         uses: docker/build-push-action@v6
         with:
           context: .
-          push: ${{ github.event_name != 'pull_request'  || (github.event_name == 'pull_request' && contains(github.event.pull_request.labels.*.name, 'canary')) }}
-          tags: mbround18/vtt-maps:static-site
+          push: ${{ github.event_name != 'pull_request' || (github.event_name == 'pull_request' && contains(github.event.pull_request.labels.*.name, 'canary')) }}
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
 
       - name: Upload Build Artifacts
         uses: actions/upload-artifact@v4
         with:
           name: build
           path: dist
-

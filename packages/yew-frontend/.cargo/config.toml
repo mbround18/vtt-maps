@@ -1,0 +1,7 @@
+[build]
+# This ensures we build for wasm32-unknown-unknown by default in this project
+target = "wasm32-unknown-unknown"
+
+[target.wasm32-unknown-unknown]
+# This ensures that `cargo build` works without having to specify the target
+runner = "wasm-bindgen-test-runner"

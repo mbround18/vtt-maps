@@ -1,0 +1,35 @@
+### Admin Token Info (Public endpoint)
+GET http://localhost:8080/api/admin/token/info
+
+###
+
+### Get Admin Token (requires admin auth)
+GET http://localhost:8080/api/admin/token
+Authorization: Bearer YOUR_ADMIN_TOKEN_HERE
+
+###
+
+### Get Admin Token using query parameter
+GET http://localhost:8080/api/admin/token?admin_token=YOUR_ADMIN_TOKEN_HERE
+
+###
+
+### Clear Rebuild Lock (admin-only) - Using Bearer token
+DELETE http://localhost:8080/api/maps/rebuild/clear
+Authorization: Bearer YOUR_ADMIN_TOKEN_HERE
+
+###
+
+### Clear Rebuild Lock (admin-only) - Using query parameter
+DELETE http://localhost:8080/api/maps/rebuild/clear?admin_token=YOUR_ADMIN_TOKEN_HERE
+
+###
+
+### Test unauthorized access to admin endpoint
+DELETE http://localhost:8080/api/maps/rebuild/clear
+
+###
+
+### Test with invalid token
+DELETE http://localhost:8080/api/maps/rebuild/clear
+Authorization: Bearer invalid_token_123

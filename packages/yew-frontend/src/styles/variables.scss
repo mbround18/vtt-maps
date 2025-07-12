@@ -1,0 +1,67 @@
+:root {
+  // Beach theme - light mode
+  --background-color: #f5f0e6;
+  --foreground-color: #2a4858;
+  --accent-color: #4fb3bf;
+  --secondary-color: #f9bc60;
+  --error-color: #e63946;
+  --warn-color: #f4a261;
+  --info-color: #2a9d8f;
+  --text-color: #333333;
+  --card-bg: #ffffff;
+  --card-shadow: rgba(0, 0, 0, 0.1);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    // Beach theme - dark mode
+    --background-color: #14212a;
+    --foreground-color: #2d4654;
+    --accent-color: #00b4d8;
+    --secondary-color: #f48c06;
+    --error-color: #e5383b;
+    --warn-color: #e76f51;
+    --info-color: #48cae4;
+    --text-color: #e0e0e0;
+    --card-bg: #1d2d3a;
+    --card-shadow: rgba(0, 0, 0, 0.4);
+  }
+}
+
+// Color variables
+$background-color: var(--background-color);
+$foreground-color: var(--foreground-color);
+$accent-color: var(--accent-color);
+$secondary-color: var(--secondary-color);
+$error-color: var(--error-color);
+$warn-color: var(--warn-color);
+$info-color: var(--info-color);
+$text-color: var(--text-color);
+$card-bg: var(--card-bg);
+$card-shadow: var(--card-shadow);
+
+// Responsive breakpoints
+$breakpoint-xs: 480px;
+$breakpoint-sm: 768px;
+$breakpoint-md: 992px;
+$breakpoint-lg: 1200px;
+
+// Spacing
+$spacing-xs: 0.25rem;
+$spacing-small: 0.5rem;
+$spacing-medium: 1rem;
+$spacing-large: 2rem;
+$spacing-xl: 3rem;
+
+// Typography
+$font-size-base: 16px;
+$font-family-base: "Segoe UI", Arial, sans-serif;
+$font-family-heading: "Helvetica Neue", Arial, sans-serif;
+$line-height-base: 1.5;
+
+// Layout
+$card-min-width: 150px;
+$container-max-width: 1200px;
+$border-radius-small: 4px;
+$border-radius-medium: 8px;
+$border-radius-large: 16px;

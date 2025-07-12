@@ -1,0 +1,113 @@
+@use "variables" as vars;
+@use "mixins";
+
+.btn {
+  display: inline-block;
+  padding: vars.$spacing-small vars.$spacing-medium;
+  background-color: vars.$accent-color;
+  color: white;
+  border: none;
+  border-radius: vars.$border-radius-small;
+  cursor: pointer;
+  font-weight: 500;
+  text-align: center;
+  transition:
+    background-color 0.2s ease,
+    transform 0.2s ease,
+    box-shadow 0.2s ease;
+
+  &:hover {
+    background-color: var(--accent-color);
+    filter: brightness(1.1);
+    transform: translateY(-2px);
+    @include mixins.shadow(1);
+  }
+
+  &:active {
+    transform: translateY(0);
+  }
+
+  &:focus {
+    outline: 2px solid var(--accent-color);
+    filter: brightness(0.9);
+    outline-offset: 2px;
+  }
+
+  &:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+
+    &:hover {
+      background-color: vars.$accent-color;
+      filter: none;
+      transform: none;
+      box-shadow: none;
+    }
+  }
+}
+
+.btn-secondary {
+  background-color: vars.$secondary-color;
+  color: vars.$text-color;
+
+  &:hover {
+    background-color: var(--secondary-color);
+    filter: brightness(1.1);
+  }
+
+  &:focus {
+    outline-color: var(--secondary-color);
+  }
+}
+
+.btn-outline {
+  background-color: transparent;
+  border: 2px solid vars.$accent-color;
+  color: vars.$accent-color;
+
+  &:hover {
+    background-color: vars.$accent-color;
+    color: white;
+  }
+}
+
+.btn-small {
+  padding: vars.$spacing-xs vars.$spacing-small;
+  font-size: 0.875rem;
+}
+
+.btn-large {
+  padding: vars.$spacing-medium vars.$spacing-large;
+  font-size: 1.125rem;
+}
+
+.btn-block {
+  display: block;
+  width: 100%;
+}
+
+.btn-loading {
+  position: relative;
+  pointer-events: none;
+  color: transparent;
+
+  &::after {
+    content: "";
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 1em;
+    height: 1em;
+    margin: -0.5em 0 0 -0.5em;
+    border: 2px solid white;
+    border-top-color: transparent;
+    border-radius: 50%;
+    animation: btn-spinner 0.8s linear infinite;
+  }
+}
+
+@keyframes btn-spinner {
+  to {
+    transform: rotate(360deg);
+  }
+}

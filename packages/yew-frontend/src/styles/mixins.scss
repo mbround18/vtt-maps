@@ -1,0 +1,82 @@
+@use "sass:math";
+@use "variables" as vars;
+
+// Media query mixins
+@mixin respond($size) {
+  @if $size == xs {
+    @media (min-width: vars.$breakpoint-xs) {
+      @content;
+    }
+  } @else if $size == sm {
+    @media (min-width: vars.$breakpoint-sm) {
+      @content;
+    }
+  } @else if $size == md {
+    @media (min-width: vars.$breakpoint-md) {
+      @content;
+    }
+  } @else if $size == lg {
+    @media (min-width: vars.$breakpoint-lg) {
+      @content;
+    }
+  }
+}
+
+// Fluid typography function
+@function fluid($min, $max, $min-vw: 320, $max-vw: 1200) {
+  $slope: math.div($max - $min, $max-vw - $min-vw);
+  $base: $min - $slope * $min-vw;
+  @return clamp(#{$min}px, #{$base}px + #{$slope * 100}vw, #{$max}px);
+}
+
+// Box shadow styles
+@mixin shadow($level: 1) {
+  @if $level == 1 {
+    box-shadow: 0 2px 5px vars.$card-shadow;
+  } @else if $level == 2 {
+    box-shadow: 0 5px 15px vars.$card-shadow;
+  } @else if $level == 3 {
+    box-shadow: 0 10px 25px vars.$card-shadow;
+  }
+}
+
+// Card styles
+@mixin card {
+  background-color: vars.$card-bg;
+  border-radius: vars.$border-radius-medium;
+  @include shadow(1);
+  transition:
+    transform 0.3s ease,
+    box-shadow 0.3s ease;
+
+  &:hover {
+    @include shadow(2);
+    transform: translateY(-3px);
+  }
+}
+
+// Flex utilities
+@mixin flex(
+  $direction: row,
+  $justify: flex-start,
+  $align: stretch,
+  $wrap: nowrap
+) {
+  display: flex;
+  flex-direction: $direction;
+  justify-content: $justify;
+  align-items: $align;
+  flex-wrap: $wrap;
+}
+
+// Grid utilities
+@mixin grid($columns: 1, $gap: vars.$spacing-medium) {
+  display: grid;
+  gap: $gap;
+
+  @if type-of($columns) == number {
+    grid-template-columns: repeat($columns, 1fr);
+  } @else {
+    grid-template-columns: $columns;
+  }
+}

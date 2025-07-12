@@ -1,0 +1,30 @@
+[package]
+name = "actix-backend"
+version = "0.1.0"
+edition = "2024"
+
+[dependencies]
+git2 = "0"
+actix-web = "4.11.0"
+actix-files = "0.6.6"
+actix-cors = "0.7.1"
+tokio = { version = "1.45.1", features = ["full"] }
+serde = { version = "1.0.219", features = ["derive"] }
+serde_json = "1.0.140"
+glob = "0.3.2"
+shared = { path = "../shared" }
+meilisearch-sdk = "0.28.0"
+anyhow = "1.0.98"
+tracing = "0.1.41"
+tracing-subscriber = { version = "0.3.19", features = ["env-filter", "fmt"] }
+tracing-actix-web = "0.7.18"
+pulldown-cmark = "0.13.0"
+base64 = "0.22.1"
+futures = "0.3.31"
+kuchikiki = "0.8.8-speedreader"
+futures-util = "0.3.31"
+html5ever = "0.29"
+bytes = "1.10.1"
+actix-session   = { version = "0.10.1", features = ["cookie-session"] }
+actix-identity  = "0.8.0"
+rand = "0.8.5"

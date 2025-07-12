@@ -1,0 +1,97 @@
+@use "variables" as vars;
+@use "mixins";
+
+html {
+  font-size: vars.$font-size-base;
+  line-height: vars.$line-height-base;
+  color: vars.$text-color;
+  font-family: vars.$font-family-base;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-family: vars.$font-family-heading;
+  margin-bottom: vars.$spacing-medium;
+  font-weight: 600;
+  color: vars.$accent-color;
+}
+
+h1 {
+  font-size: mixins.fluid(24, 36);
+  line-height: 1.2;
+  margin-bottom: vars.$spacing-large;
+}
+
+h2 {
+  font-size: mixins.fluid(22, 30);
+  line-height: 1.25;
+}
+
+h3 {
+  font-size: mixins.fluid(20, 26);
+  line-height: 1.3;
+}
+
+h4 {
+  font-size: mixins.fluid(18, 22);
+  line-height: 1.35;
+}
+
+h5 {
+  font-size: mixins.fluid(16, 18);
+  line-height: 1.4;
+}
+
+h6 {
+  font-size: mixins.fluid(14, 16);
+  line-height: 1.4;
+}
+
+p {
+  margin-bottom: vars.$spacing-medium;
+  font-size: mixins.fluid(14, 16);
+}
+
+a {
+  color: vars.$accent-color;
+  text-decoration: none;
+  transition: color 0.2s ease;
+
+  &:hover {
+    color: var(--accent-color-light, var(--accent-color));
+    filter: brightness(1.2);
+  }
+
+  &:focus {
+    outline: 2px solid vars.$accent-color;
+    outline-offset: 2px;
+  }
+}
+
+strong,
+b {
+  font-weight: 600;
+}
+
+em,
+i {
+  font-style: italic;
+}
+
+small {
+  font-size: 0.875em;
+}
+
+.text-center {
+  text-align: center;
+}
+.text-right {
+  text-align: right;
+}
+.text-muted {
+  color: rgba(vars.$text-color, 0.75);
+}

@@ -1,5 +1,9 @@
 .idea
 target
-docs
 dist
 *.png~
+assets/thumbnails
+*.bak
+.env
+.admin-token
+rest/http-client.env.json
