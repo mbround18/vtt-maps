@@ -1,14 +1,8 @@
 use actix_web::{HttpResponse, error::ErrorInternalServerError};
-use serde::{Deserialize, Serialize};
-use std::env;
-use std::{
-    fs::{File, OpenOptions},
-    io::{Read, Write},
-    path::{Path, PathBuf},
-    time::Instant,
-};
+use std::{env, path::Path};
+use std::{path::PathBuf, time::Instant};
 use tokio::task;
-use tracing::{debug, error, info, instrument, warn};
+use tracing::{debug, error, info, instrument};
 
 use crate::utils::folders::thumbnails_dir;
 use crate::utils::repo::{get_sha, update_repo};
@@ -20,111 +14,6 @@ use shared::utils::casing::titlecase;
 use shared::utils::root_dir::{maps_dir, root_dir};
 
 const TASK_BATCH_SIZE: usize = 10;
-
-#[derive(Serialize, Deserialize)]
-#[serde(tag = "status", rename_all = "snake_case")]
-enum BuildLock {
-    Processing {
-        processed: usize,
-        total: usize,
-        sha: String,
-    },
-    Complete {
-        maps: usize,
-        sha: String,
-    },
-}
-
-fn lock_path() -> PathBuf {
-    thumbnails_dir().unwrap().join(".map_rebuild_lock.json")
-}
-
-/// Atomically create lock (fails if exists)
-fn try_acquire_lock(path: &Path) -> std::io::Result<File> {
-    // Create parent directory if it doesn't exist
-    if let Some(parent) = path.parent() {
-        std::fs::create_dir_all(parent)?;
-    }
-    OpenOptions::new().write(true).create_new(true).open(path)
-}
-
-/// Read current lock state
-fn read_lock(path: &Path) -> Option<BuildLock> {
-    let mut file = File::open(path).ok()?;
-    let mut buf = String::new();
-    file.read_to_string(&mut buf).ok()?;
-    drop(file); // Explicit file handle cleanup
-    serde_json::from_str(&buf).ok()
-}
-
-/// Atomically overwrite lock file
-fn write_lock(path: &Path, data: &BuildLock) -> std::io::Result<()> {
-    // Create parent directory if it doesn't exist
-    if let Some(parent) = path.parent() {
-        std::fs::create_dir_all(parent)?;
-    }
-
-    let tmp = path.with_extension("lock.tmp");
-    let mut f = OpenOptions::new()
-        .write(true)
-        .create(true)
-        .truncate(true)
-        .open(&tmp)?;
-    write!(f, "{}", serde_json::to_string(data).unwrap())?;
-    std::fs::rename(tmp, path)?;
-    Ok(())
-}
-
-/// Remove lock file
-fn remove_lock(path: &Path) -> std::io::Result<()> {
-    if path.exists() {
-        std::fs::remove_file(path)?;
-        info!("🧹 Removed stale lock file: {}", path.display());
-    }
-    Ok(())
-}
-
-/// Check if lock is stale (from previous container run)
-fn is_lock_stale(_lock_data: &BuildLock) -> bool {
-    // For container environments, we can consider any existing lock as potentially stale
-    // since containers don't persist process state across restarts
-    if env::var("CONTAINER").is_ok() || env::var("DOCKER_CONTAINER").is_ok() {
-        warn!("🐳 Container environment detected - treating existing lock as potentially stale");
-        return true;
-    }
-
-    // Additional heuristics could be added here:
-    // - Check if the lock is older than X minutes
-    // - Check if the process that created it is still running
-    false
-}
-
-/// Get container uptime information
-fn get_container_info() -> String {
-    // Check container uptime via /proc/1/stat if available
-    if let Ok(stat) = std::fs::read_to_string("/proc/1/stat") {
-        if let Some(start_time) = stat.split_whitespace().nth(21) {
-            let boot_time_result = std::fs::read_to_string("/proc/stat")
-                .unwrap_or_default()
-                .lines()
-                .find(|line| line.starts_with("btime"))
-                .and_then(|line| line.split_whitespace().nth(1))
-                .and_then(|t| t.parse::<u64>().ok());
-
-            if let (Ok(start), Some(_boot_time)) = (start_time.parse::<u64>(), boot_time_result) {
-                let uptime_seconds = start / 100; // Convert from jiffies to seconds (assuming 100 Hz)
-                return format!("Container uptime: ~{uptime_seconds} seconds");
-            }
-        }
-    }
-
-    // Fallback: check container environment variables
-    if env::var("CONTAINER").is_ok() || env::var("DOCKER_CONTAINER").is_ok() {
-        "Running in container environment".to_string()
-    } else {
-        "Not in container".to_string()
-    }
-}
 
 // find all .dd2vtt files
 #[instrument(level = "debug")]
@@ -223,38 +112,6 @@ pub async fn rebuild_maps_core() -> Result<usize, Box<dyn std::error::Error + Se
     std::fs::create_dir_all(&root)?;
     info!("📁 Root directory ready: {}", root.display());
 
-    let lockfile = lock_path();
-    info!("🔍 Container info: {}", get_container_info());
-
-    // Check for existing lock and handle stale locks
-    if let Some(existing_lock) = read_lock(&lockfile) {
-        match &existing_lock {
-            BuildLock::Processing {
-                processed, total, ..
-            } => {
-                if is_lock_stale(&existing_lock) {
-                    warn!(
-                        "🧹 Detected stale lock from previous run ({}/{} processed) - removing",
-                        processed, total
-                    );
-                    if let Err(e) = remove_lock(&lockfile) {
-                        error!("❌ Failed to remove stale lock: {}", e);
-                        return Err("Failed to clean up stale lock".into());
-                    }
-                } else {
-                    warn!(
-                        "⚠️  Rebuild already in progress: {}/{} maps processed",
-                        processed, total
-                    );
-                    return Err("Rebuild already in progress".into());
-                }
-            }
-            BuildLock::Complete { maps, .. } => {
-                info!("✅ Previous rebuild completed successfully ({} maps)", maps);
-            }
-        }
-    }
-
     let base = maps_dir()?;
     std::fs::create_dir_all(&base)?;
 
@@ -264,22 +121,6 @@ pub async fn rebuild_maps_core() -> Result<usize, Box<dyn std::error::Error + Se
 
     let sha = get_sha()?;
     info!("📋 Current SHA: {}", sha);
-
-    // Acquire lock
-    let Ok(mut lock) = try_acquire_lock(&lockfile) else {
-        return Err("Rebuild already running".into());
-    };
-
-    write!(
-        lock,
-        "{}",
-        serde_json::to_string(&BuildLock::Processing {
-            processed: 0,
-            total,
-            sha: sha.clone()
-        })?
-    )?;
-    info!("🔒 Lock acquired, starting rebuild");
 
     // Update repository if configured
     if env::var("REPO_DIR").is_ok() {
@@ -319,7 +160,7 @@ pub async fn rebuild_maps_core() -> Result<usize, Box<dyn std::error::Error + Se
     }
 
     // Always rebuild documents in streaming batches to minimize memory usage
-    info!("�️  Clearing existing documents from search index");
+    info!("🗑️  Clearing existing documents from search index");
     index.delete_all_documents().await?;
     info!("✅ Search index cleared");
 
@@ -334,7 +175,7 @@ pub async fn rebuild_maps_core() -> Result<usize, Box<dyn std::error::Error + Se
         total.div_ceil(TASK_BATCH_SIZE)
     };
 
-    let mut processed = 0;
+    let mut _processed = 0;
     for (batch_idx, chunk) in paths.chunks(TASK_BATCH_SIZE).enumerate() {
         info!(
             "📊 Processing and indexing batch {}/{} ({} maps)",
@@ -366,18 +207,9 @@ pub async fn rebuild_maps_core() -> Result<usize, Box<dyn std::error::Error + Se
         }
 
         if !batch_docs.is_empty() {
-            info!("� Indexing {} documents", batch_docs.len());
+            info!("📇 Indexing {} documents", batch_docs.len());
             index.add_documents(&batch_docs, Some("id")).await?;
-            processed += batch_docs.len();
-
-            write_lock(
-                &lockfile,
-                &BuildLock::Processing {
-                    processed,
-                    total,
-                    sha: sha.clone(),
-                },
-            )?;
+            _processed += batch_docs.len();
         }
 
         // Explicitly drop the batch to free memory
@@ -389,7 +221,7 @@ pub async fn rebuild_maps_core() -> Result<usize, Box<dyn std::error::Error + Se
             total_batches
         );
     }
-    write_lock(&lockfile, &BuildLock::Complete { maps: total, sha })?;
+
     let total_elapsed = start.elapsed();
     info!(
         "🎉 Map rebuild completed successfully: {} maps processed in {:?}",
@@ -398,47 +230,10 @@ pub async fn rebuild_maps_core() -> Result<usize, Box<dyn std::error::Error + Se
     Ok(total)
 }
 
-/// Initialization-specific rebuild that clears stale locks
+/// Initialization-specific rebuild - alias for core rebuild
 #[instrument(level = "info")]
 pub async fn rebuild_maps_init() -> Result<usize, Box<dyn std::error::Error + Send + Sync>> {
-    let lockfile = lock_path();
-    info!("🔍 Container info: {}", get_container_info());
-
-    // During initialization, we should clear any existing locks as they are likely stale
-    if let Some(existing_lock) = read_lock(&lockfile) {
-        match &existing_lock {
-            BuildLock::Processing {
-                processed, total, ..
-            } => {
-                warn!(
-                    "🧹 Detected lock from previous run during initialization ({}/{} processed) - clearing",
-                    processed, total
-                );
-                if let Err(e) = remove_lock(&lockfile) {
-                    error!(
-                        "❌ Failed to remove stale lock during initialization: {}",
-                        e
-                    );
-                    return Err("Failed to clean up stale lock during initialization".into());
-                }
-            }
-            BuildLock::Complete { maps, .. } => {
-                info!(
-                    "✅ Previous rebuild completed successfully ({} maps) - clearing for fresh start",
-                    maps
-                );
-                if let Err(e) = remove_lock(&lockfile) {
-                    error!(
-                        "❌ Failed to remove completed lock during initialization: {}",
-                        e
-                    );
-                    return Err("Failed to clean up completed lock during initialization".into());
-                }
-            }
-        }
-    }
-
-    // Now proceed with normal rebuild
+    info!("� Initializing map rebuild process");
     rebuild_maps_core().await
 }
 
@@ -446,47 +241,10 @@ pub async fn rebuild_maps_init() -> Result<usize, Box<dyn std::error::Error + Se
 pub async fn maps_rebuild() -> Result<HttpResponse, actix_web::Error> {
     info!("🌐 Map rebuild requested via HTTP endpoint");
 
-    let lockfile = lock_path();
-    info!("🔍 Container info: {}", get_container_info());
-
-    // Check for existing lock and handle stale locks
-    if let Some(existing_lock) = read_lock(&lockfile) {
-        match &existing_lock {
-            BuildLock::Processing {
-                processed, total, ..
-            } => {
-                if is_lock_stale(&existing_lock) {
-                    warn!(
-                        "🧹 Detected stale lock from previous run ({}/{} processed) - removing",
-                        processed, total
-                    );
-                    if let Err(e) = remove_lock(&lockfile) {
-                        error!("❌ Failed to remove stale lock: {}", e);
-                        return Ok(HttpResponse::InternalServerError().json(serde_json::json!({
-                            "error": "Failed to clean up stale lock"
-                        })));
-                    }
-                } else {
-                    info!(
-                        "📊 Rebuild in progress: {}/{} maps processed",
-                        processed, total
-                    );
-                    return Ok(HttpResponse::Ok().json(serde_json::json!({
-                        "status":"processing","processed":processed,"total":total
-                    })));
-                }
-            }
-            BuildLock::Complete { maps, .. } => {
-                info!("✅ Previous rebuild completed successfully ({} maps)", maps);
-            }
-        }
-    }
-
     // Start rebuild in background
     actix_web::rt::spawn(async move {
         if let Err(e) = rebuild_maps_core().await {
             error!("❌ Background rebuild failed: {:?}", e);
-            let _ = std::fs::remove_file(&lockfile);
         }
     });
 
@@ -498,62 +256,14 @@ pub async fn maps_rebuild() -> Result<HttpResponse, actix_web::Error> {
 
     info!("🚀 Background rebuild started for {} maps", total);
     Ok(HttpResponse::Accepted().json(serde_json::json!({
-        "status":"processing","processed":0,"total":total
+        "status":"processing","total":total
     })))
 }
 
 /// Rebuild status handler
 pub async fn rebuild_status() -> Result<HttpResponse, actix_web::Error> {
-    let lockfile = lock_path();
-    let container_info = get_container_info();
-
-    if let Some(lock_data) = read_lock(&lockfile) {
-        match lock_data {
-            BuildLock::Processing {
-                processed,
-                total,
-                sha,
-            } => Ok(HttpResponse::Ok().json(serde_json::json!({
-                "status": "processing",
-                "processed": processed,
-                "total": total,
-                "sha": sha,
-                "container_info": container_info,
-                "progress_percentage": if total > 0 { (processed * 100) / total } else { 0 }
-            }))),
-            BuildLock::Complete { maps, sha } => Ok(HttpResponse::Ok().json(serde_json::json!({
-                "status": "complete",
-                "maps": maps,
-                "sha": sha,
-                "container_info": container_info
-            }))),
-        }
-    } else {
-        Ok(HttpResponse::Ok().json(serde_json::json!({
-            "status": "idle",
-            "container_info": container_info
-        })))
-    }
-}
-
-/// Clear rebuild lock handler (admin-only)
-pub async fn clear_rebuild_lock() -> Result<HttpResponse, actix_web::Error> {
-    let lockfile = lock_path();
-
-    info!("🔐 Admin requested rebuild lock clear via API");
-
-    match remove_lock(&lockfile) {
-        Ok(()) => {
-            info!("🧹 Lock file cleared successfully by admin");
-            Ok(HttpResponse::Ok().json(serde_json::json!({
-                "message": "Lock file cleared successfully"
-            })))
-        }
-        Err(e) => {
-            error!("❌ Failed to clear lock file: {}", e);
-            Ok(HttpResponse::InternalServerError().json(serde_json::json!({
-                "error": format!("Failed to clear lock file: {}", e)
-            })))
-        }
-    }
+    Ok(HttpResponse::Ok().json(serde_json::json!({
+        "status": "no_lock_system",
+        "message": "Lock system has been removed - rebuild status not available"
+    })))
 }

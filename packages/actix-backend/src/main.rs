@@ -109,11 +109,6 @@ async fn main() -> std::io::Result<()> {
                                     .route(web::post().to(maps::maps_rebuild)),
                             )
                             .route("/rebuild/status", web::get().to(maps::rebuild_status))
-                            .service(
-                                web::resource("/rebuild/clear")
-                                    .wrap(hooks::admin_auth::AdminAuth)
-                                    .route(web::delete().to(maps::clear_rebuild_lock)),
-                            )
                             .route("/download/{id}", web::get().to(maps::download_map))
                             .route("/tiled/{id}", web::get().to(maps::tiled_map))
                             .route("/content/{id}", web::get().to(maps::map_content)),
