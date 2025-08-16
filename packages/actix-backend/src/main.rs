@@ -103,11 +103,11 @@ async fn main() -> std::io::Result<()> {
                         web::scope("/maps")
                             .route("/all", web::get().to(maps::maps_all))
                             .route("/{id}", web::get().to(maps::map_detail))
-                            .service(
-                                web::resource("/rebuild")
-                                    .wrap(hooks::admin_auth::AdminAuth)
-                                    .route(web::post().to(maps::maps_rebuild)),
-                            )
+                            // .service(
+                            //     web::resource("/rebuild")
+                            //         .wrap(hooks::admin_auth::AdminAuth)
+                            //         .route(web::post().to(maps::maps_rebuild)),
+                            // )
                             .route("/rebuild/status", web::get().to(maps::rebuild_status))
                             .route("/download/{id}", web::get().to(maps::download_map))
                             .route("/tiled/{id}", web::get().to(maps::tiled_map))

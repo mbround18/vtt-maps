@@ -1,6 +1,5 @@
 use actix_web::{HttpRequest, error::ErrorInternalServerError};
-use html5ever::{QualName, local_name, namespace_url};
-use kuchikiki::{parse_fragment, parse_html, traits::TendrilSink};
+use kuchikiki::{parse_html, traits::TendrilSink};
 
 pub struct SeoData {
     pub title: String,
@@ -49,22 +48,18 @@ pub fn inject_seo_metadata(
         img = seo.image_url,
     );
 
-    // 2) Parse the blob as a <head> fragment:
-    let fragment = parse_fragment(
-        QualName::new(
-            None,
-            namespace_url!("http://www.w3.org/1999/xhtml"),
-            local_name!("head"),
-        ),
-        Vec::new(),
-    )
-    .one(blob);
-
+    // Parse the main HTML document
     let document = parse_html().one(html);
+
+    // Parse the SEO metadata as HTML fragment and extract the elements
+    let seo_fragment = parse_html().one(format!("<head>{}</head>", blob));
+
     if let Ok(head) = document.document_node.select_first("head") {
-        // 4) Move each child from the parsed fragment into the document's head:
-        for child in fragment.document_node.children() {
-            head.as_node().append(child.clone());
+        if let Ok(seo_head) = seo_fragment.document_node.select_first("head") {
+            // Move each child from the SEO fragment into the document's head
+            for child in seo_head.as_node().children() {
+                head.as_node().append(child.clone());
+            }
         }
     }
 
