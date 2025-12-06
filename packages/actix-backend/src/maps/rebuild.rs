@@ -1,4 +1,4 @@
-use actix_web::{HttpResponse, error::ErrorInternalServerError};
+use actix_web::HttpResponse;
 use serde::{Deserialize, Serialize};
 use std::env;
 use std::{
