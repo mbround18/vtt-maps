@@ -16,16 +16,13 @@ pub fn header() -> Html {
                     gloo_net::http::Request::get("https://api.github.com/repos/dnd-apps/vtt-maps")
                         .send()
                         .await
+                    && let Ok(json) = response.json::<serde_json::Value>().await
+                    && let Some(stargazers_count) = json
+                        .get("stargazers_count")
+                        .and_then(serde_json::Value::as_u64)
                 {
-                    if let Ok(json) = response.json::<serde_json::Value>().await {
-                        if let Some(stargazers_count) = json
-                            .get("stargazers_count")
-                            .and_then(serde_json::Value::as_u64)
-                        {
-                            #[allow(clippy::cast_possible_truncation)]
-                            stars.set(Some(stargazers_count as u32));
-                        }
-                    }
+                    #[allow(clippy::cast_possible_truncation)]
+                    stars.set(Some(stargazers_count as u32));
                 }
             });
             || {}

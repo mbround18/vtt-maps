@@ -115,26 +115,25 @@ pub struct AdminAuthenticated;
 /// 3. Query parameter `admin_token`
 fn extract_admin_token(req: &ServiceRequest) -> Option<String> {
     // Check Authorization header first
-    if let Some(auth_header) = req.headers().get(AUTHORIZATION) {
-        if let Ok(auth_str) = auth_header.to_str() {
-            // Try Bearer token format
-            if let Some(token) = auth_str.strip_prefix("Bearer ") {
-                return Some(token.trim().to_string());
-            }
+    if let Some(auth_header) = req.headers().get(AUTHORIZATION)
+        && let Ok(auth_str) = auth_header.to_str()
+    {
+        // Try Bearer token format
+        if let Some(token) = auth_str.strip_prefix("Bearer ") {
+            return Some(token.trim().to_string());
+        } else if !auth_str.is_empty() {
             // Try direct token format
-            if !auth_str.is_empty() {
-                return Some(auth_str.trim().to_string());
-            }
+            return Some(auth_str.trim().to_string());
         }
     }
 
     // Check query parameter
     if let Some(query_str) = req.uri().query() {
         for pair in query_str.split('&') {
-            if let Some((key, value)) = pair.split_once('=') {
-                if key == "admin_token" {
-                    return Some(value.to_string());
-                }
+            if let Some((key, value)) = pair.split_once('=')
+                && key == "admin_token"
+            {
+                return Some(value.to_string());
             }
         }
     }

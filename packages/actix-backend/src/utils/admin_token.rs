@@ -18,11 +18,11 @@ const ADMIN_TOKEN_FILE: &str = ".admin-token";
 /// Returns an error if the token file cannot be read or written.
 pub fn get_or_create_admin_token() -> Result<String> {
     // Check environment variable first
-    if let Ok(token) = env::var("ADMIN_TOKEN") {
-        if !token.trim().is_empty() {
-            info!("🔑 Using admin token from ADMIN_TOKEN environment variable");
-            return Ok(token.trim().to_string());
-        }
+    if let Ok(token) = env::var("ADMIN_TOKEN")
+        && !token.trim().is_empty()
+    {
+        info!("🔑 Using admin token from ADMIN_TOKEN environment variable");
+        return Ok(token.trim().to_string());
     }
 
     // Check for existing token file
@@ -78,10 +78,10 @@ fn admin_token_path() -> Result<PathBuf> {
 
 /// Generates a cryptographically secure random token.
 fn generate_secure_token() -> String {
-    let mut rng = rand::thread_rng();
+    let mut rng = rand::rng();
     (0..TOKEN_LENGTH)
         .map(|_| {
-            let idx = rng.gen_range(0..62);
+            let idx = rng.random_range(0..62);
             match idx {
                 0..=25 => (b'A' + idx) as char,
                 26..=51 => (b'a' + (idx - 26)) as char,

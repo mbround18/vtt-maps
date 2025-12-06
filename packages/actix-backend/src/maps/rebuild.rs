@@ -1,4 +1,4 @@
-use actix_web::HttpResponse;
+use actix_web::{HttpResponse, error::ErrorInternalServerError};
 use serde::{Deserialize, Serialize};
 use std::env;
 use std::{
@@ -102,19 +102,19 @@ fn is_lock_stale(_lock_data: &BuildLock) -> bool {
 /// Get container uptime information
 fn get_container_info() -> String {
     // Check container uptime via /proc/1/stat if available
-    if let Ok(stat) = std::fs::read_to_string("/proc/1/stat") {
-        if let Some(start_time) = stat.split_whitespace().nth(21) {
-            let boot_time_result = std::fs::read_to_string("/proc/stat")
-                .unwrap_or_default()
-                .lines()
-                .find(|line| line.starts_with("btime"))
-                .and_then(|line| line.split_whitespace().nth(1))
-                .and_then(|t| t.parse::<u64>().ok());
+    if let Ok(stat) = std::fs::read_to_string("/proc/1/stat")
+        && let Some(start_time) = stat.split_whitespace().nth(21)
+    {
+        let boot_time_result = std::fs::read_to_string("/proc/stat")
+            .unwrap_or_default()
+            .lines()
+            .find(|line| line.starts_with("btime"))
+            .and_then(|line| line.split_whitespace().nth(1))
+            .and_then(|t| t.parse::<u64>().ok());
 
-            if let (Ok(start), Some(_boot_time)) = (start_time.parse::<u64>(), boot_time_result) {
-                let uptime_seconds = start / 100; // Convert from jiffies to seconds (assuming 100 Hz)
-                return format!("Container uptime: ~{uptime_seconds} seconds");
-            }
+        if let (Ok(start), Some(_boot_time)) = (start_time.parse::<u64>(), boot_time_result) {
+            let uptime_seconds = start / 100; // Convert from jiffies to seconds (assuming 100 Hz)
+            return format!("Container uptime: ~{uptime_seconds} seconds");
         }
     }
 

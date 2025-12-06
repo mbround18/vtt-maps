@@ -26,10 +26,9 @@ pub fn catalog() -> Html {
                 .request()
                 .send()
                 .await
+                    && let Ok(list) = response.json::<Vec<MapDocument>>().await
                 {
-                    if let Ok(list) = response.json::<Vec<MapDocument>>().await {
-                        maps.set(list);
-                    }
+                    maps.set(list);
                 }
 
                 is_loading.set(false);

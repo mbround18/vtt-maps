@@ -111,7 +111,7 @@ fn clone_repository(url: &str, branch: &str, root: &std::path::Path) -> Result<(
     cb.transfer_progress(move |progress: Progress| {
         let current = progress_counter_clone.fetch_add(1, Ordering::Relaxed);
 
-        if current % CLONE_PROGRESS_INTERVAL == 0
+        if current.is_multiple_of(CLONE_PROGRESS_INTERVAL)
             || progress.received_objects() == progress.total_objects()
         {
             log_clone_progress(&progress);
@@ -171,7 +171,7 @@ fn update_existing_repository(root: &std::path::Path, branch: &str) -> Result<()
     // Progress callback for fetch
     cb.transfer_progress(move |progress: Progress| {
         let current = progress_counter_clone.fetch_add(1, Ordering::Relaxed);
-        if (current % FETCH_PROGRESS_INTERVAL == 0
+        if (current.is_multiple_of(FETCH_PROGRESS_INTERVAL)
             || progress.received_objects() == progress.total_objects())
             && progress.total_objects() > 0
         {

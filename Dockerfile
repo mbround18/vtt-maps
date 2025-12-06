@@ -1,5 +1,5 @@
-ARG RUST_VERSION=1.86
-ARG DEBIAN_VERSION=bookworm
+ARG RUST_VERSION=1.91
+ARG DEBIAN_VERSION=trixie
 ########################
 # Base Setup
 ########################
@@ -19,10 +19,10 @@ FROM debian:${DEBIAN_VERSION}-slim AS trunk
 # Install required tools
 RUN apt-get update && \
     apt-get install -y --no-install-recommends \
-        curl \
-        ca-certificates \
-        jq \
-        tar && \
+    curl \
+    ca-certificates \
+    jq \
+    tar && \
     rm -rf /var/lib/apt/lists/*
 
 # Set environment variables
@@ -80,7 +80,7 @@ RUN cd ./packages/yew-frontend && trunk build --release \
 FROM debian:${DEBIAN_VERSION}-slim
 
 RUN apt-get update && apt-get install -y --no-install-recommends \
-    ca-certificates git git-lfs curl jq && rm -rf /var/lib/apt/lists/*
+    ca-certificates git git-lfs curl jq adduser && rm -rf /var/lib/apt/lists/*
 
 WORKDIR /app
 

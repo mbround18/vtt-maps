@@ -1,7 +1,8 @@
 // use reqwasm::http::Request;
 use serde::{Deserialize, Serialize};
 
-#[derive(PartialEq, Serialize, Deserialize)]
+#[allow(dead_code)]
+#[derive(Clone, PartialEq, Serialize, Deserialize)]
 pub struct GitTree {
     pub path: String,
 }
@@ -12,14 +13,7 @@ impl From<String> for GitTree {
     }
 }
 
-impl Clone for GitTree {
-    fn clone(&self) -> Self {
-        Self {
-            path: self.path.to_string(),
-        }
-    }
-}
-
+#[allow(dead_code)]
 #[derive(Serialize, Deserialize)]
 pub struct GHRepoTree {
     pub tree: Vec<GitTree>,
