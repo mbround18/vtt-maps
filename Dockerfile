@@ -6,7 +6,7 @@ ARG DEBIAN_VERSION=trixie
 FROM rust:${RUST_VERSION}-slim AS base
 
 RUN apt-get update && apt-get install -y --no-install-recommends \
-    curl ca-certificates pkg-config libssl-dev build-essential \
+    curl ca-certificates pkg-config libssl-dev build-essential libpq-dev \
     && rm -rf /var/lib/apt/lists/*
 
 COPY --from=lukemathwalker/cargo-chef:latest  /usr/local/cargo/bin/cargo-chef /usr/local/cargo/bin/cargo-chef
@@ -80,7 +80,7 @@ RUN cd ./packages/yew-frontend && trunk build --release \
 FROM debian:${DEBIAN_VERSION}-slim
 
 RUN apt-get update && apt-get install -y --no-install-recommends \
-    ca-certificates git git-lfs curl jq adduser && rm -rf /var/lib/apt/lists/*
+    ca-certificates git git-lfs curl jq adduser libpq5 && rm -rf /var/lib/apt/lists/*
 
 WORKDIR /app
 

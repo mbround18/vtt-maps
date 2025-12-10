@@ -15,6 +15,7 @@ use tracing::{debug, warn};
 /// 1. Authorization header: `Bearer <token>`
 /// 2. Authorization header: `<token>` (without Bearer prefix)
 /// 3. Query parameter: `?admin_token=<token>`
+#[allow(dead_code)]
 pub struct AdminAuth;
 
 impl<S, B> Transform<S, ServiceRequest> for AdminAuth
@@ -33,6 +34,7 @@ where
     }
 }
 
+#[allow(dead_code)]
 pub struct AdminAuthMiddleware<S>(Rc<S>);
 
 impl<S, B> Service<ServiceRequest> for AdminAuthMiddleware<S>
@@ -113,6 +115,7 @@ pub struct AdminAuthenticated;
 /// 1. Authorization header (Bearer token)
 /// 2. Authorization header (direct token)
 /// 3. Query parameter `admin_token`
+#[allow(dead_code)]
 fn extract_admin_token(req: &ServiceRequest) -> Option<String> {
     // Check Authorization header first
     if let Some(auth_header) = req.headers().get(AUTHORIZATION)

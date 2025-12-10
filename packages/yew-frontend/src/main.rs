@@ -8,6 +8,7 @@ use tracing_wasm::set_as_global_default;
 use yew::prelude::*;
 use yew_router::prelude::*;
 mod pages;
+use crate::api::auth::AuthProvider;
 use crate::api::context::ApiEndpoint;
 use crate::pages::MarkdownViewer;
 use components::header::Header;
@@ -16,12 +17,12 @@ use pages::{Catalog, MapDetail, NotFound, Route};
 #[function_component(App)]
 fn app() -> Html {
     html! {
-        <>
+        <AuthProvider>
             <Header />
             <BrowserRouter>
                 <Switch<Route> render={switch} />
             </BrowserRouter>
-        </>
+        </AuthProvider>
     }
 }
 

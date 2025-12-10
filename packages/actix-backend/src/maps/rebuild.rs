@@ -1,4 +1,7 @@
-use actix_web::{HttpResponse, error::ErrorInternalServerError};
+use actix_web::{
+    HttpResponse,
+    error::{ErrorForbidden, ErrorInternalServerError},
+};
 use serde::{Deserialize, Serialize};
 use std::env;
 use std::{
@@ -10,6 +13,7 @@ use std::{
 use tokio::task;
 use tracing::{debug, error, info, instrument, warn};
 
+use crate::auth::extractor::AuthenticatedSession;
 use crate::utils::folders::thumbnails_dir;
 use crate::utils::repo::{get_sha, update_repo};
 use glob::glob;
@@ -443,7 +447,11 @@ pub async fn rebuild_maps_init() -> Result<usize, Box<dyn std::error::Error + Se
 }
 
 // main handler
-pub async fn maps_rebuild() -> Result<HttpResponse, actix_web::Error> {
+pub async fn maps_rebuild(session: AuthenticatedSession) -> Result<HttpResponse, actix_web::Error> {
+    if !session.user().is_admin() {
+        warn!("🚫 Non-admin attempted to trigger map rebuild");
+        return Err(ErrorForbidden("admin role required"));
+    }
     info!("🌐 Map rebuild requested via HTTP endpoint");
 
     let lockfile = lock_path();
@@ -537,7 +545,13 @@ pub async fn rebuild_status() -> Result<HttpResponse, actix_web::Error> {
 }
 
 /// Clear rebuild lock handler (admin-only)
-pub async fn clear_rebuild_lock() -> Result<HttpResponse, actix_web::Error> {
+pub async fn clear_rebuild_lock(
+    session: AuthenticatedSession,
+) -> Result<HttpResponse, actix_web::Error> {
+    if !session.user().is_admin() {
+        warn!("🚫 Non-admin attempted to clear rebuild lock");
+        return Err(ErrorForbidden("admin role required"));
+    }
     let lockfile = lock_path();
 
     info!("🔐 Admin requested rebuild lock clear via API");

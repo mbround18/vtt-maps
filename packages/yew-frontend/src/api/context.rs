@@ -21,6 +21,7 @@ pub enum Endpoint {
     MapContent {
         id: String,
     },
+    DownloadMetrics,
 }
 
 impl Endpoint {
@@ -47,6 +48,7 @@ impl Endpoint {
             Endpoint::TiledMap { id } => format!("{API_BASE}/maps/tiled/{id}"),
             Endpoint::Markdown { path } => format!("{API_BASE}/docs/{path}"),
             Endpoint::MapContent { id } => format!("{API_BASE}/maps/content/{id}"),
+            Endpoint::DownloadMetrics => format!("{API_BASE}/maps/metrics/downloads"),
         }
     }
 
@@ -56,7 +58,8 @@ impl Endpoint {
             | Endpoint::Map { .. }
             | Endpoint::TiledMap { .. }
             | Endpoint::MapContent { .. }
-            | Endpoint::Markdown { .. } => Request::get(&self.url()),
+            | Endpoint::Markdown { .. }
+            | Endpoint::DownloadMetrics => Request::get(&self.url()),
         }
     }
 }

@@ -1,4 +1,4 @@
-.PHONY: all setup lint serve-meilisearch serve-backend serve-frontend serve clean setup_meilisearch
+.PHONY: all setup lint serve-meilisearch serve-postgres serve-backend serve-frontend serve clean setup_meilisearch
 
 # Efficient Makefile for building and managing Rust and WebAssembly projects
 # Following the approach in https://markentier.tech/posts/2022/01/speedy-rust-builds-under-wsl2/
@@ -47,6 +47,10 @@ serve-meilisearch:
 	@sleep 2
 	@make setup_meilisearch
 
+serve-postgres:
+	@docker compose up -d postgres
+	@echo "PostgreSQL is running on port 5432"
+
 serve-backend:
 	@echo "Starting backend server..."
 	@cargo watch --env MEILI_MASTER_KEY=$(MEILI_MASTER_KEY) \
@@ -59,7 +63,8 @@ serve-frontend:
 	@echo "Starting frontend server..."
 	@cd packages/yew-frontend && RUST_LOG=info trunk watch --dist $(DIST_DIR)
 
-serve: lint serve-meilisearch
+serve: lint serve-meilisearch serve-postgres
+	@echo "Starting both frontend and backend servers..."
 	@(trap 'kill 0' SIGINT; make serve-frontend & make serve-backend & wait)
 
 

@@ -1,0 +1,57 @@
+services:
+  backend:
+    image: mbround18/vtt-maps:latest
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "8080:8080"
+    environment:
+      - MEILI_URL=http://meilisearch:7700
+      - MEILI_KEY=${MEILI_MASTER_KEY:-masterKey}
+      - REPO_REF=${REPO_REF:-main}
+      - REPO_DIR=/data
+      - DATABASE_URL=${DATABASE_URL:-postgres://postgres:postgres@postgres:5432/vttmaps}
+      - REDIS_URL=${REDIS_URL:-redis://redis:6379}
+    depends_on:
+      - meilisearch
+      - postgres
+      - redis
+    volumes:
+      - data:/data
+
+  meilisearch:
+    image: getmeili/meilisearch:v1.14
+    ports:
+      - "7700:7700"
+    environment:
+      - MEILI_MASTER_KEY=${MEILI_MASTER_KEY:-masterKey}
+
+  postgres:
+    image: postgres:18
+    environment:
+      POSTGRES_DB: vttmaps
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres-data:/var/lib/postgresql
+
+  redis:
+    image: redis:8-alpine
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis-data:/data
+    command: redis-server --appendonly yes
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 3s
+      retries: 5
+
+volumes:
+  data: {}
+  postgres-data: {}
+  redis-data: {}

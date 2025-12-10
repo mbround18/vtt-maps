@@ -1,6 +1,7 @@
-use crate::clients::meilisearch::meilisearch_index;
+use super::tracking::{DownloadEventMetadata, record_download_event};
+use crate::{clients::meilisearch::meilisearch_index, utils::db::DbPool};
 use actix_web::{
-    Error, HttpResponse,
+    Error, HttpRequest, HttpResponse,
     error::{ErrorInternalServerError, ErrorNotFound},
     web,
 };
@@ -8,7 +9,7 @@ use shared::types::map_document::MapDocument as MapDoc;
 use shared::utils::root_dir::root_dir;
 use std::path::{Path, PathBuf};
 use tokio::fs;
-use tracing::{debug, error};
+use tracing::{debug, error, warn};
 
 async fn retrieve_map_document(id: &str) -> Result<MapDoc, Error> {
     let index = meilisearch_index("maps")?;
@@ -58,7 +59,11 @@ fn create_download_response(data: Vec<u8>, filename: &str) -> HttpResponse {
         .body(data)
 }
 
-pub async fn download_map(id: web::Path<String>) -> Result<HttpResponse, Error> {
+pub async fn download_map(
+    req: HttpRequest,
+    pool: web::Data<DbPool>,
+    id: web::Path<String>,
+) -> Result<HttpResponse, Error> {
     let id = id.into_inner();
     debug!("Request for map download with id: {}", id);
 
@@ -68,6 +73,11 @@ pub async fn download_map(id: web::Path<String>) -> Result<HttpResponse, Error> 
     let canonical_path = construct_file_path(&doc).await?;
     let data = read_map_file(&canonical_path).await?;
     let filename = extract_filename(&canonical_path);
+
+    let metadata = DownloadEventMetadata::from_request(&req);
+    if let Err(e) = record_download_event(pool, doc.id.clone(), metadata).await {
+        warn!("Failed to record download telemetry for {}: {}", doc.id, e);
+    }
 
     Ok(create_download_response(data, filename))
 }

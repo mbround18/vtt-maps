@@ -198,6 +198,117 @@
       }
     }
   }
+
+  .nav-auth {
+    display: flex;
+    align-items: center;
+    margin: vars.$spacing-small 0;
+
+    @include mixins.respond(md) {
+      margin: 0 0 0 vars.$spacing-medium;
+    }
+  }
+
+  .auth-status {
+    color: rgba(255, 255, 255, 0.85);
+    font-style: italic;
+    font-size: 0.9rem;
+  }
+
+  .profile-chip {
+    display: flex;
+    align-items: center;
+    gap: vars.$spacing-small;
+    padding: vars.$spacing-small vars.$spacing-small;
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.15);
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.15);
+    border: 1px solid rgba(255, 255, 255, 0.25);
+    backdrop-filter: blur(8px);
+  }
+
+  .profile-avatar {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 2px solid rgba(255, 255, 255, 0.5);
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.2);
+    display: block;
+  }
+
+  .profile-avatar.fallback {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 600;
+    text-transform: uppercase;
+    color: white;
+    background: rgba(255, 255, 255, 0.2);
+  }
+
+  .profile-meta {
+    display: flex;
+    flex-direction: column;
+    line-height: 1.2;
+  }
+
+  .profile-name {
+    color: white;
+    font-weight: 600;
+  }
+
+  .role-badge {
+    margin-top: 2px;
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    padding: 2px 8px;
+    border-radius: 999px;
+    border: 1px solid rgba(255, 255, 255, 0.35);
+    color: white;
+
+    &.admin {
+      background: rgba(255, 111, 97, 0.3);
+      border-color: rgba(255, 111, 97, 0.8);
+    }
+
+    &.contributor {
+      background: rgba(255, 193, 7, 0.3);
+      border-color: rgba(255, 193, 7, 0.8);
+      color: #2f1b02;
+    }
+
+    &.guest {
+      background: rgba(255, 255, 255, 0.2);
+    }
+  }
+
+  .logout-button {
+    border: none;
+    background: transparent;
+    color: white;
+    font-weight: 600;
+    padding: vars.$spacing-small vars.$spacing-small;
+    border-radius: vars.$border-radius-small;
+    cursor: pointer;
+    transition: background 0.2s ease;
+
+    &:hover {
+      background: rgba(255, 255, 255, 0.15);
+    }
+  }
+
+  .login-button {
+    border: none;
+    cursor: pointer;
+  }
+
+  .auth-error {
+    color: #ffe5e5;
+    font-size: 0.85rem;
+    font-style: italic;
+  }
   .wave-divider {
     position: absolute;
     bottom: 0;

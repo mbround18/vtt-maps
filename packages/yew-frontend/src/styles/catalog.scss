@@ -1,6 +1,44 @@
 @use "variables" as vars;
 @use "mixins";
 
+.catalog-shell {
+  display: flex;
+  flex-direction: column;
+  gap: vars.$spacing-medium;
+  padding: vars.$spacing-medium;
+}
+
+.catalog-controls {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: vars.$spacing-small;
+  padding: vars.$spacing-small vars.$spacing-medium;
+  background-color: rgba(vars.$card-bg, 0.8);
+  border-radius: vars.$border-radius-large;
+  @include mixins.shadow(1);
+
+  label {
+    font-weight: 600;
+    color: vars.$text-color;
+  }
+
+  select {
+    padding: vars.$spacing-small vars.$spacing-medium;
+    border-radius: vars.$border-radius-small;
+    border: 1px solid rgba(vars.$text-color, 0.2);
+    background-color: transparent;
+    color: vars.$text-color;
+    font-weight: 600;
+
+    &:focus {
+      outline: none;
+      border-color: vars.$accent-color;
+      box-shadow: 0 0 0 2px rgba(vars.$accent-color, 0.2);
+    }
+  }
+}
+
 #catalog {
   padding: vars.$spacing-medium;
   margin: vars.$spacing-medium auto;
@@ -54,6 +92,36 @@
     display: flex;
     flex-direction: column;
     justify-content: space-between;
+
+    .download-stat {
+      display: inline-flex;
+      align-items: baseline;
+      gap: vars.$spacing-xs;
+      margin-bottom: vars.$spacing-small;
+      padding: vars.$spacing-xs vars.$spacing-small;
+      border-radius: vars.$border-radius-large;
+      background-color: rgba(vars.$accent-color, 0.12);
+      color: vars.$accent-color;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+
+      .download-count {
+        font-size: 1rem;
+      }
+
+      .download-label {
+        font-size: 0.75rem;
+        opacity: 0.85;
+      }
+
+      .download-trend {
+        font-size: 0.7rem;
+        margin-left: vars.$spacing-small;
+        color: vars.$accent-color;
+        opacity: 0.75;
+      }
+    }
 
     .card-actions {
       display: flex;

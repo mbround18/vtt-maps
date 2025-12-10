@@ -65,6 +65,7 @@ pub fn get_or_create_admin_token() -> Result<String> {
 ///
 /// # Errors
 /// Returns an error if the admin token cannot be retrieved.
+#[allow(dead_code)]
 pub fn validate_admin_token(provided_token: &str) -> Result<bool> {
     let admin_token = get_or_create_admin_token()?;
     Ok(admin_token == provided_token.trim())

@@ -1,3 +1,4 @@
+pub mod oauth;
 pub mod types;
 pub mod utils;
 

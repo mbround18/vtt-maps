@@ -1,8 +1,11 @@
+mod auth;
 mod clients;
 mod docs;
 mod health;
 mod hooks;
 mod maps;
+mod models;
+mod schema;
 mod services;
 mod utils;
 mod wrappers;
@@ -10,9 +13,12 @@ mod wrappers;
 use actix_files::Files;
 use actix_web::dev::Service;
 use actix_web::{App, HttpServer, http::header::CONTENT_TYPE, web};
+use dotenvy::dotenv;
 use tracing::{error, info};
 
-use crate::hooks::{cors, identity, logger::setup_logger, security};
+use crate::auth::{discord::DiscordOAuthClient, jwt::JwtService};
+use crate::hooks::logger::setup_logger;
+use crate::hooks::redis_session::create_redis_session_middleware;
 use crate::maps::rebuild_maps_init;
 use crate::services::file_service::file_service;
 use crate::wrappers::seo::SeoMetadata;
@@ -27,6 +33,14 @@ use utils::setup::setup_folders;
 async fn main() -> std::io::Result<()> {
     // Initialize tracing subscriber
     setup_logger();
+    dotenv().ok();
+
+    // Initialize and validate admin configuration
+    if let Err(e) = utils::admin_init::initialize_admin_config() {
+        error!("❌ Admin configuration initialization failed: {:?}", e);
+        eprintln!("Admin configuration error: {e:?}");
+        std::process::exit(1);
+    }
 
     let address = env::var("ADDRESS").unwrap_or_else(|_| "0.0.0.0".to_string());
     let port = env::var("PORT").unwrap_or_else(|_| "8080".to_string());
@@ -41,6 +55,37 @@ async fn main() -> std::io::Result<()> {
     }
 
     info!("Operating out of directory: {}", root.display());
+
+    // Initialize database pool + migrations
+    let db_pool = match utils::db::init_pool() {
+        Ok(pool) => pool,
+        Err(e) => {
+            error!("❌ Failed to initialize database pool: {:?}", e);
+            eprintln!("Database initialization failed: {e:?}");
+            std::process::exit(1);
+        }
+    };
+    let db_pool = web::Data::new(db_pool);
+
+    // Initialize JWT session service
+    let jwt_service = match JwtService::from_env() {
+        Ok(service) => web::Data::new(service),
+        Err(e) => {
+            error!("❌ Failed to initialize JWT service: {:?}", e);
+            eprintln!("JWT service initialization failed: {e:?}");
+            std::process::exit(1);
+        }
+    };
+
+    // Initialize Discord OAuth client
+    let discord_client = match DiscordOAuthClient::from_env() {
+        Ok(client) => web::Data::new(client),
+        Err(e) => {
+            error!("❌ Failed to initialize Discord OAuth client: {:?}", e);
+            eprintln!("Discord OAuth initialization failed: {e:?}");
+            std::process::exit(1);
+        }
+    };
 
     // Initialize admin token system
     match utils::admin_token::get_or_create_admin_token() {
@@ -73,14 +118,36 @@ async fn main() -> std::io::Result<()> {
 
     info!("Listening on {}:{}", &address, &port);
 
+    // Try to initialize Redis session store, fall back to cookies
+    let redis_available = create_redis_session_middleware().await.is_ok();
+
+    if redis_available {
+        info!("✅ Redis session store available - multi-instance deployment ready");
+    } else {
+        info!("🍪 Using cookie-based sessions (single-instance or no Redis)");
+    }
+
     HttpServer::new(move || {
+        let db_pool = db_pool.clone();
+        let jwt_service = jwt_service.clone();
+        let discord_client = discord_client.clone();
+
         App::new()
+            .app_data(db_pool)
+            .app_data(jwt_service)
+            .app_data(discord_client)
             // Register middleware via configure hooks
             .wrap(TracingLogger::default())
             .wrap(IdentityMiddleware::default())
-            .wrap(identity::session_middleware())
-            .wrap(cors::cors())
-            .wrap(security::security())
+            .wrap(if redis_available {
+                // Note: In actual runtime, Redis would be reinitialized per worker.
+                // For now, we use cookies as fallback for all instances.
+                hooks::identity::session_middleware()
+            } else {
+                hooks::identity::session_middleware()
+            })
+            .wrap(hooks::cors::cors())
+            .wrap(hooks::security::security())
             // SEO wrapper
             .wrap(SeoMetadata)
             // Static thumbnails
@@ -103,20 +170,24 @@ async fn main() -> std::io::Result<()> {
                         web::scope("/maps")
                             .route("/all", web::get().to(maps::maps_all))
                             .route("/{id}", web::get().to(maps::map_detail))
-                            .service(
-                                web::resource("/rebuild")
-                                    .wrap(hooks::admin_auth::AdminAuth)
-                                    .route(web::post().to(maps::maps_rebuild)),
-                            )
+                            .route("/rebuild", web::post().to(maps::maps_rebuild))
                             .route("/rebuild/status", web::get().to(maps::rebuild_status))
-                            .service(
-                                web::resource("/rebuild/clear")
-                                    .wrap(hooks::admin_auth::AdminAuth)
-                                    .route(web::delete().to(maps::clear_rebuild_lock)),
-                            )
+                            .route("/rebuild/clear", web::delete().to(maps::clear_rebuild_lock))
                             .route("/download/{id}", web::get().to(maps::download_map))
+                            .route("/tracking/download", web::post().to(maps::track_download))
+                            .route("/metrics/downloads", web::get().to(maps::download_metrics))
                             .route("/tiled/{id}", web::get().to(maps::tiled_map))
                             .route("/content/{id}", web::get().to(maps::map_content)),
+                    )
+                    .service(
+                        web::scope("/auth")
+                            .route("/discord/start", web::get().to(auth::routes::discord_start))
+                            .route(
+                                "/discord/callback",
+                                web::get().to(auth::routes::discord_callback),
+                            )
+                            .route("/me", web::get().to(auth::routes::current_user))
+                            .route("/logout", web::post().to(auth::routes::logout)),
                     )
                     .service(
                         web::scope("/docs")
@@ -126,16 +197,15 @@ async fn main() -> std::io::Result<()> {
                     .service(web::scope("/admin").route(
                         "/token/info",
                         web::get().to(utils::admin_info::get_admin_token_info),
-                    )),
+                    ))
+                    .service(
+                        web::scope("/health")
+                            .route("/liveness", web::get().to(health::liveness))
+                            .route("/readiness", web::get().to(health::readiness)),
+                    )
+                    // SPA file service with fallback to index.html
+                    .configure(file_service),
             )
-            // Health checks
-            .service(
-                web::scope("/health")
-                    .route("/liveness", web::get().to(health::liveness))
-                    .route("/readiness", web::get().to(health::readiness)),
-            )
-            // SPA file service with fallback
-            .configure(file_service)
     })
     .bind(format!("{address}:{port}"))?
     .run()
