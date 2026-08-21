@@ -1,3 +1,0 @@
-### Get license information
-GET http://localhost:8080/api/docs/license
-Accept: application/json
