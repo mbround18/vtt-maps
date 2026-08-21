@@ -1,3 +1,0 @@
-### Get all maps
-GET http://localhost:8080/api/maps/all
-Accept: application/json

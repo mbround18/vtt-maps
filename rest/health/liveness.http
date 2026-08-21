@@ -1,2 +1,0 @@
-### Check liveness of the application
-GET http://localhost:8080/health/liveness
